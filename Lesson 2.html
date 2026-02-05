@@ -1,0 +1,923 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lesson 2: All Organisms Contain Genetic Information</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background: #f5f5f5;
+            padding: 20px;
+        }
+        .container { max-width: 1200px; margin: 0 auto; }
+        
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%);
+            color: white;
+            padding: 40px;
+            border-radius: 12px;
+            text-align: center;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .header h1 { font-size: 2.5em; margin-bottom: 10px; }
+        .header p { font-size: 1.2em; opacity: 0.95; }
+        
+        /* Navigation Tabs */
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        .tab-btn {
+            padding: 15px 30px;
+            background: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: 600;
+            color: #374151;
+            transition: all 0.3s;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .tab-btn:hover { background: #f3f4f6; transform: translateY(-2px); }
+        .tab-btn.active { background: #7c3aed; color: white; }
+        
+        /* Content Sections */
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        
+        /* Presentation Slides */
+        .slide {
+            background: white;
+            padding: 60px;
+            margin: 20px 0;
+            border-radius: 12px;
+            min-height: 500px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            page-break-after: always;
+        }
+        .slide h2 { color: #7c3aed; font-size: 2.2em; margin-bottom: 20px; }
+        .slide h3 { color: #333; font-size: 1.6em; margin: 20px 0 10px 0; }
+        .subtitle { color: #666; font-size: 1.3em; margin-bottom: 30px; }
+        
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 30px 0; }
+        .box { padding: 25px; border-radius: 10px; }
+        .bg-blue { background: #dbeafe; }
+        .bg-green { background: #dcfce7; }
+        .bg-yellow { background: #fef9c3; }
+        .bg-purple { background: #f3e8ff; }
+        .bg-orange { background: #fed7aa; }
+        .bg-red { background: #fecaca; }
+        .bg-cyan { background: #cffafe; }
+        .bg-pink { background: #fce7f3; }
+        
+        .emoji { font-size: 3.5em; margin: 15px 0; display: block; }
+        .center { text-align: center; }
+        .border-box { border: 3px solid; padding: 20px; border-radius: 10px; margin: 15px 0; }
+        
+        ul { line-height: 1.9; margin-left: 20px; }
+        li { margin: 8px 0; }
+        
+        .highlight { background: #fef3c7; padding: 5px 10px; border-radius: 4px; font-weight: 600; }
+        .key-term { color: #7c3aed; font-weight: 700; }
+        
+        /* Quiz Styles */
+        .question-block {
+            background: white;
+            padding: 25px;
+            margin: 20px 0;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .question-number {
+            font-weight: bold;
+            color: #7c3aed;
+            font-size: 1.2em;
+            margin-bottom: 15px;
+        }
+        .option {
+            padding: 12px;
+            margin: 8px 0;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .option:hover { background: #f3f4f6; }
+        .option input { margin-right: 10px; }
+        
+        .submit-btn {
+            background: #7c3aed;
+            color: white;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        .submit-btn:hover { background: #5b21b6; }
+        
+        .results {
+            background: #f3e8ff;
+            border-left: 5px solid #7c3aed;
+            padding: 30px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        .score { font-size: 3em; font-weight: bold; color: #7c3aed; }
+        
+        .correct { background: #dcfce7; border-left: 4px solid #16a34a; }
+        .incorrect { background: #fecaca; border-left: 4px solid #dc2626; }
+        
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid #e5e7eb;
+        }
+        .nav-btn {
+            padding: 12px 25px;
+            background: #7c3aed;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+        }
+        .nav-btn:disabled {
+            background: #d1d5db;
+            cursor: not-allowed;
+        }
+        .nav-btn:not(:disabled):hover { background: #5b21b6; }
+        
+        .vocab-box {
+            background: #f3e8ff;
+            border: 2px solid #7c3aed;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .analogy-box {
+            background: linear-gradient(to right, #dbeafe, #f3e8ff);
+            padding: 30px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 5px solid #7c3aed;
+        }
+        
+        @media print {
+            .tabs, .nav-buttons, .submit-btn { display: none; }
+            .slide { page-break-after: always; box-shadow: none; }
+            body { background: white; }
+        }
+        
+        @media (max-width: 768px) {
+            .grid-2 { grid-template-columns: 1fr; }
+            .slide { padding: 30px 20px; }
+            .header h1 { font-size: 1.8em; }
+            .tabs { flex-direction: column; }
+            .tab-btn { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🧬 Lesson 2: All Organisms Contain Genetic Information</h1>
+            <p>Understanding DNA and Genetic Information</p>
+        </div>
+
+        <div class="tabs">
+            <button class="tab-btn active" onclick="showTab('presentation')">📊 Presentation</button>
+            <button class="tab-btn" onclick="showTab('reading')">📖 Reading Text</button>
+            <button class="tab-btn" onclick="showTab('quiz')">✏️ Quiz (19 Questions)</button>
+        </div>
+
+        <!-- PRESENTATION TAB -->
+        <div id="presentation" class="tab-content active">
+            <!-- Slide 1: Title -->
+            <div class="slide">
+                <div class="center">
+                    <h2>Lesson 2</h2>
+                    <p class="subtitle">All Organisms Contain Genetic Information</p>
+                    <span class="emoji">🧬</span>
+                    <h3 style="margin-top: 40px;">Learning Intention</h3>
+                    <div class="box bg-purple" style="margin: 30px auto; max-width: 800px;">
+                        <p style="font-size: 1.3em;">Students will identify that all living organisms contain genetic information stored in DNA</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 2: Success Criteria -->
+            <div class="slide">
+                <h2>Success Criteria</h2>
+                <p style="font-size: 1.2em; margin-bottom: 30px;">I can...</p>
+                <div class="box bg-green" style="margin: 20px 0;">
+                    <p style="font-size: 1.2em;">✓ Explain that all organisms contain DNA</p>
+                </div>
+                <div class="box bg-blue" style="margin: 20px 0;">
+                    <p style="font-size: 1.2em;">✓ Name the building blocks of DNA (nucleotides)</p>
+                </div>
+                <div class="box bg-yellow" style="margin: 20px 0;">
+                    <p style="font-size: 1.2em;">✓ Describe how small units join together to make DNA</p>
+                </div>
+            </div>
+
+            <!-- Slide 3: Key Question -->
+            <div class="slide">
+                <div class="center">
+                    <h2>Think About This...</h2>
+                    <div class="box bg-blue" style="padding: 50px; margin: 50px 0;">
+                        <p style="font-size: 1.8em; font-weight: 600;">What do you, your dog, a goldfish, and a blade of grass all have in common?</p>
+                    </div>
+                    <span class="emoji">🤔</span>
+                </div>
+            </div>
+
+            <!-- Slide 4: Answer -->
+            <div class="slide">
+                <h2>They All Contain Genetic Information!</h2>
+                <div class="box bg-green" style="margin: 30px 0;">
+                    <p style="font-size: 1.3em; line-height: 1.8;">Every single living organism on Earth contains <span class="key-term">genetic information</span> - a set of instructions that tells cells how to build and run a body.</p>
+                </div>
+                <div class="grid-2" style="margin-top: 40px;">
+                    <div class="box bg-blue center">
+                        <span class="emoji">🐕</span>
+                        <h3>Dogs</h3>
+                    </div>
+                    <div class="box bg-yellow center">
+                        <span class="emoji">🐠</span>
+                        <h3>Fish</h3>
+                    </div>
+                    <div class="box bg-purple center">
+                        <span class="emoji">🌱</span>
+                        <h3>Plants</h3>
+                    </div>
+                    <div class="box bg-orange center">
+                        <span class="emoji">👤</span>
+                        <h3>Humans</h3>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 5: What is DNA -->
+            <div class="slide">
+                <h2>What is DNA?</h2>
+                <div class="vocab-box">
+                    <h3 style="color: #7c3aed; margin-bottom: 15px;">Key Term: DNA</h3>
+                    <p style="font-size: 1.2em;"><span class="key-term">DNA</span> stands for deoxyribonucleic acid</p>
+                </div>
+                <div class="box bg-green" style="margin: 30px 0;">
+                    <p style="font-size: 1.3em; line-height: 1.8;">DNA is the molecule that stores genetic information. It's found in virtually every cell of every living thing on Earth!</p>
+                </div>
+                <div class="center">
+                    <span class="emoji">🧬</span>
+                </div>
+            </div>
+
+            <!-- Slide 6: DNA as Instructions -->
+            <div class="slide">
+                <h2>DNA: The Instruction Manual</h2>
+                <div class="analogy-box">
+                    <p style="font-size: 1.3em; margin-bottom: 20px;"><strong>Think of DNA like an instruction manual:</strong></p>
+                    <ul style="font-size: 1.2em;">
+                        <li>📖 A book has pages with words</li>
+                        <li>🧬 DNA has sections with instructions</li>
+                        <li>📝 The instructions tell cells what to do</li>
+                        <li>🏗️ They direct how to build and run a body</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Slide 7: Understanding Polymers -->
+            <div class="slide">
+                <h2>Breaking Down the Word: POLYMER</h2>
+                <div class="box bg-purple" style="margin: 30px 0; padding: 40px;">
+                    <div style="font-size: 1.5em; text-align: center; margin-bottom: 30px;">
+                        <span class="highlight">"Poly"</span> + <span class="highlight">"Mer"</span>
+                    </div>
+                    <div class="grid-2">
+                        <div class="box bg-blue">
+                            <h3>"Poly" means...</h3>
+                            <p style="font-size: 1.3em; margin-top: 15px;"><strong>MANY</strong></p>
+                        </div>
+                        <div class="box bg-green">
+                            <h3>"Mer" means...</h3>
+                            <p style="font-size: 1.3em; margin-top: 15px;"><strong>UNIT or PART</strong></p>
+                        </div>
+                    </div>
+                    <div class="center" style="margin-top: 30px;">
+                        <p style="font-size: 1.4em; font-weight: 600;">Polymer = MANY UNITS</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 8: DNA is a Polymer -->
+            <div class="slide">
+                <h2>DNA is a Polymer</h2>
+                <div class="vocab-box">
+                    <h3 style="color: #7c3aed; margin-bottom: 15px;">Key Definition</h3>
+                    <p style="font-size: 1.2em;">A <span class="key-term">polymer</span> is a large molecule constructed from many smaller, repeating units called <span class="key-term">monomers</span></p>
+                </div>
+                <div class="box bg-yellow" style="margin: 30px 0; padding: 40px;">
+                    <p style="font-size: 1.3em; text-align: center;">
+                        <strong>"Mono"</strong> = ONE<br>
+                        <span style="font-size: 0.8em; margin: 15px 0; display: block;">⬇️</span>
+                        <span class="key-term">Monomer</span> = ONE UNIT (the small building block)
+                    </p>
+                </div>
+            </div>
+
+            <!-- Slide 9: Pearl Necklace Analogy -->
+            <div class="slide">
+                <h2>Visualizing DNA Structure</h2>
+                <div class="analogy-box">
+                    <h3 style="margin-bottom: 20px;">🔗 Think of a Pearl Necklace</h3>
+                    <div class="grid-2" style="margin: 30px 0;">
+                        <div>
+                            <h3>Pearl Necklace:</h3>
+                            <ul style="font-size: 1.1em;">
+                                <li>Each individual pearl 📿</li>
+                                <li>String together in a chain</li>
+                                <li>Hundreds make a necklace</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h3>DNA:</h3>
+                            <ul style="font-size: 1.1em;">
+                                <li>Each nucleotide (monomer)</li>
+                                <li>Connected in a chain</li>
+                                <li>Thousands make DNA (polymer)</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <p style="font-size: 1.2em; text-align: center; margin-top: 30px; font-weight: 600;">Many pearls = necklace<br>Many nucleotides = DNA</p>
+                </div>
+            </div>
+
+            <!-- Slide 10: Nucleotides -->
+            <div class="slide">
+                <h2>What is a Nucleotide?</h2>
+                <div class="vocab-box">
+                    <h3 style="color: #7c3aed; margin-bottom: 15px;">Key Term: Nucleotide</h3>
+                    <p style="font-size: 1.2em;">A <span class="key-term">nucleotide</span> is the specific type of monomer that makes up DNA</p>
+                </div>
+                <div class="box bg-green" style="margin: 30px 0; padding: 40px;">
+                    <p style="font-size: 1.3em; text-align: center; line-height: 2;">
+                        Nucleotides are the <strong>building blocks</strong> of DNA<br>
+                        <span class="emoji" style="font-size: 2em;">🧱</span><br>
+                        Just like LEGO bricks build structures, nucleotides build DNA!
+                    </p>
+                </div>
+            </div>
+
+            <!-- Slide 11: Nucleotide Components -->
+            <div class="slide">
+                <h2>Inside a Nucleotide</h2>
+                <p style="font-size: 1.2em; margin-bottom: 30px;">Each nucleotide contains THREE components:</p>
+                <div class="box bg-blue" style="margin: 15px 0;">
+                    <h3>1️⃣ Sugar molecule</h3>
+                </div>
+                <div class="box bg-green" style="margin: 15px 0;">
+                    <h3>2️⃣ Phosphate group</h3>
+                </div>
+                <div class="box bg-purple" style="margin: 15px 0;">
+                    <h3>3️⃣ Nitrogenous base</h3>
+                    <p style="margin-top: 10px; font-size: 1.1em;">⭐ This is the part that varies!</p>
+                </div>
+            </div>
+
+            <!-- Slide 12: Four Types of Bases -->
+            <div class="slide">
+                <h2>Four Types of Nucleotides</h2>
+                <p style="font-size: 1.2em; margin-bottom: 30px;">DNA uses only <span class="highlight">FOUR different types</span> of nitrogenous bases:</p>
+                <div class="grid-2">
+                    <div class="box bg-red center">
+                        <h3 style="font-size: 2em;">A</h3>
+                        <p>Adenine</p>
+                    </div>
+                    <div class="box bg-yellow center">
+                        <h3 style="font-size: 2em;">T</h3>
+                        <p>Thymine</p>
+                    </div>
+                    <div class="box bg-green center">
+                        <h3 style="font-size: 2em;">G</h3>
+                        <p>Guanine</p>
+                    </div>
+                    <div class="box bg-blue center">
+                        <h3 style="font-size: 2em;">C</h3>
+                        <p>Cytosine</p>
+                    </div>
+                </div>
+                <div class="box bg-orange" style="margin-top: 30px;">
+                    <p style="font-size: 1.2em; text-align: center;">These four bases can be arranged in <strong>millions of different combinations!</strong></p>
+                </div>
+            </div>
+
+            <!-- Slide 13: Creating Diversity -->
+            <div class="slide">
+                <h2>Four Bases Create Diversity</h2>
+                <div class="box bg-purple" style="padding: 40px;">
+                    <p style="font-size: 1.3em; margin-bottom: 30px;">Even though there are only <strong>four types</strong> of nucleotides, they can create instructions for:</p>
+                    <ul style="font-size: 1.2em; line-height: 2;">
+                        <li>🐈 Whether a cat has orange fur or black fur</li>
+                        <li>🐕 Whether a dog has floppy ears or pointy ears</li>
+                        <li>👁️ Whether your eyes are brown or blue</li>
+                        <li>🌱 How tall a plant grows</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Slide 14: What is a Gene -->
+            <div class="slide">
+                <h2>What is a Gene?</h2>
+                <div class="vocab-box">
+                    <h3 style="color: #7c3aed; margin-bottom: 15px;">Key Term: Gene</h3>
+                    <p style="font-size: 1.2em;">A <span class="key-term">gene</span> is a specific section of DNA that contains instructions for one particular trait or job in the body</p>
+                </div>
+                <div class="analogy-box">
+                    <p style="font-size: 1.2em; margin-bottom: 20px;"><strong>Think of DNA as a cookbook:</strong></p>
+                    <ul style="font-size: 1.1em;">
+                        <li>📖 The whole book = All your DNA</li>
+                        <li>📄 Each recipe = One gene</li>
+                        <li>🍪 Each recipe makes something specific (cookies, cake, etc.)</li>
+                        <li>🧬 Each gene controls something specific (eye color, height, etc.)</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Slide 15: Gene Examples -->
+            <div class="slide">
+                <h2>Gene Examples in Animals</h2>
+                <div class="box bg-orange" style="margin: 20px 0;">
+                    <h3>🐰 In Rabbits:</h3>
+                    <p style="font-size: 1.1em; margin-top: 10px;">One gene controls fur color, another gene controls ear length</p>
+                </div>
+                <div class="box bg-blue" style="margin: 20px 0;">
+                    <h3>🐕 In Dogs:</h3>
+                    <p style="font-size: 1.1em; margin-top: 10px;">Dogs have about 20,000 different genes - each controlling different traits!</p>
+                </div>
+                <div class="box bg-green" style="margin: 20px 0;">
+                    <h3>👤 In Humans:</h3>
+                    <p style="font-size: 1.1em; margin-top: 10px;">Humans also have roughly 20,000 genes</p>
+                </div>
+            </div>
+
+            <!-- Slide 16: Complementary Base Pairing -->
+            <div class="slide">
+                <h2>Complementary Base Pairing</h2>
+                <div class="vocab-box">
+                    <h3 style="color: #7c3aed; margin-bottom: 15px;">Key Term</h3>
+                    <p style="font-size: 1.2em;"><span class="key-term">Complementary base pairing</span> is a system where specific nucleotide bases only pair with particular partners</p>
+                </div>
+                <div class="analogy-box">
+                    <h3>🤐 Think of a Zipper</h3>
+                    <p style="font-size: 1.2em; margin: 20px 0;">Each tooth on one side only fits with a specific tooth on the other side. In DNA, nucleotides pair up in specific ways!</p>
+                </div>
+            </div>
+
+            <!-- Slide 17: Base Pairing Rules -->
+            <div class="slide">
+                <h2>The Pairing Rules</h2>
+                <p style="font-size: 1.2em; margin-bottom: 30px;">Bases ALWAYS pair the same way:</p>
+                <div class="grid-2" style="margin: 40px 0;">
+                    <div class="box bg-red" style="padding: 50px;">
+                        <h3 style="text-align: center; font-size: 2em;">A ↔ T</h3>
+                        <p style="text-align: center; font-size: 1.2em; margin-top: 20px;">Adenine pairs with Thymine</p>
+                    </div>
+                    <div class="box bg-green" style="padding: 50px;">
+                        <h3 style="text-align: center; font-size: 2em;">G ↔ C</h3>
+                        <p style="text-align: center; font-size: 1.2em; margin-top: 20px;">Guanine pairs with Cytosine</p>
+                    </div>
+                </div>
+                <div class="box bg-yellow" style="margin-top: 30px;">
+                    <p style="font-size: 1.2em; text-align: center; font-weight: 600;">This creates DNA's twisted ladder shape!</p>
+                </div>
+            </div>
+
+            <!-- Slide 18: Why Base Pairing Matters -->
+            <div class="slide">
+                <h2>Why is Base Pairing Important?</h2>
+                <div class="box bg-blue" style="margin: 20px 0; padding: 30px;">
+                    <h3>1️⃣ Stability</h3>
+                    <p style="font-size: 1.1em; margin-top: 10px;">It holds the DNA structure together</p>
+                </div>
+                <div class="box bg-green" style="margin: 20px 0; padding: 30px;">
+                    <h3>2️⃣ Accurate Copying</h3>
+                    <p style="font-size: 1.1em; margin-top: 10px;">When cells divide, DNA can be copied perfectly</p>
+                </div>
+                <div class="box bg-purple" style="margin: 20px 0; padding: 30px;">
+                    <h3>3️⃣ Passing Traits</h3>
+                    <p style="font-size: 1.1em; margin-top: 10px;">Genetic information transfers reliably from parents to offspring</p>
+                </div>
+            </div>
+
+            <!-- Slide 19: What is Genetics -->
+            <div class="slide">
+                <h2>What is Genetics?</h2>
+                <div class="vocab-box">
+                    <h3 style="color: #7c3aed; margin-bottom: 15px;">Key Term: Genetics</h3>
+                    <p style="font-size: 1.2em;"><span class="key-term">Genetics</span> is the scientific study of genes, heredity, and variation in living organisms</p>
+                </div>
+                <div class="box bg-green" style="margin: 30px 0;">
+                    <h3>Through genetics, we can explain:</h3>
+                    <ul style="font-size: 1.1em; margin-top: 15px;">
+                        <li>Why thoroughbred horses excel at racing</li>
+                        <li>Why some cat breeds are more vocal than others</li>
+                        <li>Why puppies look like their parents</li>
+                        <li>Why you might have the same eye color as your grandmother</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Slide 20: Summary -->
+            <div class="slide">
+                <h2>Let's Review!</h2>
+                <div class="box bg-purple" style="margin: 20px 0; padding: 20px;">
+                    <h3>✓ All organisms contain genetic information</h3>
+                </div>
+                <div class="box bg-blue" style="margin: 20px 0; padding: 20px;">
+                    <h3>✓ DNA stores genetic information</h3>
+                </div>
+                <div class="box bg-green" style="margin: 20px 0; padding: 20px;">
+                    <h3>✓ DNA is a polymer made of nucleotide monomers</h3>
+                </div>
+                <div class="box bg-yellow" style="margin: 20px 0; padding: 20px;">
+                    <h3>✓ Nucleotides are the building blocks of DNA</h3>
+                </div>
+                <div class="box bg-orange" style="margin: 20px 0; padding: 20px;">
+                    <h3>✓ Complementary base pairing holds DNA together</h3>
+                </div>
+            </div>
+
+            <div class="nav-buttons">
+                <button class="nav-btn" onclick="prevSlide()" id="prevBtn">← Previous</button>
+                <span id="slideCounter" style="font-weight: 600; color: #666;">Slide 1 of 20</span>
+                <button class="nav-btn" onclick="nextSlide()" id="nextBtn">Next →</button>
+            </div>
+        </div>
+
+        <!-- READING TEXT TAB -->
+        <div id="reading" class="tab-content">
+            <div style="background: white; padding: 40px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                <h2 style="color: #7c3aed; font-size: 2.2em; margin-bottom: 20px;">Student Reading Text</h2>
+                
+                <h3 style="margin-top: 30px;">The Universal Code of Life</h3>
+                <p style="font-size: 1.1em; line-height: 1.8; margin: 15px 0;">
+                    <strong>What connects an elephant to an ant, a parrot to a python, and you to a sunflower?</strong>
+                </p>
+                <p style="font-size: 1.1em; line-height: 1.8; margin: 15px 0;">
+                    Despite their incredible differences, all living organisms share something fundamental: they all contain <strong>genetic information</strong>. This genetic information acts as a biological instruction manual, directing how organisms grow, develop, and function. The molecule that stores this information is <strong>DNA</strong> (deoxyribonucleic acid), and it's found in virtually every cell of every living thing on Earth.
+                </p>
+
+                <h3 style="margin-top: 30px;">Understanding DNA's Structure</h3>
+                <p style="font-size: 1.1em; line-height: 1.8; margin: 15px 0;">
+                    DNA is classified as a <strong>polymer</strong>. Let's break down what this word means:
+                </p>
+                <ul style="font-size: 1.1em; line-height: 1.8; margin-left: 40px;">
+                    <li><strong>"Poly"</strong> means "many"</li>
+                    <li><strong>"Mer"</strong> means "unit" or "part"</li>
+                    <li>So <strong>polymer</strong> literally means "many units"</li>
+                </ul>
+                <p style="font-size: 1.1em; line-height: 1.8; margin: 15px 0;">
+                    A polymer is a large molecule constructed from many smaller, repeating units called <strong>monomers</strong> (where "mono" means "one"). In DNA, these monomers are specifically called <strong>nucleotides</strong>.
+                </p>
+                <p style="font-size: 1.1em; line-height: 1.8; margin: 15px 0;">
+                    To visualize this, imagine a pearl necklace: each individual pearl represents a nucleotide (the monomer), and when hundreds or thousands are strung together, they form the complete DNA polymer chain. Just as many pearls make a necklace, many nucleotides make a DNA polymer.
+                </p>
+                <p style="font-size: 1.1em; line-height: 1.8; margin: 15px 0;">
+                    Each nucleotide contains three components: a sugar molecule, a phosphate group, and a nitrogenous base. While the sugar and phosphate portions remain constant, there are four different types of nitrogenous bases. These four bases can be arranged in countless sequences, creating the vast diversity of genetic instructions needed for different traits and functions.
+                </p>
+
+                <h3 style="margin-top: 30px;">The Language of Genes</h3>
+                <p style="font-size: 1.1em; line-height: 1.8; margin: 15px 0;">
+                    A <strong>gene</strong> is a specific segment of DNA that contains the complete instructions for producing a particular protein or controlling a specific trait. For instance, in border collies, specific genes determine their distinctive black-and-white coat pattern, while other genes influence their legendary herding instincts. Golden retrievers possess different versions of these genes, resulting in their golden coats and gentler temperament.
+                </p>
+                <p style="font-size: 1.1em; line-height: 1.8; margin: 15px 0;">
+                    The term <strong>genetics</strong> refers to the scientific study of genes, heredity, and variation in living organisms. Through genetics, we can explain why thoroughbred horses excel at racing, why some cat breeds are more vocal than others, or why certain dog breeds are predisposed to specific health conditions.
+                </p>
+
+                <h3 style="margin-top: 30px;">Complementary Base Pairing: DNA's Secret</h3>
+                <p style="font-size: 1.1em; line-height: 1.8; margin: 15px 0;">
+                    DNA's structure relies on <strong>complementary base pairing</strong>, a system where specific nucleotide bases only pair with particular partners. This pairing creates DNA's famous double helix structure - imagine a twisted ladder where the rungs are formed by paired bases. This complementary pairing serves two critical functions: it stabilizes the DNA structure and ensures accurate copying when cells divide and pass genetic information to daughter cells.
+                </p>
+                <p style="font-size: 1.1em; line-height: 1.8; margin: 15px 0;">
+                    This pairing mechanism explains how a female wolf can pass her hunting abilities to her cubs, or how a mare's speed and endurance traits can appear in her foal. The precision of complementary base pairing ensures that genetic information transfers reliably from one generation to the next.
+                </p>
+
+                <h3 style="margin-top: 30px;">Why This Matters</h3>
+                <p style="font-size: 1.1em; line-height: 1.8; margin: 15px 0;">
+                    Understanding that all organisms contain genetic information helps us appreciate the fundamental unity of life while explaining its remarkable diversity. Whether examining the migration patterns of arctic terns, the camouflage of chameleons, or the pack behavior of wolves, DNA and genes provide the underlying instructions that make these characteristics possible.
+                </p>
+
+                <div style="background: #f3e8ff; padding: 30px; border-radius: 10px; margin-top: 40px; border-left: 5px solid #7c3aed;">
+                    <h3 style="color: #7c3aed;">Answer this question:</h3>
+                    <p style="font-size: 1.2em; margin-top: 15px;">Name the basic building blocks or subunits of DNA.</p>
+                    <p style="font-size: 1.1em; margin-top: 20px;"><strong>Answer:</strong> _____________________________________________</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- QUIZ TAB -->
+        <div id="quiz" class="tab-content">
+            <div style="background: white; padding: 40px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                <h2 style="color: #7c3aed; font-size: 2.2em; margin-bottom: 10px;">Assessment Quiz</h2>
+                <p style="margin-bottom: 30px; color: #666;">Select the best answer for each question.</p>
+
+                <form id="quizForm">
+                    <div class="question-block">
+                        <p class="question-number">1. What do all living organisms contain?</p>
+                        <div class="option"><input type="radio" name="q1" value="0"> A. Only water</div>
+                        <div class="option"><input type="radio" name="q1" value="1"> B. Genetic information</div>
+                        <div class="option"><input type="radio" name="q1" value="2"> C. Only proteins</div>
+                        <div class="option"><input type="radio" name="q1" value="3"> D. Only carbohydrates</div>
+                    </div>
+
+                    <div class="question-block">
+                        <p class="question-number">2. What does DNA stand for?</p>
+                        <div class="option"><input type="radio" name="q2" value="0"> A. Different Nucleotide Arrangement</div>
+                        <div class="option"><input type="radio" name="q2" value="1"> B. Deoxyribonucleic Acid</div>
+                        <div class="option"><input type="radio" name="q2" value="2"> C. Diverse Natural Acids</div>
+                        <div class="option"><input type="radio" name="q2" value="3"> D. Double Nitrogen Atom</div>
+                    </div>
+
+                    <div class="question-block">
+                        <p class="question-number">3. What does the prefix "poly" mean?</p>
+                        <div class="option"><input type="radio" name="q3" value="0"> A. One</div>
+                        <div class="option"><input type="radio" name="q3" value="1"> B. Two</div>
+                        <div class="option"><input type="radio" name="q3" value="2"> C. Many</div>
+                        <div class="option"><input type="radio" name="q3" value="3"> D. Few</div>
+                    </div>
+
+                    <div class="question-block">
+                        <p class="question-number">4. What does the prefix "mono" mean?</p>
+                        <div class="option"><input type="radio" name="q4" value="0"> A. Many</div>
+                        <div class="option"><input type="radio" name="q4" value="1"> B. One</div>
+                        <div class="option"><input type="radio" name="q4" value="2"> C. Two</div>
+                        <div class="option"><input type="radio" name="q4" value="3"> D. Zero</div>
+                    </div>
+
+                    <div class="question-block">
+                        <p class="question-number">5. What is a polymer?</p>
+                        <div class="option"><input type="radio" name="q5" value="0"> A. A single small molecule</div>
+                        <div class="option"><input type="radio" name="q5" value="1"> B. A large molecule made from many smaller units</div>
+                        <div class="option"><input type="radio" name="q5" value="2"> C. A type of cell</div>
+                        <div class="option"><input type="radio" name="q5" value="3"> D. A chemical reaction</div>
+                    </div>
+
+                    <div class="question-block">
+                        <p class="question-number">6. What are the small building blocks that make up DNA called?</p>
+                        <div class="option"><input type="radio" name="q6" value="0"> A. Proteins</div>
+                        <div class="option"><input type="radio" name="q6" value="1"> B. Nucleotides</div>
+                        <div class="option"><input type="radio" name="q6" value="2"> C. Amino acids</div>
+                        <div class="option"><input type="radio" name="q6" value="3"> D. Lipids</div>
+                    </div>
+
+                    <div class="question-block">
+                        <p class="question-number">7. In the pearl necklace analogy, what does each pearl represent?</p>
+                        <div class="option"><input type="radio" name="q7" value="0"> A. A complete DNA molecule</div>
+                        <div class="option"><input type="radio" name="q7" value="1"> B. A nucleotide (monomer)</div>
+                        <div class="option"><input type="radio" name="q7" value="2"> C. A cell</div>
+                        <div class="option"><input type="radio" name="q7" value="3"> D. A gene</div>
+                    </div>
+
+                    <div class="question-block">
+                        <p class="question-number">8. How many different types of nitrogenous bases are in DNA?</p>
+                        <div class="option"><input type="radio" name="q8" value="0"> A. Two</div>
+                        <div class="option"><input type="radio" name="q8" value="1"> B. Three</div>
+                        <div class="option"><input type="radio" name="q8" value="2"> C. Four</div>
+                        <div class="option"><input type="radio" name="q8" value="3"> D. Five</div>
+                    </div>
+
+                    <div class="question-block">
+                        <p class="question-number">9. Which bases pair together in DNA?</p>
+                        <div class="option"><input type="radio" name="q9" value="0"> A. A pairs with G, T pairs with C</div>
+                        <div class="option"><input type="radio" name="q9" value="1"> B. A pairs with T, G pairs with C</div>
+                        <div class="option"><input type="radio" name="q9" value="2"> C. A pairs with C, G pairs with T</div>
+                        <div class="option"><input type="radio" name="q9" value="3"> D. All bases pair with each other</div>
+                    </div>
+
+                    <div class="question-block">
+                        <p class="question-number">10. What is a gene?</p>
+                        <div class="option"><input type="radio" name="q10" value="0"> A. The entire DNA molecule</div>
+                        <div class="option"><input type="radio" name="q10" value="1"> B. A specific section of DNA that controls one trait</div>
+                        <div class="option"><input type="radio" name="q10" value="2"> C. A type of cell</div>
+                        <div class="option"><input type="radio" name="q10" value="3"> D. A single nucleotide</div>
+                    </div>
+
+                    <div class="question-block">
+                        <p class="question-number">11. What is genetics?</p>
+                        <div class="option"><input type="radio" name="q11" value="0"> A. The study of rocks</div>
+                        <div class="option"><input type="radio" name="q11" value="1"> B. The study of genes, heredity, and variation</div>
+                        <div class="option"><input type="radio" name="q11" value="2"> C. The study of planets</div>
+                        <div class="option"><input type="radio" name="q11" value="3"> D. The study of weather</div>
+                    </div>
+
+                    <div class="question-block">
+                        <p class="question-number">12. How many components does each nucleotide contain?</p>
+                        <div class="option"><input type="radio" name="q12" value="0"> A. One</div>
+                        <div class="option"><input type="radio" name="q12" value="1"> B. Two</div>
+                        <div class="option"><input type="radio" name="q12" value="2"> C. Three</div>
+                        <div class="option"><input type="radio" name="q12" value="3"> D. Four</div>
+                    </div>
+
+                    <div class="question-block">
+                        <p class="question-number">13. What is complementary base pairing?</p>
+                        <div class="option"><input type="radio" name="q13" value="0"> A. When bases randomly connect</div>
+                        <div class="option"><input type="radio" name="q13" value="1"> B. When specific bases only pair with particular partners</div>
+                        <div class="option"><input type="radio" name="q13" value="2"> C. When all bases pair together</div>
+                        <div class="option"><input type="radio" name="q13" value="3"> D. When bases never pair</div>
+                    </div>
+
+                    <div class="question-block">
+                        <p class="question-number">14. Approximately how many genes do dogs have?</p>
+                        <div class="option"><input type="radio" name="q14" value="0"> A. 1,000</div>
+                        <div class="option"><input type="radio" name="q14" value="1"> B. 5,000</div>
+                        <div class="option"><input type="radio" name="q14" value="2"> C. 20,000</div>
+                        <div class="option"><input type="radio" name="q14" value="3"> D. 100,000</div>
+                    </div>
+
+                    <div class="question-block">
+                        <p class="question-number">15. Why is complementary base pairing important?</p>
+                        <div class="option"><input type="radio" name="q15" value="0"> A. It makes DNA colorful</div>
+                        <div class="option"><input type="radio" name="q15" value="1"> B. It allows DNA to be copied accurately</div>
+                        <div class="option"><input type="radio" name="q15" value="2"> C. It makes DNA taste good</div>
+                        <div class="option"><input type="radio" name="q15" value="3"> D. It has no importance</div>
+                    </div>
+
+                    <div class="question-block">
+                        <p class="question-number">16. What shape does DNA have due to base pairing?</p>
+                        <div class="option"><input type="radio" name="q16" value="0"> A. A circle</div>
+                        <div class="option"><input type="radio" name="q16" value="1"> B. A square</div>
+                        <div class="option"><input type="radio" name="q16" value="2"> C. A twisted ladder (double helix)</div>
+                        <div class="option"><input type="radio" name="q16" value="3"> D. A triangle</div>
+                    </div>
+
+                    <div class="question-block">
+                        <p class="question-number">17. Which part of a nucleotide varies between the four types?</p>
+                        <div class="option"><input type="radio" name="q17" value="0"> A. The sugar</div>
+                        <div class="option"><input type="radio" name="q17" value="1"> B. The phosphate group</div>
+                        <div class="option"><input type="radio" name="q17" value="2"> C. The nitrogenous base</div>
+                        <div class="option"><input type="radio" name="q17" value="3"> D. Nothing varies</div>
+                    </div>
+
+                    <div class="question-block">
+                        <p class="question-number">18. DNA is found in:</p>
+                        <div class="option"><input type="radio" name="q18" value="0"> A. Only animal cells</div>
+                        <div class="option"><input type="radio" name="q18" value="1"> B. Only plant cells</div>
+                        <div class="option"><input type="radio" name="q18" value="2"> C. Virtually every cell of every living thing</div>
+                        <div class="option"><input type="radio" name="q18" value="3"> D. Only human cells</div>
+                    </div>
+
+                    <div class="question-block">
+                        <p class="question-number">19. What does genetic information act as?</p>
+                        <div class="option"><input type="radio" name="q19" value="0"> A. A power source</div>
+                        <div class="option"><input type="radio" name="q19" value="1"> B. An instruction manual for building and running a body</div>
+                        <div class="option"><input type="radio" name="q19" value="2"> C. A transport system</div>
+                        <div class="option"><input type="radio" name="q19" value="3"> D. A storage container</div>
+                    </div>
+
+                    <button type="button" class="submit-btn" onclick="submitQuiz()">Submit Quiz</button>
+                </form>
+
+                <div id="results" style="display: none;"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Tab switching
+        function showTab(tabName) {
+            const tabs = document.querySelectorAll('.tab-content');
+            const buttons = document.querySelectorAll('.tab-btn');
+            
+            tabs.forEach(tab => tab.classList.remove('active'));
+            buttons.forEach(btn => btn.classList.remove('active'));
+            
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        // Presentation navigation
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('#presentation .slide');
+        const totalSlides = slides.length;
+
+        function showSlide(n) {
+            slides.forEach(slide => slide.style.display = 'none');
+            slides[n].style.display = 'block';
+            
+            document.getElementById('slideCounter').textContent = `Slide ${n + 1} of ${totalSlides}`;
+            document.getElementById('prevBtn').disabled = n === 0;
+            document.getElementById('nextBtn').disabled = n === totalSlides - 1;
+        }
+
+        function nextSlide() {
+            if (currentSlide < totalSlides - 1) {
+                currentSlide++;
+                showSlide(currentSlide);
+            }
+        }
+
+        function prevSlide() {
+            if (currentSlide > 0) {
+                currentSlide--;
+                showSlide(currentSlide);
+            }
+        }
+
+        // Initialize first slide
+        showSlide(0);
+
+        // Quiz functionality - Correct answers (0-indexed)
+        const answers = [1, 1, 2, 1, 1, 1, 1, 2, 1, 1, 1, 2, 1, 2, 1, 2, 2, 2, 1];
+        const questions = [
+            "What do all living organisms contain?",
+            "What does DNA stand for?",
+            "What does the prefix 'poly' mean?",
+            "What does the prefix 'mono' mean?",
+            "What is a polymer?",
+            "What are the small building blocks that make up DNA called?",
+            "In the pearl necklace analogy, what does each pearl represent?",
+            "How many different types of nitrogenous bases are in DNA?",
+            "Which bases pair together in DNA?",
+            "What is a gene?",
+            "What is genetics?",
+            "How many components does each nucleotide contain?",
+            "What is complementary base pairing?",
+            "Approximately how many genes do dogs have?",
+            "Why is complementary base pairing important?",
+            "What shape does DNA have due to base pairing?",
+            "Which part of a nucleotide varies between the four types?",
+            "DNA is found in:",
+            "What does genetic information act as?"
+        ];
+
+        function submitQuiz() {
+            let score = 0;
+            let resultsHTML = '<div class="results"><h2>Quiz Results</h2>';
+            
+            for (let i = 1; i <= 19; i++) {
+                const selected = document.querySelector(`input[name="q${i}"]:checked`);
+                const userAnswer = selected ? parseInt(selected.value) : -1;
+                const correct = answers[i-1];
+                
+                if (userAnswer === correct) {
+                    score++;
+                }
+            }
+            
+            const percentage = Math.round((score / 19) * 100);
+            
+            resultsHTML += `<p class="score">${score} / 19</p>`;
+            resultsHTML += `<p style="font-size: 1.5em; margin: 10px 0;">${percentage}%</p>`;
+            
+            if (percentage >= 90) {
+                resultsHTML += '<p style="font-size: 1.2em; color: #7c3aed;">Excellent work! 🌟</p>';
+            } else if (percentage >= 70) {
+                resultsHTML += '<p style="font-size: 1.2em; color: #7c3aed;">Good job! 👍</p>';
+            } else if (percentage >= 50) {
+                resultsHTML += '<p style="font-size: 1.2em; color: #ca8a04;">Keep practicing! 📚</p>';
+            } else {
+                resultsHTML += '<p style="font-size: 1.2em; color: #dc2626;">Review the material and try again! 💪</p>';
+            }
+            
+            resultsHTML += '</div>';
+            
+            // Show detailed results
+            for (let i = 1; i <= 19; i++) {
+                const selected = document.querySelector(`input[name="q${i}"]:checked`);
+                const userAnswer = selected ? parseInt(selected.value) : -1;
+                const correct = answers[i-1];
+                const isCorrect = userAnswer === correct;
+                
+                const options = document.querySelectorAll(`input[name="q${i}"]`);
+                const optionTexts = Array.from(options).map(opt => opt.parentElement.textContent.trim());
+                
+                resultsHTML += `<div class="question-block ${isCorrect ? 'correct' : 'incorrect'}">`;
+                resultsHTML += `<p class="question-number">${i}. ${questions[i-1]}</p>`;
+                resultsHTML += `<p><strong>Your answer:</strong> ${userAnswer >= 0 ? optionTexts[userAnswer] : 'Not answered'}</p>`;
+                if (!isCorrect) {
+                    resultsHTML += `<p style="color: #7c3aed;"><strong>Correct answer:</strong> ${optionTexts[correct]}</p>`;
+                }
+                resultsHTML += '</div>';
+            }
+            
+            document.getElementById('quizForm').style.display = 'none';
+            document.getElementById('results').innerHTML = resultsHTML;
+            document.getElementById('results').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
