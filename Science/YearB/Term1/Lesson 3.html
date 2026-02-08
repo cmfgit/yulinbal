@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Introduction to Chromosomes - PowerPoint Presentation</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background: #f5f5f5;
+            padding: 20px;
+        }
+        .container { max-width: 1200px; margin: 0 auto; }
+        
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%);
+            color: white;
+            padding: 40px;
+            border-radius: 12px;
+            text-align: center;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .header h1 { font-size: 2.5em; margin-bottom: 10px; }
+        .header p { font-size: 1.2em; opacity: 0.95; }
+        
+        /* Presentation Slides */
+        .slide {
+            background: white;
+            padding: 60px;
+            margin: 20px 0;
+            border-radius: 12px;
+            min-height: 500px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            page-break-after: always;
+            display: none;
+        }
+        .slide.active { display: block; }
+        
+        .slide h2 { color: #1976D2; font-size: 2.2em; margin-bottom: 20px; }
+        .slide h3 { color: #333; font-size: 1.6em; margin: 20px 0 10px 0; }
+        .subtitle { color: #666; font-size: 1.3em; margin-bottom: 30px; }
+        
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 30px 0; }
+        .box { 
+            padding: 25px; 
+            border-radius: 10px;
+            border: 3px solid #2196F3;
+            background: #f8f9fa;
+        }
+        .box h3 { 
+            color: #1976D2; 
+            margin-bottom: 15px; 
+            font-size: 18px; 
+        }
+        .content-item {
+            font-size: 16px;
+            margin-bottom: 8px;
+            padding: 8px;
+            background: white;
+            border-radius: 5px;
+        }
+        
+        .bg-blue { background: #e3f2fd; border-color: #2196F3; }
+        .bg-green { background: #e8f5e9; border-color: #4caf50; }
+        .bg-yellow { background: #fff3cd; border-color: #ffc107; }
+        .bg-purple { background: #f3e5f5; border-color: #9c27b0; }
+        .bg-orange { background: #fed7aa; border-color: #f57c00; }
+        
+        .emoji { font-size: 3.5em; margin: 15px 0; display: block; }
+        .center { text-align: center; }
+        .border-box { border: 3px solid; padding: 20px; border-radius: 10px; margin: 15px 0; }
+        
+        ul { line-height: 1.9; margin-left: 20px; font-size: 1.1em; }
+        li { margin: 8px 0; }
+        
+        .key-concept {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border: 2px solid #2196F3;
+            font-size: 16px;
+            font-weight: bold;
+            color: #1976D2;
+        }
+        
+        .vocab-list {
+            background: #fff3cd;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            border: 2px solid #ffc107;
+        }
+        .vocab-list h3 {
+            margin: 0 0 10px 0;
+            color: #856404;
+        }
+        .vocab-list ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+        
+        .pathway-box {
+            background: #f3e5f5;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border: 2px solid #9c27b0;
+        }
+        .pathway-box h3 {
+            margin: 0 0 10px 0;
+            color: #6a1b9a;
+        }
+        .pathway-box ol {
+            margin-top: 10px;
+            margin-bottom: 0;
+            padding-left: 30px;
+        }
+        
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid #e5e7eb;
+        }
+        .nav-btn {
+            padding: 12px 25px;
+            background: #2196F3;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+        }
+        .nav-btn:disabled {
+            background: #d1d5db;
+            cursor: not-allowed;
+        }
+        .nav-btn:not(:disabled):hover { background: #1976D2; }
+        
+        .print-info {
+            background: #fff3cd;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #ffc107;
+            margin-top: 20px;
+        }
+        .print-info h3 {
+            margin: 0 0 10px 0;
+            color: #856404;
+        }
+        
+        @media print {
+            .nav-buttons, .print-info, .header { display: none; }
+            .slide { 
+                page-break-after: always; 
+                box-shadow: none;
+                display: block !important;
+            }
+            body { background: white; }
+        }
+        
+        @media (max-width: 768px) {
+            .grid-2 { grid-template-columns: 1fr; }
+            .slide { padding: 30px 20px; min-height: auto; }
+            .header h1 { font-size: 1.8em; }
+            .slide h2 { font-size: 1.6em; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🧬 Introduction to Chromosomes</h1>
+            <p>Stage 5 Science - Week 2 Genetics Unit</p>
+        </div>
+
+        <div class="print-info">
+            <h3>💡 Presentation Instructions</h3>
+            <p style="margin: 0; font-size: 14px; color: #856404;">
+                <strong>For Classroom Display:</strong> Use arrow buttons to navigate through slides<br/>
+                <strong>For Student Handouts:</strong> Print this page (File → Print) - each slide will print on a separate page<br/>
+                <strong>Differentiation:</strong> Print for lower-level students who need visual support during reading activity
+            </p>
+        </div>
+
+        <!-- SLIDE 1: Title -->
+        <div class="slide active">
+            <div class="center">
+                <h2>From DNA to Chromosomes</h2>
+                <p class="subtitle">Stage 5 Science - Genetics</p>
+                <span class="emoji">🧬</span>
+                <h3 style="margin-top: 40px;">Week 2: Understanding Chromosome Structure</h3>
+                <p style="color: #666; font-size: 1.1em; margin-top: 20px;">SC5-GEV-01</p>
+            </div>
+        </div>
+
+        <!-- SLIDE 2: DNA Revision -->
+        <div class="slide">
+            <h2>Slide 1: DNA Revision</h2>
+            <div style="margin: 30px 0;">
+                <div class="content-item">🧬 DNA = Instructions for your body</div>
+                <div class="content-item">🌀 Shaped like a twisted ladder (double helix)</div>
+                <div class="content-item">🔤 Made of 4 bases: A, T, C, G</div>
+                <div class="content-item">🔗 A pairs with T</div>
+                <div class="content-item">🔗 C pairs with G</div>
+            </div>
+            <div class="key-concept" style="margin-top: 50px;">
+                💡 Remember: DNA is the molecule that stores genetic information
+            </div>
+        </div>
+
+        <!-- SLIDE 3: The Packaging Problem -->
+        <div class="slide">
+            <h2>Slide 2: The Packaging Problem</h2>
+            <div style="margin: 30px 0;">
+                <div class="content-item">📏 DNA in one cell = 2 metres long</div>
+                <div class="content-item">🔬 Your cells = microscopic (very tiny)</div>
+                <div class="content-item">❓ How does 2m of DNA fit in a tiny cell?</div>
+                <div class="content-item">📦 Answer: DNA is tightly packaged!</div>
+            </div>
+            <div class="center" style="margin-top: 60px;">
+                <h3 style="color: #1976D2;">Think about it:</h3>
+                <p style="font-size: 1.3em; margin-top: 20px;">
+                    It's like fitting 2 metres of string into a tiny box!
+                </p>
+            </div>
+        </div>
+
+        <!-- SLIDE 4: What is a Chromosome -->
+        <div class="slide">
+            <h2>Slide 3: What is a Chromosome?</h2>
+            <div style="margin: 30px 0;">
+                <div class="content-item">🧬 Chromosome = packaged DNA</div>
+                <div class="content-item">🧵 DNA wraps around histone proteins</div>
+                <div class="content-item">📦 Gets coiled and packed super tight</div>
+                <div class="content-item">✨ This creates a chromosome</div>
+                <div class="content-item">🔍 You can see chromosomes under a microscope</div>
+            </div>
+            <div class="key-concept" style="margin-top: 50px;">
+                💡 A chromosome is a tightly packaged bundle of DNA and proteins
+            </div>
+        </div>
+
+        <!-- SLIDE 5: Human Chromosomes -->
+        <div class="slide">
+            <h2>Slide 4: Human Chromosomes</h2>
+            <div style="margin: 30px 0;">
+                <div class="content-item">🔢 Humans have 46 chromosomes</div>
+                <div class="content-item">👥 They come in 23 pairs</div>
+                <div class="content-item">👨 1 from dad, 1 from mum (each pair)</div>
+                <div class="content-item">📊 Numbered 1-23 (biggest to smallest)</div>
+                <div class="content-item">🧬 Each pair has similar genes</div>
+            </div>
+            <div class="center" style="margin-top: 60px;">
+                <h3 style="color: #1976D2;">Key Point:</h3>
+                <p style="font-size: 1.3em; margin-top: 20px;">
+                    46 chromosomes = 23 pairs
+                </p>
+            </div>
+        </div>
+
+        <!-- SLIDE 6: Why Pairs Matter -->
+        <div class="slide">
+            <h2>Slide 5: Why Pairs Matter</h2>
+            <div style="margin: 30px 0;">
+                <div class="content-item">👯 Two chromosomes in each pair</div>
+                <div class="content-item">🧬 Two copies of each gene</div>
+                <div class="content-item">👪 One from mum, one from dad</div>
+                <div class="content-item">🎨 This creates your unique traits</div>
+                <div class="content-item">📊 Pairs have genes in same locations</div>
+            </div>
+            <div class="center" style="margin-top: 60px;">
+                <p style="font-size: 1.3em; color: #666;">
+                    You inherit traits from BOTH parents because you have<br/>
+                    one chromosome from each parent in every pair
+                </p>
+            </div>
+        </div>
+
+        <!-- SLIDE 7: Chromosome Shape -->
+        <div class="slide">
+            <h2>Slide 6: Chromosome Shape</h2>
+            <div style="margin: 30px 0;">
+                <div class="content-item">❌ Chromosomes look like an X</div>
+                <div class="content-item">🔗 Two chromatids joined in the middle</div>
+                <div class="content-item">📍 Middle point = centromere</div>
+                <div class="content-item">👯 The two sides are identical copies</div>
+                <div class="content-item">🔬 Best seen when cells are dividing</div>
+            </div>
+            <div class="center" style="margin-top: 60px; font-size: 5em; color: #1976D2;">
+                ✕
+            </div>
+            <p class="center" style="font-size: 1.2em; color: #666; margin-top: 20px;">
+                Chromosome shape during cell division
+            </p>
+        </div>
+
+        <!-- SLIDE 8: Karyotype -->
+        <div class="slide">
+            <h2>Slide 7: Karyotype</h2>
+            <div style="margin: 30px 0;">
+                <div class="content-item">📸 Karyotype = picture of all chromosomes</div>
+                <div class="content-item">📊 Organized from biggest to smallest</div>
+                <div class="content-item">🔢 Numbered 1-23 in pairs</div>
+                <div class="content-item">👨‍⚕️ Doctors use these to check for problems</div>
+                <div class="content-item">🧬 Can diagnose genetic conditions</div>
+            </div>
+            <div class="key-concept" style="margin-top: 50px;">
+                💡 A karyotype helps doctors see if someone has the correct number of chromosomes
+            </div>
+        </div>
+
+        <!-- SLIDE 9: Genes on Chromosomes -->
+        <div class="slide">
+            <h2>Slide 8: Genes on Chromosomes</h2>
+            <div style="margin: 30px 0;">
+                <div class="content-item">🧩 Gene = section of DNA</div>
+                <div class="content-item">🔨 Each gene makes one protein</div>
+                <div class="content-item">⚙️ Proteins do jobs in your cells</div>
+                <div class="content-item">📚 Each chromosome has 100s-1000s of genes</div>
+                <div class="content-item">🎯 Different chromosomes = different genes</div>
+            </div>
+            <div class="center" style="margin-top: 60px;">
+                <h3 style="color: #1976D2;">Examples:</h3>
+                <p style="font-size: 1.2em; margin-top: 20px; line-height: 1.8;">
+                    Chromosome 11 → Hemoglobin genes<br/>
+                    Chromosome 15 → Eye color genes<br/>
+                    Chromosome 7 → Digestion genes
+                </p>
+            </div>
+        </div>
+
+        <!-- SLIDE 10: Chromosomes Create Traits -->
+        <div class="slide">
+            <h2>Slide 9: Chromosomes Create Traits</h2>
+            <div style="margin: 30px 0;">
+                <div class="content-item">🎨 Traits = your characteristics (eye color, height)</div>
+                <div class="content-item">🧬 Genes on chromosomes control traits</div>
+                <div class="content-item">👯 2 copies of each gene (one from each parent)</div>
+                <div class="content-item">🔀 Different versions = alleles</div>
+                <div class="content-item">💪 Dominant alleles are stronger than recessive</div>
+            </div>
+            <div class="center" style="margin-top: 60px; padding: 30px; background: #e8f5e9; border-radius: 10px;">
+                <h3 style="color: #2e7d32;">Example: Eye Color</h3>
+                <p style="font-size: 1.2em; margin-top: 15px;">
+                    Brown allele (dominant) + Blue allele (recessive) = Brown eyes
+                </p>
+            </div>
+        </div>
+
+        <!-- SLIDE 11: Chromosome to Trait Pathway -->
+        <div class="slide">
+            <h2>Slide 10: Chromosome → Trait Pathway</h2>
+            <div class="pathway-box" style="margin-top: 40px;">
+                <h3>🔬 The Complete Pathway:</h3>
+                <ol style="font-size: 1.2em; line-height: 2;">
+                    <li><strong>Chromosome</strong> contains DNA</li>
+                    <li><strong>Gene</strong> is a section of DNA</li>
+                    <li>Gene makes a <strong>protein</strong></li>
+                    <li>Protein does a <strong>job</strong> (e.g., makes eye pigment)</li>
+                    <li>Job creates your <strong>trait</strong> (e.g., brown eyes)</li>
+                </ol>
+            </div>
+            <div class="center" style="margin-top: 50px; font-size: 1.8em; color: #6a1b9a;">
+                Chromosome → Gene → Protein → Trait
+            </div>
+        </div>
+
+        <!-- SLIDE 12: Key Vocabulary -->
+        <div class="slide">
+            <h2>Slide 11: Key Vocabulary</h2>
+            <div class="grid-2" style="margin-top: 40px;">
+                <div class="box bg-blue">
+                    <div class="content-item">🧬 <strong>Chromosome:</strong> packaged DNA</div>
+                    <div class="content-item">🧵 <strong>Gene:</strong> DNA that makes a protein</div>
+                    <div class="content-item">📍 <strong>Centromere:</strong> middle of X</div>
+                </div>
+                <div class="box bg-green">
+                    <div class="content-item">🎨 <strong>Trait:</strong> observable characteristic</div>
+                    <div class="content-item">🔀 <strong>Allele:</strong> version of a gene</div>
+                    <div class="content-item">💪 <strong>Dominant:</strong> stronger allele</div>
+                </div>
+            </div>
+            <div class="key-concept" style="margin-top: 50px;">
+                💡 These terms are important for understanding genetics!
+            </div>
+        </div>
+
+        <!-- SLIDE 13: Summary -->
+        <div class="slide">
+            <h2>Summary: What We Learned</h2>
+            <div class="center" style="margin-top: 50px;">
+                <div class="box bg-blue" style="margin: 20px 0; padding: 30px;">
+                    <h3 style="margin-bottom: 20px;">Key Concepts</h3>
+                    <p style="font-size: 1.1em; line-height: 1.8; text-align: left;">
+                        ✓ DNA is packaged into chromosomes<br/>
+                        ✓ Humans have 46 chromosomes (23 pairs)<br/>
+                        ✓ Chromosomes contain genes<br/>
+                        ✓ Genes make proteins that create traits<br/>
+                        ✓ We inherit chromosomes from both parents
+                    </p>
+                </div>
+                <div style="margin-top: 50px; font-size: 1.3em; color: #1976D2;">
+                    <strong>Next:</strong> Complete the reading activity and questions
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <div class="nav-buttons">
+            <button class="nav-btn" onclick="prevSlide()" id="prevBtn">← Previous</button>
+            <span id="slideCounter" style="font-weight: 600; color: #666;">Slide 1 of 13</span>
+            <button class="nav-btn" onclick="nextSlide()" id="nextBtn">Next →</button>
+        </div>
+    </div>
+
+    <script>
+        // Presentation navigation
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+
+        function showSlide(n) {
+            slides.forEach(slide => slide.classList.remove('active'));
+            slides[n].classList.add('active');
+            
+            document.getElementById('slideCounter').textContent = `Slide ${n + 1} of ${totalSlides}`;
+            document.getElementById('prevBtn').disabled = n === 0;
+            document.getElementById('nextBtn').disabled = n === totalSlides - 1;
+            
+            // Scroll to top when changing slides
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function nextSlide() {
+            if (currentSlide < totalSlides - 1) {
+                currentSlide++;
+                showSlide(currentSlide);
+            }
+        }
+
+        function prevSlide() {
+            if (currentSlide > 0) {
+                currentSlide--;
+                showSlide(currentSlide);
+            }
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'ArrowRight') nextSlide();
+            if (e.key === 'ArrowLeft') prevSlide();
+        });
+
+        // Initialize first slide
+        showSlide(0);
+    </script>
+</body>
+</html>
