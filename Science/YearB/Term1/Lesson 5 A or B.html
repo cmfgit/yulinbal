@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DNA Revision & Protein Introduction - Is It A or B?</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        .presentation {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            background: linear-gradient(to bottom right, #eff6ff, #faf5ff);
+        }
+
+        .slide-container {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 3rem;
+        }
+
+        .slide {
+            display: none;
+            width: 100%;
+            height: 100%;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .slide.active {
+            display: flex;
+        }
+
+        .title-slide {
+            text-align: center;
+        }
+
+        .title-slide h1 {
+            font-size: 5rem;
+            color: #2563eb;
+            margin-bottom: 2rem;
+            font-weight: bold;
+        }
+
+        .title-slide h2 {
+            font-size: 3.5rem;
+            color: #374151;
+            margin-bottom: 3rem;
+            font-weight: 600;
+        }
+
+        .title-slide p {
+            font-size: 2rem;
+            color: #4b5563;
+            margin-top: 4rem;
+        }
+
+        .question-slide {
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .question-slide h2 {
+            font-size: 3.5rem;
+            color: #2563eb;
+            margin-bottom: 3rem;
+            font-weight: bold;
+        }
+
+        .question-slide .question-text {
+            font-size: 2.5rem;
+            color: #1f2937;
+            margin-bottom: 4rem;
+            font-weight: 600;
+        }
+
+        .options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            width: 100%;
+            max-width: 1200px;
+        }
+
+        .option {
+            border: 4px solid;
+            border-radius: 1.5rem;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .option.option-a {
+            background-color: #fee2e2;
+            border-color: #ef4444;
+        }
+
+        .option.option-b {
+            background-color: #dbeafe;
+            border-color: #3b82f6;
+        }
+
+        .option h3 {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            font-weight: bold;
+        }
+
+        .option.option-a h3 {
+            color: #dc2626;
+        }
+
+        .option.option-b h3 {
+            color: #2563eb;
+        }
+
+        .option p {
+            font-size: 2rem;
+            color: #1f2937;
+        }
+
+        .answer-slide {
+            flex-direction: column;
+        }
+
+        .answer-slide h2 {
+            font-size: 3.5rem;
+            color: #16a34a;
+            margin-bottom: 2rem;
+            font-weight: bold;
+        }
+
+        .answer-box {
+            border: 4px solid;
+            border-radius: 1.5rem;
+            padding: 3rem;
+            max-width: 1000px;
+            text-align: center;
+        }
+
+        .answer-box.answer-a {
+            background-color: #fee2e2;
+            border-color: #ef4444;
+        }
+
+        .answer-box.answer-b {
+            background-color: #dbeafe;
+            border-color: #3b82f6;
+        }
+
+        .answer-box .explanation {
+            font-size: 2.5rem;
+            color: #1f2937;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .answer-box .subtext {
+            font-size: 2rem;
+            color: #4b5563;
+            font-style: italic;
+            margin-top: 1.5rem;
+        }
+
+        /* New concept slides - purple theme */
+        .question-slide.new-concept h2 {
+            color: #9c27b0;
+        }
+
+        .answer-slide.new-concept h2 {
+            color: #7b1fa2;
+        }
+
+        .conclusion-slide {
+            text-align: center;
+        }
+
+        .conclusion-slide h1 {
+            font-size: 5rem;
+            color: #16a34a;
+            margin-bottom: 3rem;
+            font-weight: bold;
+        }
+
+        .conclusion-content {
+            text-align: left;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .conclusion-content p {
+            font-size: 2.5rem;
+            color: #374151;
+            margin-bottom: 2rem;
+        }
+
+        .conclusion-content ul {
+            list-style: none;
+            font-size: 2rem;
+            color: #4b5563;
+        }
+
+        .conclusion-content li {
+            margin: 1rem 0 1rem 2rem;
+        }
+
+        .navigation {
+            background-color: #1f2937;
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .nav-button {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 0.5rem;
+            font-size: 1.125rem;
+            font-weight: 600;
+            cursor: pointer;
+            background-color: #2563eb;
+            color: white;
+        }
+
+        .nav-button:hover:not(:disabled) {
+            background-color: #1d4ed8;
+        }
+
+        .nav-button:disabled {
+            background-color: #4b5563;
+            cursor: not-allowed;
+            opacity: 0.5;
+        }
+
+        .slide-info {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .slide-counter {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-right: 1rem;
+        }
+
+        .dot {
+            width: 0.75rem;
+            height: 0.75rem;
+            border-radius: 50%;
+            background-color: #6b7280;
+            cursor: pointer;
+        }
+
+        .dot.active {
+            background-color: #3b82f6;
+        }
+
+        .keyboard-hint {
+            background-color: #374151;
+            color: #d1d5db;
+            text-align: center;
+            padding: 0.5rem;
+            font-size: 0.875rem;
+        }
+
+        @media print {
+            .navigation, .keyboard-hint {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="presentation">
+        <div class="slide-container">
+            <!-- Slide 1: Title -->
+            <div class="slide active title-slide">
+                <div>
+                    <h1>Is It A or B?</h1>
+                    <h2>DNA Revision & Protein Introduction</h2>
+                    <p>Stand on the side of the room that matches your answer!</p>
+                </div>
+            </div>
+
+            <!-- Slide 2: Question 1 - DNA REVISION -->
+            <div class="slide question-slide">
+                <h2>Question 1</h2>
+                <p class="question-text">DNA is shaped like a twisted ladder. What is this shape called?</p>
+                <div class="options">
+                    <div class="option option-a">
+                        <h3>A</h3>
+                        <p>Double helix</p>
+                    </div>
+                    <div class="option option-b">
+                        <h3>B</h3>
+                        <p>Single strand</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 3: Answer 1 -->
+            <div class="slide answer-slide">
+                <h2>Answer: A</h2>
+                <div class="answer-box answer-a">
+                    <p class="explanation">Double helix</p>
+                    <p class="subtext">DNA is shaped like a twisted ladder - this is called a "double helix". The two sides are made of sugar and phosphate, while the rungs are base pairs (A-T and C-G).</p>
+                </div>
+            </div>
+
+            <!-- Slide 4: Question 2 - DNA REVISION -->
+            <div class="slide question-slide">
+                <h2>Question 2</h2>
+                <p class="question-text">In DNA, which base always pairs with Thymine (T)?</p>
+                <div class="options">
+                    <div class="option option-a">
+                        <h3>A</h3>
+                        <p>Adenine (A)</p>
+                    </div>
+                    <div class="option option-b">
+                        <h3>B</h3>
+                        <p>Cytosine (C)</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 5: Answer 2 -->
+            <div class="slide answer-slide">
+                <h2>Answer: A</h2>
+                <div class="answer-box answer-a">
+                    <p class="explanation">Adenine (A)</p>
+                    <p class="subtext">DNA bases always pair in specific ways: A pairs with T, and C pairs with G. This is called complementary base pairing!</p>
+                </div>
+            </div>
+
+            <!-- Slide 6: Question 3 - DNA REVISION -->
+            <div class="slide question-slide">
+                <h2>Question 3</h2>
+                <p class="question-text">How much DNA is inside one human cell?</p>
+                <div class="options">
+                    <div class="option option-a">
+                        <h3>A</h3>
+                        <p>About 2 metres</p>
+                    </div>
+                    <div class="option option-b">
+                        <h3>B</h3>
+                        <p>About 2 centimetres</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 7: Answer 3 -->
+            <div class="slide answer-slide">
+                <h2>Answer: A</h2>
+                <div class="answer-box answer-a">
+                    <p class="explanation">About 2 metres</p>
+                    <p class="subtext">Each cell contains approximately 2 metres of DNA! It fits inside tiny cells because DNA is tightly packaged and coiled around proteins called histones.</p>
+                </div>
+            </div>
+
+            <!-- Slide 8: Question 4 - DNA REVISION -->
+            <div class="slide question-slide">
+                <h2>Question 4</h2>
+                <p class="question-text">When DNA is tightly packaged, what structures does it form?</p>
+                <div class="options">
+                    <div class="option option-a">
+                        <h3>A</h3>
+                        <p>Chromosomes</p>
+                    </div>
+                    <div class="option option-b">
+                        <h3>B</h3>
+                        <p>Ribosomes</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 9: Answer 4 -->
+            <div class="slide answer-slide">
+                <h2>Answer: A</h2>
+                <div class="answer-box answer-a">
+                    <p class="explanation">Chromosomes</p>
+                    <p class="subtext">Chromosomes are tightly packaged bundles of DNA wrapped around histone proteins. Humans have 46 chromosomes (23 pairs) in most cells.</p>
+                </div>
+            </div>
+
+            <!-- Slide 10: Question 5 - NEW CONCEPT: PROTEINS -->
+            <div class="slide question-slide new-concept">
+                <h2>Question 5 - New Concept!</h2>
+                <p class="question-text">Where do proteins come from in your body?</p>
+                <div class="options">
+                    <div class="option option-a">
+                        <h3>A</h3>
+                        <p>They are made using instructions from genes</p>
+                    </div>
+                    <div class="option option-b">
+                        <h3>B</h3>
+                        <p>They only come from food we eat</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 11: Answer 5 -->
+            <div class="slide answer-slide new-concept">
+                <h2>Answer: A</h2>
+                <div class="answer-box answer-a">
+                    <p class="explanation">They are made using instructions from genes</p>
+                    <p class="subtext">Your body makes its own proteins using instructions stored in your genes! Each gene is a section of DNA that contains the code for making one specific protein.</p>
+                </div>
+            </div>
+
+            <!-- Slide 12: Question 6 - NEW CONCEPT: TRANSCRIPTION -->
+            <div class="slide question-slide new-concept">
+                <h2>Question 6 - New Concept!</h2>
+                <p class="question-text">What is the first step in making a protein from a gene?</p>
+                <div class="options">
+                    <div class="option option-a">
+                        <h3>A</h3>
+                        <p>The gene's DNA code is copied into RNA</p>
+                    </div>
+                    <div class="option option-b">
+                        <h3>B</h3>
+                        <p>The protein appears immediately</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 13: Answer 6 -->
+            <div class="slide answer-slide new-concept">
+                <h2>Answer: A</h2>
+                <div class="answer-box answer-a">
+                    <p class="explanation">The gene's DNA code is copied into RNA</p>
+                    <p class="subtext">Making a protein is a two-step process. First, DNA is copied into RNA (transcription). Think of it like making a photocopy of instructions before using them!</p>
+                </div>
+            </div>
+
+            <!-- Slide 14: Question 7 - NEW CONCEPT: WHY RNA -->
+            <div class="slide question-slide new-concept">
+                <h2>Question 7 - New Concept!</h2>
+                <p class="question-text">Why does the cell make an RNA copy instead of using DNA directly?</p>
+                <div class="options">
+                    <div class="option option-a">
+                        <h3>A</h3>
+                        <p>To protect the original DNA from damage</p>
+                    </div>
+                    <div class="option option-b">
+                        <h3>B</h3>
+                        <p>Because DNA cannot make proteins</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 15: Answer 7 -->
+            <div class="slide answer-slide new-concept">
+                <h2>Answer: A</h2>
+                <div class="answer-box answer-a">
+                    <p class="explanation">To protect the original DNA from damage</p>
+                    <p class="subtext">DNA is your master instruction manual and stays safely in the nucleus. Making an RNA copy is like photocopying a recipe - you can use the copy without risking damage to the original!</p>
+                </div>
+            </div>
+
+            <!-- Slide 16: Conclusion -->
+            <div class="slide conclusion-slide">
+                <div>
+                    <h1>Great Work!</h1>
+                    <div class="conclusion-content">
+                        <p>You now understand:</p>
+                        <ul>
+                            <li>✓ DNA structure: double helix with complementary base pairing (A-T, C-G)</li>
+                            <li>✓ DNA packaging: 2 metres fits in cells by forming chromosomes</li>
+                            <li>✓ Genes contain instructions for making proteins</li>
+                            <li>✓ Transcription: DNA is copied into RNA</li>
+                            <li>✓ RNA protects the original DNA while carrying instructions</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <div class="navigation">
+            <button class="nav-button" id="prevBtn" onclick="changeSlide(-1)">
+                ← Previous
+            </button>
+
+            <div class="slide-info">
+                <span class="slide-counter" id="slideCounter">Slide 1 of 16</span>
+                <div id="dotContainer"></div>
+            </div>
+
+            <button class="nav-button" id="nextBtn" onclick="changeSlide(1)">
+                Next →
+            </button>
+        </div>
+
+        <div class="keyboard-hint">
+            Use ← → arrow keys or click buttons to navigate | Press F11 for fullscreen
+        </div>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const slideCounter = document.getElementById('slideCounter');
+        const dotContainer = document.getElementById('dotContainer');
+
+        // Create dots for each slide
+        for (let i = 0; i < totalSlides; i++) {
+            const dot = document.createElement('div');
+            dot.className = 'dot';
+            if (i === 0) dot.classList.add('active');
+            dot.onclick = () => goToSlide(i);
+            dotContainer.appendChild(dot);
+        }
+
+        const dots = document.querySelectorAll('.dot');
+
+        function showSlide(n) {
+            slides.forEach(slide => slide.classList.remove('active'));
+            dots.forEach(dot => dot.classList.remove('active'));
+            
+            slides[n].classList.add('active');
+            dots[n].classList.add('active');
+            
+            slideCounter.textContent = `Slide ${n + 1} of ${totalSlides}`;
+            
+            prevBtn.disabled = n === 0;
+            nextBtn.disabled = n === totalSlides - 1;
+        }
+
+        function changeSlide(direction) {
+            currentSlide += direction;
+            if (currentSlide < 0) currentSlide = 0;
+            if (currentSlide >= totalSlides) currentSlide = totalSlides - 1;
+            showSlide(currentSlide);
+        }
+
+        function goToSlide(n) {
+            currentSlide = n;
+            showSlide(currentSlide);
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' && currentSlide < totalSlides - 1) {
+                changeSlide(1);
+            } else if (e.key === 'ArrowLeft' && currentSlide > 0) {
+                changeSlide(-1);
+            }
+        });
+
+        // Initialize
+        showSlide(0);
+    </script>
+</body>
+</html>
