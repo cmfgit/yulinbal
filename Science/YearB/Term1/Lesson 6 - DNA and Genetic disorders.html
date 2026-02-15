@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Introduction to Genetic Disorders</title>
+    <style>
+        body {
+            font-family: 'Comic Sans MS', 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to bottom, #667eea, #764ba2);
+            min-height: 100vh;
+        }
+        
+        .slide-container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            background: white;
+            color: #667eea;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+        }
+        
+        .header h1 {
+            margin: 0;
+            font-size: 38px;
+        }
+        
+        .header p {
+            margin: 10px 0 0 0;
+            font-size: 18px;
+        }
+        
+        .slide {
+            display: none;
+            background: white;
+            min-height: 550px;
+            padding: 50px;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+            position: relative;
+        }
+        
+        .slide.active {
+            display: block;
+            animation: slideIn 0.5s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        .slide-number {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            background: #667eea;
+            color: white;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 16px;
+        }
+        
+        .slide h2 {
+            color: #667eea;
+            font-size: 36px;
+            margin-top: 0;
+            margin-bottom: 30px;
+            border-bottom: 4px solid #667eea;
+            padding-bottom: 15px;
+        }
+        
+        .slide h3 {
+            color: #764ba2;
+            font-size: 26px;
+            margin-top: 25px;
+            margin-bottom: 15px;
+        }
+        
+        .slide h4 {
+            color: #2196f3;
+            font-size: 22px;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+        
+        .intro-box {
+            background: #fff3e0;
+            border-left: 5px solid #ff9800;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+        
+        .intro-box h3 {
+            color: #ff9800;
+            margin-top: 0;
+        }
+        
+        .definition-box {
+            background: #e8f5e9;
+            border: 3px solid #4caf50;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+            font-size: 18px;
+        }
+        
+        .definition-box h3 {
+            color: #4caf50;
+            margin-top: 0;
+        }
+        
+        .chromosome-badge {
+            display: inline-block;
+            background: #ff5722;
+            color: white;
+            padding: 10px 25px;
+            border-radius: 25px;
+            font-weight: bold;
+            font-size: 20px;
+            margin: 15px 0;
+        }
+        
+        .key-point {
+            background: #fffde7;
+            border-left: 5px solid #ffc107;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+            font-size: 17px;
+        }
+        
+        .symptom-list {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+        
+        .symptom-list li {
+            margin: 10px 0;
+            font-size: 17px;
+        }
+        
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 16px;
+        }
+        
+        .comparison-table th {
+            background: #667eea;
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-size: 17px;
+        }
+        
+        .comparison-table td {
+            border: 2px solid #ddd;
+            padding: 15px;
+        }
+        
+        .comparison-table tr:nth-child(even) {
+            background: #f9f9f9;
+        }
+        
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 3px solid #eee;
+        }
+        
+        .nav-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 20px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        
+        .nav-btn:hover {
+            background: #764ba2;
+            transform: scale(1.05);
+        }
+        
+        .nav-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .progress-bar {
+            background: #e0e0e0;
+            height: 8px;
+            border-radius: 4px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            background: #667eea;
+            height: 100%;
+            transition: width 0.3s;
+        }
+        
+        ul {
+            line-height: 1.8;
+            font-size: 17px;
+        }
+        
+        p {
+            font-size: 17px;
+            line-height: 1.6;
+        }
+        
+        strong {
+            color: #333;
+        }
+        
+        @media print {
+            .navigation, .progress-bar, .header {
+                display: none;
+            }
+            .slide {
+                display: block !important;
+                page-break-after: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="slide-container">
+        <div class="header">
+            <h1>🧬 Introduction to Genetic Disorders 🧬</h1>
+            <p>Week 3: Understanding How Genes Affect Health</p>
+        </div>
+        
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressBar" style="width: 0%"></div>
+        </div>
+
+        <!-- Slide 1: What Are Genetic Disorders? -->
+        <div class="slide active" data-slide="1">
+            <div class="slide-number">Slide 1 of 10</div>
+            <h2>What Are Genetic Disorders?</h2>
+            
+            <div class="intro-box">
+                <h3>Remember from previous lessons:</h3>
+                <ul>
+                    <li><strong>DNA</strong> is stored in chromosomes</li>
+                    <li>Humans have <strong>23 pairs</strong> of chromosomes (46 total)</li>
+                    <li>Chromosomes carry <strong>genes</strong> that give instructions for making proteins</li>
+                    <li>Proteins do all the work in our bodies</li>
+                </ul>
+            </div>
+            
+            <div class="definition-box">
+                <h3>🔍 Definition: Genetic Disorder</h3>
+                <p><strong>A genetic disorder is a health condition caused by changes (mutations) in genes or chromosomes.</strong></p>
+                <p>These changes affect how proteins are made, which can cause problems in how the body works.</p>
+            </div>
+            
+            <div class="navigation">
+                <button class="nav-btn" onclick="nextSlide()">Next →</button>
+            </div>
+        </div>
+
+        <!-- Slide 2: Types of Genetic Disorders -->
+        <div class="slide" data-slide="2">
+            <div class="slide-number">Slide 2 of 10</div>
+            <h2>Two Types of Genetic Disorders</h2>
+            
+            <div class="key-point">
+                <h3>Type 1: Chromosome Disorders</h3>
+                <p>• Problems with <strong>whole chromosomes</strong> (too many, too few, or damaged)</p>
+                <p>• Example: Having an extra chromosome 21</p>
+                <p>• Affects many genes at once</p>
+            </div>
+            
+            <div class="key-point">
+                <h3>Type 2: Single Gene Disorders</h3>
+                <p>• Problems with <strong>one specific gene</strong> on a chromosome</p>
+                <p>• The gene has wrong instructions, so it makes the wrong protein</p>
+                <p>• Examples: Problems with genes on chromosome 7 or chromosome 11</p>
+            </div>
+            
+            <div class="intro-box">
+                <h3>Important to Remember:</h3>
+                <ul>
+                    <li>Genetic disorders are <strong>not contagious</strong> - you can't catch them</li>
+                    <li>They are often <strong>inherited</strong> (passed from parents)</li>
+                    <li>Some can be managed with treatment</li>
+                    <li>People with genetic disorders can live full, meaningful lives</li>
+                </ul>
+            </div>
+            
+            <div class="navigation">
+                <button class="nav-btn" onclick="previousSlide()">← Previous</button>
+                <button class="nav-btn" onclick="nextSlide()">Next →</button>
+            </div>
+        </div>
+
+        <!-- Slide 3: Down Syndrome - Part 1 -->
+        <div class="slide" data-slide="3">
+            <div class="slide-number">Slide 3 of 10</div>
+            <h2>Down Syndrome - Part 1</h2>
+            
+            <div class="chromosome-badge">📍 CHROMOSOME 21</div>
+            
+            <h3>What Causes It?</h3>
+            <div class="key-point">
+                <p><strong>People with Down syndrome have an EXTRA copy of chromosome 21.</strong></p>
+                <p>• Normal: 2 copies of chromosome 21</p>
+                <p>• Down syndrome: 3 copies of chromosome 21</p>
+                <p>• This is called "Trisomy 21"</p>
+                <p>• They have 47 chromosomes instead of 46</p>
+            </div>
+            
+            <h3>Why Does an Extra Chromosome Cause Problems?</h3>
+            <div class="intro-box">
+                <p>The extra chromosome 21 means cells make <strong>TOO MUCH</strong> of certain proteins.</p>
+                <p>When there's too much of some proteins, it affects how the body and brain develop.</p>
+            </div>
+            
+            <div class="navigation">
+                <button class="nav-btn" onclick="previousSlide()">← Previous</button>
+                <button class="nav-btn" onclick="nextSlide()">Next →</button>
+            </div>
+        </div>
+
+        <!-- Slide 4: Down Syndrome - Part 2 -->
+        <div class="slide" data-slide="4">
+            <div class="slide-number">Slide 4 of 10</div>
+            <h2>Down Syndrome - Part 2</h2>
+            
+            <div class="chromosome-badge">📍 CHROMOSOME 21</div>
+            
+            <h3>What Does It Affect?</h3>
+            <div class="symptom-list">
+                <strong>Common Features:</strong>
+                <ul>
+                    <li>Intellectual disability (learning takes longer)</li>
+                    <li>Distinctive facial features</li>
+                    <li>Lower muscle tone</li>
+                    <li>Shorter height</li>
+                    <li>Increased risk of heart problems</li>
+                </ul>
+            </div>
+            
+            <div class="intro-box">
+                <h3>Living with Down Syndrome:</h3>
+                <p>• Many people attend regular schools with support</p>
+                <p>• They can learn to read, write, and do many activities</p>
+                <p>• Many live independently or with minimal support as adults</p>
+                <p>• They have unique personalities, talents, and interests</p>
+            </div>
+            
+            <div class="navigation">
+                <button class="nav-btn" onclick="previousSlide()">← Previous</button>
+                <button class="nav-btn" onclick="nextSlide()">Next →</button>
+            </div>
+        </div>
+
+        <!-- Slide 5: Cystic Fibrosis - Part 1 -->
+        <div class="slide" data-slide="5">
+            <div class="slide-number">Slide 5 of 10</div>
+            <h2>Cystic Fibrosis - Part 1</h2>
+            
+            <div class="chromosome-badge">📍 CHROMOSOME 7</div>
+            
+            <h3>What Causes It?</h3>
+            <div class="key-point">
+                <p><strong>A mutation in ONE gene on chromosome 7.</strong></p>
+                <p>• The gene is called the CFTR gene</p>
+                <p>• The mutation means the gene gives WRONG instructions</p>
+                <p>• This makes a faulty protein that doesn't work properly</p>
+                <p>• Both parents must pass on a faulty gene for a child to have CF</p>
+            </div>
+            
+            <h3>What Does the CFTR Protein Do?</h3>
+            <div class="intro-box">
+                <p>The CFTR protein normally controls <strong>salt and water movement</strong> in cells.</p>
+                <p><strong>When it doesn't work:</strong></p>
+                <p>→ Thick, sticky mucus builds up in organs</p>
+                <p>→ Particularly affects lungs and digestive system</p>
+            </div>
+            
+            <div class="key-point">
+                <strong>DNA → RNA → Protein Connection:</strong>
+                <p>Chromosome 7 has faulty DNA → makes faulty RNA → makes faulty CFTR protein → protein can't do its job → mucus problems</p>
+            </div>
+            
+            <div class="navigation">
+                <button class="nav-btn" onclick="previousSlide()">← Previous</button>
+                <button class="nav-btn" onclick="nextSlide()">Next →</button>
+            </div>
+        </div>
+
+        <!-- Slide 6: Cystic Fibrosis - Part 2 -->
+        <div class="slide" data-slide="6">
+            <div class="slide-number">Slide 6 of 10</div>
+            <h2>Cystic Fibrosis - Part 2</h2>
+            
+            <div class="chromosome-badge">📍 CHROMOSOME 7</div>
+            
+            <h3>What Does It Affect?</h3>
+            <div class="symptom-list">
+                <strong>Common Problems:</strong>
+                <ul>
+                    <li><strong>Lungs:</strong> Thick mucus makes it hard to breathe and causes infections</li>
+                    <li><strong>Digestive system:</strong> Hard to digest food and absorb nutrients</li>
+                    <li><strong>Other:</strong> Very salty sweat, difficulty gaining weight</li>
+                </ul>
+            </div>
+            
+            <div class="intro-box">
+                <h3>Managing Cystic Fibrosis:</h3>
+                <p>• Daily physiotherapy to clear mucus from lungs</p>
+                <p>• Medications to thin mucus and fight infections</p>
+                <p>• Enzyme supplements to help digest food</p>
+                <p>• With treatment, many people with CF live into their 40s and beyond</p>
+            </div>
+            
+            <div class="navigation">
+                <button class="nav-btn" onclick="previousSlide()">← Previous</button>
+                <button class="nav-btn" onclick="nextSlide()">Next →</button>
+            </div>
+        </div>
+
+        <!-- Slide 7: Sickle Cell Disease - Part 1 -->
+        <div class="slide" data-slide="7">
+            <div class="slide-number">Slide 7 of 10</div>
+            <h2>Sickle Cell Disease - Part 1</h2>
+            
+            <div class="chromosome-badge">📍 CHROMOSOME 11</div>
+            
+            <h3>What Causes It?</h3>
+            <div class="key-point">
+                <p><strong>A mutation in ONE gene on chromosome 11.</strong></p>
+                <p>• The gene makes hemoglobin (protein in red blood cells)</p>
+                <p>• Just <strong>ONE letter change</strong> in the DNA causes the problem!</p>
+                <p>• This makes abnormal hemoglobin called "hemoglobin S"</p>
+                <p>• Both parents must pass on a faulty gene for a child to have it</p>
+            </div>
+            
+            <h3>What Does Hemoglobin Do?</h3>
+            <div class="intro-box">
+                <p>Hemoglobin normally carries <strong>oxygen in red blood cells</strong>.</p>
+                <p><strong>When it's faulty (hemoglobin S):</strong></p>
+                <p>→ Red blood cells become stiff and curved (sickle-shaped)</p>
+                <p>→ They get stuck in blood vessels</p>
+                <p>→ They break apart easily</p>
+            </div>
+            
+            <div class="key-point">
+                <strong>DNA → RNA → Protein Connection:</strong>
+                <p>Chromosome 11 has ONE wrong DNA letter → makes wrong RNA → makes wrong hemoglobin protein → protein changes red blood cell shape → blood cells can't work properly</p>
+            </div>
+            
+            <div class="navigation">
+                <button class="nav-btn" onclick="previousSlide()">← Previous</button>
+                <button class="nav-btn" onclick="nextSlide()">Next →</button>
+            </div>
+        </div>
+
+        <!-- Slide 8: Sickle Cell Disease - Part 2 -->
+        <div class="slide" data-slide="8">
+            <div class="slide-number">Slide 8 of 10</div>
+            <h2>Sickle Cell Disease - Part 2</h2>
+            
+            <div class="chromosome-badge">📍 CHROMOSOME 11</div>
+            
+            <h3>What Does It Affect?</h3>
+            <div class="symptom-list">
+                <strong>Common Problems:</strong>
+                <ul>
+                    <li><strong>Pain crises:</strong> Sickle cells block blood flow, causing severe pain</li>
+                    <li><strong>Fatigue:</strong> Not enough healthy red blood cells to carry oxygen</li>
+                    <li><strong>Infections:</strong> Damaged spleen makes fighting infections harder</li>
+                    <li><strong>Organ damage:</strong> Blocked blood vessels can damage organs over time</li>
+                </ul>
+            </div>
+            
+            <div class="intro-box">
+                <h3>Managing Sickle Cell Disease:</h3>
+                <p>• Pain medication during crises</p>
+                <p>• Medication to reduce sickling</p>
+                <p>• Blood transfusions when needed</p>
+                <p>• Drinking lots of water helps prevent crises</p>
+                <p>• Avoiding extreme temperatures and high altitudes</p>
+            </div>
+            
+            <div class="intro-box">
+                <h3>Interesting Fact:</h3>
+                <p>Sickle cell disease is more common in people whose ancestors came from Africa, Mediterranean countries, Middle East, and India. The sickle cell gene provides some protection against malaria!</p>
+            </div>
+            
+            <div class="navigation">
+                <button class="nav-btn" onclick="previousSlide()">← Previous</button>
+                <button class="nav-btn" onclick="nextSlide()">Next →</button>
+            </div>
+        </div>
+
+        <!-- Slide 9: Comparison Table -->
+        <div class="slide" data-slide="9">
+            <div class="slide-number">Slide 9 of 10</div>
+            <h2>Comparing the Three Disorders</h2>
+            
+            <table class="comparison-table">
+                <tr>
+                    <th>Feature</th>
+                    <th>Down Syndrome</th>
+                    <th>Cystic Fibrosis</th>
+                    <th>Sickle Cell Disease</th>
+                </tr>
+                <tr>
+                    <td><strong>Chromosome</strong></td>
+                    <td>Chromosome 21</td>
+                    <td>Chromosome 7</td>
+                    <td>Chromosome 11</td>
+                </tr>
+                <tr>
+                    <td><strong>Type of Problem</strong></td>
+                    <td>Extra whole chromosome</td>
+                    <td>Faulty gene</td>
+                    <td>Faulty gene</td>
+                </tr>
+                <tr>
+                    <td><strong>Protein Affected</strong></td>
+                    <td>Many proteins (too much)</td>
+                    <td>CFTR protein (doesn't work)</td>
+                    <td>Hemoglobin (wrong shape)</td>
+                </tr>
+                <tr>
+                    <td><strong>Main Body System</strong></td>
+                    <td>Brain development</td>
+                    <td>Lungs and digestive system</td>
+                    <td>Blood and circulation</td>
+                </tr>
+                <tr>
+                    <td><strong>Inheritance</strong></td>
+                    <td>Usually random (not inherited)</td>
+                    <td>Both parents carry gene</td>
+                    <td>Both parents carry gene</td>
+                </tr>
+            </table>
+            
+            <div class="key-point">
+                <strong>Key Difference:</strong>
+                <p>Down syndrome = Extra chromosome affects MANY proteins</p>
+                <p>Cystic fibrosis and Sickle cell = ONE faulty gene affects ONE protein</p>
+            </div>
+            
+            <div class="navigation">
+                <button class="nav-btn" onclick="previousSlide()">← Previous</button>
+                <button class="nav-btn" onclick="nextSlide()">Next →</button>
+            </div>
+        </div>
+
+        <!-- Slide 10: Summary -->
+        <div class="slide" data-slide="10">
+            <div class="slide-number">Slide 10 of 10</div>
+            <h2>Key Takeaways</h2>
+            
+            <div class="key-point">
+                <h3>1. The DNA → RNA → Protein Connection</h3>
+                <p>DNA has instructions → RNA copies them → Proteins do the work</p>
+                <p>When DNA is wrong, the proteins are wrong, and the body doesn't work properly</p>
+            </div>
+            
+            <div class="key-point">
+                <h3>2. Chromosomes Matter</h3>
+                <p>Each chromosome carries hundreds or thousands of genes</p>
+                <p>Problems with different chromosomes cause different disorders</p>
+            </div>
+            
+            <div class="definition-box">
+                <h3>Remember:</h3>
+                <ul>
+                    <li>Genetic disorders are NOT the person's fault</li>
+                    <li>They are NOT contagious</li>
+                    <li>People with genetic disorders are valuable members of our community</li>
+                    <li>Medical science is constantly finding better treatments</li>
+                    <li>Many people with genetic disorders live full, meaningful lives</li>
+                </ul>
+            </div>
+            
+            <div class="intro-box">
+                <h3>🌟 Success Criteria - Can You:</h3>
+                <ul>
+                    <li>✓ Define what a genetic disorder is?</li>
+                    <li>✓ Name which chromosome is affected in each disorder?</li>
+                    <li>✓ Explain how faulty genes lead to faulty proteins?</li>
+                    <li>✓ Describe the main symptoms of each disorder?</li>
+                    <li>✓ Explain the difference between chromosome disorders and gene disorders?</li>
+                </ul>
+            </div>
+            
+            <div class="navigation">
+                <button class="nav-btn" onclick="previousSlide()">← Previous</button>
+                <button class="nav-btn" onclick="goToSlide(1)">Back to Start</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentSlide = 1;
+        const totalSlides = 10;
+        
+        function showSlide(slideNumber) {
+            const slides = document.querySelectorAll('.slide');
+            slides.forEach((slide, index) => {
+                slide.classList.remove('active');
+                if (parseInt(slide.getAttribute('data-slide')) === slideNumber) {
+                    slide.classList.add('active');
+                }
+            });
+            
+            currentSlide = slideNumber;
+            updateProgress();
+            window.scrollTo({top: 0, behavior: 'smooth'});
+        }
+
+        function nextSlide() {
+            if (currentSlide < totalSlides) {
+                showSlide(currentSlide + 1);
+            }
+        }
+
+        function previousSlide() {
+            if (currentSlide > 1) {
+                showSlide(currentSlide - 1);
+            }
+        }
+
+        function goToSlide(slideNumber) {
+            showSlide(slideNumber);
+        }
+
+        function updateProgress() {
+            const progress = (currentSlide / totalSlides) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+        }
+
+        // Initialize
+        showSlide(1);
+    </script>
+</body>
+</html>
