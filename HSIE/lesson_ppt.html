@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Lesson 2.1 – Natural Biophysical Processes</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', Arial, sans-serif; background: #1a1a2e; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; padding: 10px; }
+
+  .slide-container { width: 100%; max-width: 900px; }
+
+  .slide { display: none; background: white; border-radius: 12px; min-height: 480px; padding: 40px 50px; position: relative; box-shadow: 0 8px 32px rgba(0,0,0,0.4); flex-direction: column; justify-content: center; }
+  .slide.active { display: flex; }
+
+  .slide.title-slide { background: linear-gradient(135deg, #1a6b4a 0%, #0d4a35 100%); color: white; }
+  .slide.blue { border-top: 8px solid #1565c0; }
+  .slide.green { border-top: 8px solid #2e7d32; }
+  .slide.orange { border-top: 8px solid #e65100; }
+  .slide.teal { border-top: 8px solid #00695c; }
+  .slide.purple { border-top: 8px solid #6a1b9a; }
+
+  .slide-number { position: absolute; bottom: 14px; right: 20px; font-size: 12px; color: #aaa; }
+  .title-slide .slide-number { color: rgba(255,255,255,0.5); }
+
+  .title-slide h1 { font-size: 2em; margin-bottom: 10px; line-height: 1.3; }
+  .title-slide .subtitle { font-size: 1.1em; opacity: 0.85; margin-bottom: 6px; }
+  .title-slide .inquiry { background: rgba(255,255,255,0.15); border-left: 4px solid #a5d6a7; padding: 12px 16px; border-radius: 6px; margin-top: 18px; font-style: italic; font-size: 1em; }
+
+  h2 { font-size: 1.5em; color: #1a237e; margin-bottom: 20px; }
+  .blue h2 { color: #1565c0; }
+  .green h2 { color: #2e7d32; }
+  .orange h2 { color: #e65100; }
+  .teal h2 { color: #00695c; }
+  .purple h2 { color: #6a1b9a; }
+
+  .time-badge { display: inline-block; font-size: 0.8em; font-weight: bold; padding: 4px 12px; border-radius: 20px; margin-bottom: 16px; }
+  .blue .time-badge { background: #e3f2fd; color: #1565c0; }
+  .green .time-badge { background: #e8f5e9; color: #2e7d32; }
+  .orange .time-badge { background: #fff3e0; color: #e65100; }
+  .teal .time-badge { background: #e0f2f1; color: #00695c; }
+  .purple .time-badge { background: #f3e5f5; color: #6a1b9a; }
+
+  ul { padding-left: 20px; }
+  ul li { margin-bottom: 10px; font-size: 0.95em; line-height: 1.5; color: #333; }
+  ul li strong { color: #111; }
+
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .box { background: #f5f5f5; border-radius: 8px; padding: 16px; }
+  .box h3 { font-size: 0.95em; font-weight: bold; margin-bottom: 10px; }
+
+  .framework { background: #f1f8e9; border-left: 5px solid #558b2f; padding: 16px 20px; border-radius: 6px; font-size: 0.9em; line-height: 2; }
+  .framework .step { display: flex; align-items: baseline; gap: 10px; }
+  .framework .label { font-weight: bold; color: #2e7d32; min-width: 140px; }
+  .framework .arrow { color: #999; margin: 0 4px; }
+
+  .demo-steps { counter-reset: steps; }
+  .demo-steps li { counter-increment: steps; list-style: none; padding-left: 36px; position: relative; margin-bottom: 12px; }
+  .demo-steps li::before { content: counter(steps); position: absolute; left: 0; top: 0; background: #e65100; color: white; width: 24px; height: 24px; border-radius: 50%; text-align: center; font-size: 0.8em; line-height: 24px; font-weight: bold; }
+
+  /* Word bank */
+  .word-bank { background: #e8eaf6; border: 2px dashed #5c6bc0; border-radius: 8px; padding: 12px 16px; margin-bottom: 18px; }
+  .word-bank h3 { font-size: 0.85em; font-weight: bold; color: #3949ab; margin-bottom: 8px; }
+  .word-bank .words { display: flex; flex-wrap: wrap; gap: 8px; }
+  .word-bank .word { background: white; border: 1px solid #9fa8da; border-radius: 20px; padding: 3px 12px; font-size: 0.85em; color: #1a237e; font-weight: 500; }
+
+  /* Fill in the blank sentences */
+  .sentences { display: flex; flex-direction: column; gap: 10px; }
+  .sentence { background: #f9f9f9; border-left: 4px solid #00695c; border-radius: 0 6px 6px 0; padding: 10px 14px; font-size: 0.9em; color: #333; line-height: 1.6; }
+  .sentence .num { font-weight: bold; color: #00695c; margin-right: 6px; }
+  .blank { display: inline-block; border-bottom: 2px solid #1565c0; min-width: 90px; height: 18px; margin: 0 4px; vertical-align: bottom; }
+
+  .exit-box { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 10px; }
+  .exit-option { border: 2px solid #6a1b9a; border-radius: 8px; padding: 14px; }
+  .exit-option h3 { color: #6a1b9a; font-size: 0.9em; margin-bottom: 8px; }
+  .exit-option p { font-size: 0.88em; color: #444; line-height: 1.5; }
+
+  .closing-box { background: linear-gradient(135deg, #e8f5e9, #e3f2fd); border-radius: 8px; padding: 18px 22px; font-style: italic; font-size: 1.05em; color: #333; line-height: 1.6; border-left: 5px solid #1565c0; }
+
+  .nav { display: flex; align-items: center; gap: 16px; margin-top: 16px; }
+  .nav button { background: #00897b; color: white; border: none; padding: 10px 28px; border-radius: 30px; font-size: 1em; cursor: pointer; transition: background 0.2s; }
+  .nav button:hover { background: #00695c; }
+  .nav button:disabled { background: #555; cursor: default; }
+  .nav .counter { color: #ccc; font-size: 0.9em; min-width: 80px; text-align: center; }
+
+  .dot-nav { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin-top: 10px; }
+  .dot { width: 10px; height: 10px; border-radius: 50%; background: #555; cursor: pointer; transition: background 0.2s; }
+  .dot.active { background: #00e5ff; }
+</style>
+</head>
+<body>
+
+<div class="slide-container">
+
+  <!-- Slide 1: Title -->
+  <div class="slide title-slide active">
+    <div class="subtitle">Week 2 · Lesson 2.1 · Stage 5 Geography · 35 Minutes</div>
+    <h1>Natural Biophysical Processes</h1>
+    <div class="inquiry">🔍 Inquiry Question: What natural biophysical processes cause environments to change over time?</div>
+    <div class="slide-number">1 / 8</div>
+  </div>
+
+  <!-- Slide 2: Learning Intentions -->
+  <div class="slide blue">
+    <span class="time-badge">📋 Before We Begin</span>
+    <h2>Learning Intentions & Success Criteria</h2>
+    <div class="two-col">
+      <div class="box">
+        <h3>🎯 By the end of today you will be able to…</h3>
+        <ul>
+          <li>Name and describe at least <strong>three natural biophysical processes</strong> that change environments</li>
+          <li>Explain how <strong>weathering, erosion, and deposition</strong> work in sequence</li>
+          <li>Connect <strong>El Niño and La Niña</strong> to real changes in Australian environments</li>
+        </ul>
+      </div>
+      <div class="box">
+        <h3>✅ I know I've got it when…</h3>
+        <ul>
+          <li>I can use the words <em>weathering, erosion, deposition, plate tectonics, El Niño</em> and <em>La Niña</em> correctly</li>
+          <li>I can describe the sequence: rock breaks down → material moves → material is dropped</li>
+          <li>I can give one Australian example for at least <strong>two</strong> processes</li>
+        </ul>
+      </div>
+    </div>
+    <div class="slide-number">2 / 8</div>
+  </div>
+
+  <!-- Slide 3: Hook -->
+  <div class="slide green">
+    <span class="time-badge">⏱ 0–5 min · HOOK</span>
+    <h2>What Broke This?</h2>
+    <ul>
+      <li>Look at the three images on display:<br>
+        <strong>1.</strong> Blue Mountains sandstone cliffs &nbsp;|&nbsp; <strong>2.</strong> Cracked road after a Queensland flood &nbsp;|&nbsp; <strong>3.</strong> Dried riverbed in outback NSW
+      </li>
+      <li>💬 <strong>Turn and talk:</strong> What do these places have in common? What do you think <em>changed</em> them?</li>
+      <li>Be ready to share — there are no wrong answers right now!</li>
+    </ul>
+    <div class="slide-number">3 / 8</div>
+  </div>
+
+  <!-- Slide 4: Framework -->
+  <div class="slide blue">
+    <span class="time-badge">⏱ 5–12 min · EXPLICIT TEACHING</span>
+    <h2>The Big Framework — Keep This in Mind All Lesson</h2>
+    <div class="framework">
+      <div class="step"><span class="label">BIOPHYSICAL PROCESSES</span><span>= Natural forces that <strong>CHANGE</strong> environments</span></div>
+      <div class="step"><span class="label">1. WEATHERING</span><span class="arrow">→</span><span>Rock <strong>BREAKS DOWN</strong> (stays in place)</span></div>
+      <div class="step"><span class="label">2. EROSION</span><span class="arrow">→</span><span>Broken material is <strong>MOVED</strong> (by wind, water, ice)</span></div>
+      <div class="step"><span class="label">3. DEPOSITION</span><span class="arrow">→</span><span>Material is <strong>DROPPED</strong> somewhere new</span></div>
+      <div class="step"><span class="label">4. PLATE TECTONICS</span><span class="arrow">→</span><span>Earth's crust <strong>MOVES</strong> → earthquakes, volcanoes, mountains</span></div>
+      <div class="step"><span class="label">5. CLIMATE SYSTEMS</span><span class="arrow">→</span><span><strong>El Niño</strong> (dry/hot in Australia) &nbsp;|&nbsp; <strong>La Niña</strong> (wet/floods)</span></div>
+    </div>
+    <div class="slide-number">4 / 8</div>
+  </div>
+
+  <!-- Slide 5: Demo -->
+  <div class="slide orange">
+    <span class="time-badge">⏱ 12–18 min · HANDS-ON DEMO</span>
+    <h2>Rock Weathering — You Are a Geologist</h2>
+    <ul class="demo-steps">
+      <li>Pick up your two rocks. Look closely — draw or describe what they look like on your scaffold sheet. <em>(Smooth? Rough? Sharp edges?)</em></li>
+      <li>Hold one rock over your sheet of paper. Rub both rocks together firmly for <strong>30 seconds</strong>. What do you notice on the paper?</li>
+      <li>Look at the rocks again — what has changed? Record your observations.</li>
+      <li>The tiny grains on the paper = <strong>sediment</strong>. Imagine wind or rain carrying that away — that's erosion and deposition in action.</li>
+    </ul>
+    <div class="box" style="margin-top:16px; background:#fff3e0;">
+      <h3>🧠 Think About It…</h3>
+      <ul>
+        <li>What broke the rock down? → <strong>Friction/pressure = physical weathering</strong></li>
+        <li>What would carry those grains away in nature? → <strong>Wind or water = erosion</strong></li>
+        <li>Where would those grains end up? → <strong>Settling somewhere new = deposition</strong></li>
+      </ul>
+    </div>
+    <div class="slide-number">5 / 8</div>
+  </div>
+
+  <!-- Slide 6: Scaffold Sheet – Fill in the Blanks -->
+  <div class="slide teal">
+    <span class="time-badge">⏱ 18–26 min · SCAFFOLD SHEET</span>
+    <h2>Fill in the Blanks — Use the Word Bank!</h2>
+    <div class="word-bank">
+      <h3>📚 Word Bank</h3>
+      <div class="words">
+        <span class="word">breaks down</span>
+        <span class="word">carried away</span>
+        <span class="word">dropped</span>
+        <span class="word">wind & water</span>
+        <span class="word">crust</span>
+        <span class="word">earthquakes</span>
+        <span class="word">dry & hot</span>
+        <span class="word">heavy rainfall</span>
+        <span class="word">floods</span>
+        <span class="word">Blue Mountains</span>
+        <span class="word">volcanoes</span>
+        <span class="word">sediment</span>
+      </div>
+    </div>
+    <div class="sentences">
+      <div class="sentence"><span class="num">1.</span> Weathering is when rock <span class="blank"></span> in place due to pressure, temperature, or water.</div>
+      <div class="sentence"><span class="num">2.</span> During erosion, <span class="blank"></span> (sediment) is <span class="blank"></span> by <span class="blank"></span>.</div>
+      <div class="sentence"><span class="num">3.</span> Deposition happens when material is <span class="blank"></span> in a new location, like a riverbed.</div>
+      <div class="sentence"><span class="num">4.</span> Plate tectonics is the movement of Earth's <span class="blank"></span>, which can cause <span class="blank"></span> and <span class="blank"></span>.</div>
+      <div class="sentence"><span class="num">5.</span> El Niño brings <span class="blank"></span> conditions to Australia, increasing the risk of drought.</div>
+      <div class="sentence"><span class="num">6.</span> La Niña brings <span class="blank"></span> to Australia, which can cause <span class="blank"></span>.</div>
+    </div>
+    <div class="slide-number">6 / 8</div>
+  </div>
+
+  <!-- Slide 7: Exit Ticket -->
+  <div class="slide purple">
+    <span class="time-badge">⏱ 26–32 min · EXIT TICKET</span>
+    <h2>Show What You Know — Before You Leave</h2>
+    <p style="margin-bottom:14px; color:#444;">Answer ONE of the options below on a sticky note or scrap paper and hand it to your teacher at the door.</p>
+    <div class="exit-box">
+      <div class="exit-option">
+        <h3>Option A</h3>
+        <p>Draw the <strong>weathering → erosion → deposition</strong> sequence in 3 boxes with one word in each box.</p>
+      </div>
+      <div class="exit-option">
+        <h3>Option B</h3>
+        <p>Explain in <strong>2 sentences</strong> how El Niño affects Australian environments. Use the words <em>drought</em>, <em>rainfall</em>, and <em>temperature</em>.</p>
+      </div>
+    </div>
+    <div class="slide-number">7 / 8</div>
+  </div>
+
+  <!-- Slide 8: Close -->
+  <div class="slide blue">
+    <span class="time-badge">⏱ 32–35 min · Lesson Close</span>
+    <h2>Where To Next?</h2>
+    <div class="closing-box">
+      "These processes have been happening for billions of years. The Blue Mountains, the volcanic plains, the droughts — none of that was caused by people. Next lesson, we'll look at what happens when humans get involved."
+    </div>
+    <div class="box" style="margin-top:20px; background:#e8eaf6;">
+      <h3>📌 Next Lesson Preview</h3>
+      <ul>
+        <li>We begin exploring <strong>human impacts</strong> on biophysical environments</li>
+        <li>How do <strong>people change</strong> the same environments these processes shaped?</li>
+      </ul>
+    </div>
+    <div class="slide-number">8 / 8</div>
+  </div>
+
+</div>
+
+<!-- Navigation -->
+<div class="nav">
+  <button id="prev" onclick="changeSlide(-1)" disabled>◀ Prev</button>
+  <span class="counter" id="counter">1 / 8</span>
+  <button id="next" onclick="changeSlide(1)">Next ▶</button>
+</div>
+<div class="dot-nav" id="dots"></div>
+
+<script>
+  let current = 0;
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  const dotsContainer = document.getElementById('dots');
+
+  slides.forEach((_, i) => {
+    const d = document.createElement('div');
+    d.className = 'dot' + (i === 0 ? ' active' : '');
+    d.onclick = () => goTo(i);
+    dotsContainer.appendChild(d);
+  });
+
+  function goTo(n) {
+    slides[current].classList.remove('active');
+    document.querySelectorAll('.dot')[current].classList.remove('active');
+    current = n;
+    slides[current].classList.add('active');
+    document.querySelectorAll('.dot')[current].classList.add('active');
+    document.getElementById('counter').textContent = (current+1) + ' / ' + total;
+    document.getElementById('prev').disabled = current === 0;
+    document.getElementById('next').disabled = current === total - 1;
+  }
+
+  function changeSlide(dir) { goTo(current + dir); }
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' && current < total-1) changeSlide(1);
+    if (e.key === 'ArrowLeft' && current > 0) changeSlide(-1);
+  });
+</script>
+</body>
+</html>
