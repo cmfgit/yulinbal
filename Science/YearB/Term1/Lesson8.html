@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Genotype, Phenotype & Blood Groups</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', Arial, sans-serif; background: #1a1a2e; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; padding: 10px; }
+
+  .slide-container { width: 100%; max-width: 900px; }
+
+  .slide { display: none; background: white; border-radius: 12px; min-height: 480px; padding: 40px 50px; position: relative; box-shadow: 0 8px 32px rgba(0,0,0,0.4); flex-direction: column; justify-content: center; }
+  .slide.active { display: flex; }
+
+  .slide.title-slide { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
+  .slide.blue { border-top: 8px solid #2196f3; }
+  .slide.green { border-top: 8px solid #4caf50; }
+  .slide.purple { border-top: 8px solid #9c27b0; }
+  .slide.orange { border-top: 8px solid #ff9800; }
+  .slide.teal { border-top: 8px solid #00897b; }
+
+  .slide-number { position: absolute; bottom: 14px; right: 20px; font-size: 12px; color: #aaa; }
+  .title-slide .slide-number { color: rgba(255,255,255,0.5); }
+
+  .title-slide h1 { font-size: 2em; margin-bottom: 10px; line-height: 1.3; }
+  .title-slide .subtitle { font-size: 1.1em; opacity: 0.85; margin-bottom: 6px; }
+  .title-slide .inquiry { background: rgba(255,255,255,0.15); border-left: 4px solid #e1bee7; padding: 12px 16px; border-radius: 6px; margin-top: 18px; font-style: italic; font-size: 1em; }
+
+  h2 { font-size: 1.5em; color: #1a237e; margin-bottom: 20px; }
+  .blue h2 { color: #2196f3; }
+  .green h2 { color: #4caf50; }
+  .purple h2 { color: #9c27b0; }
+  .orange h2 { color: #ff9800; }
+  .teal h2 { color: #00897b; }
+
+  .time-badge { display: inline-block; font-size: 0.8em; font-weight: bold; padding: 4px 12px; border-radius: 20px; margin-bottom: 16px; }
+  .blue .time-badge { background: #e3f2fd; color: #2196f3; }
+  .green .time-badge { background: #e8f5e9; color: #4caf50; }
+  .purple .time-badge { background: #f3e5f5; color: #9c27b0; }
+  .orange .time-badge { background: #fff3e0; color: #ff9800; }
+  .teal .time-badge { background: #e0f2f1; color: #00897b; }
+
+  ul { padding-left: 20px; }
+  ul li { margin-bottom: 10px; font-size: 0.95em; line-height: 1.5; color: #333; }
+  ul li strong { color: #111; }
+
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .box { background: #f5f5f5; border-radius: 8px; padding: 16px; }
+  .box h3 { font-size: 0.95em; font-weight: bold; margin-bottom: 10px; color: #333; }
+
+  .definition-box { background: #e8f5e9; border-left: 5px solid #4caf50; padding: 16px 20px; border-radius: 6px; margin: 12px 0; }
+  .definition-box h3 { font-size: 1em; font-weight: bold; color: #2e7d32; margin-bottom: 8px; }
+  .definition-box p { font-size: 0.9em; line-height: 1.6; color: #333; margin: 6px 0; }
+
+  .example-box { background: #fff3e0; border-left: 5px solid #ff9800; padding: 16px 20px; border-radius: 6px; margin: 12px 0; }
+  .example-box h3 { font-size: 1em; font-weight: bold; color: #e65100; margin-bottom: 8px; }
+  .example-box p { font-size: 0.9em; line-height: 1.6; color: #333; margin: 6px 0; }
+
+  .key-point { background: #fffde7; border-left: 5px solid #fbc02d; padding: 14px 18px; border-radius: 6px; margin: 12px 0; }
+  .key-point p { font-size: 0.9em; line-height: 1.6; color: #333; margin: 4px 0; }
+
+  .blood-table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 0.88em; }
+  .blood-table th { background: #667eea; color: white; padding: 10px; text-align: left; font-size: 0.95em; }
+  .blood-table td { border: 2px solid #ddd; padding: 10px; }
+  .blood-table tr:nth-child(even) { background: #f9f9f9; }
+
+  .allele { font-family: 'Courier New', monospace; background: #e3f2fd; padding: 2px 6px; border-radius: 3px; font-size: 0.95em; font-weight: bold; }
+
+  sup { font-size: 0.7em; vertical-align: super; }
+
+  .framework { background: #f3e5f5; border-left: 5px solid #9c27b0; padding: 16px 20px; border-radius: 6px; font-size: 0.9em; line-height: 1.8; }
+  .framework .step { display: flex; align-items: baseline; gap: 10px; margin: 8px 0; }
+  .framework .label { font-weight: bold; color: #6a1b9a; min-width: 120px; }
+  .framework .arrow { color: #999; margin: 0 4px; }
+
+  .comparison-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 16px 0; }
+  .comparison-card { background: #f5f5f5; border: 3px solid #2196f3; border-radius: 10px; padding: 16px; }
+  .comparison-card h4 { color: #2196f3; margin-top: 0; font-size: 1em; margin-bottom: 10px; }
+  .comparison-card p { font-size: 0.88em; line-height: 1.5; color: #333; margin: 6px 0; }
+
+  .closing-box { background: linear-gradient(135deg, #e8f5e9, #e3f2fd); border-radius: 8px; padding: 18px 22px; font-style: italic; font-size: 1em; color: #333; line-height: 1.6; border-left: 5px solid #2196f3; }
+
+  .nav { display: flex; align-items: center; gap: 16px; margin-top: 16px; }
+  .nav button { background: #667eea; color: white; border: none; padding: 10px 28px; border-radius: 30px; font-size: 1em; cursor: pointer; transition: background 0.2s; }
+  .nav button:hover { background: #764ba2; }
+  .nav button:disabled { background: #555; cursor: default; }
+  .nav .counter { color: #ccc; font-size: 0.9em; min-width: 80px; text-align: center; }
+
+  .dot-nav { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin-top: 10px; }
+  .dot { width: 10px; height: 10px; border-radius: 50%; background: #555; cursor: pointer; transition: background 0.2s; }
+  .dot.active { background: #667eea; }
+</style>
+</head>
+<body>
+
+<div class="slide-container">
+
+  <!-- Slide 1: Title -->
+  <div class="slide title-slide active">
+    <div class="subtitle">Week 3 · Stage 5 Science · Genetics Unit</div>
+    <h1>Genotype, Phenotype & Blood Groups</h1>
+    <div class="inquiry">🧬 Inquiry Question: How do genes determine the traits we can see?</div>
+    <div class="slide-number">1 / 10</div>
+  </div>
+
+  <!-- Slide 2: Learning Intentions -->
+  <div class="slide blue">
+    <span class="time-badge">📋 Before We Begin</span>
+    <h2>Learning Intentions & Success Criteria</h2>
+    <div class="two-col">
+      <div class="box">
+        <h3>🎯 By the end of today you will be able to…</h3>
+        <ul>
+          <li>Define <strong>genotype</strong> and <strong>phenotype</strong></li>
+          <li>Explain the difference between <strong>dominant and recessive</strong> traits</li>
+          <li>Describe why blood type A can have <strong>two different genotypes</strong></li>
+          <li>Use correct notation for alleles (capital vs lowercase letters)</li>
+        </ul>
+      </div>
+      <div class="box">
+        <h3>✅ I know I've got it when…</h3>
+        <ul>
+          <li>I can explain genotype vs phenotype using an example</li>
+          <li>I can write genotypes using correct notation like <span class="allele">Bb</span> or <span class="allele">I<sup>A</sup>i</span></li>
+          <li>I can list all possible genotypes for blood types A, B, AB, and O</li>
+          <li>I can explain co-dominance using blood type AB</li>
+        </ul>
+      </div>
+    </div>
+    <div class="slide-number">2 / 10</div>
+  </div>
+
+  <!-- Slide 3: What is Genotype? -->
+  <div class="slide green">
+    <span class="time-badge">🔍 Key Concept 1</span>
+    <h2>What is Genotype?</h2>
+    
+    <div class="definition-box">
+      <h3>📖 Definition: Genotype</h3>
+      <p><strong>Genotype</strong> is the actual <strong>genes</strong> (alleles) an organism has.</p>
+      <p>It's like the instruction manual written in your DNA - you can't see it just by looking at someone!</p>
+    </div>
+    
+    <div class="example-box">
+      <h3>Examples of Genotypes:</h3>
+      <p>• For eye color: <span class="allele">BB</span> or <span class="allele">Bb</span> or <span class="allele">bb</span></p>
+      <p>• For height: <span class="allele">TT</span> or <span class="allele">Tt</span> or <span class="allele">tt</span></p>
+      <p>• These letters represent the <strong>alleles</strong> (versions of genes) you inherited</p>
+    </div>
+    
+    <div class="key-point">
+      <p><strong>Remember:</strong> Genotype = the genes you HAVE (hidden in your DNA)</p>
+    </div>
+    
+    <div class="slide-number">3 / 10</div>
+  </div>
+
+  <!-- Slide 4: What is Phenotype? -->
+  <div class="slide green">
+    <span class="time-badge">🔍 Key Concept 2</span>
+    <h2>What is Phenotype?</h2>
+    
+    <div class="definition-box">
+      <h3>📖 Definition: Phenotype</h3>
+      <p><strong>Phenotype</strong> is the <strong>observable characteristics</strong> that you can see or measure.</p>
+      <p>It's what the genes actually create - the traits you can observe!</p>
+    </div>
+    
+    <div class="example-box">
+      <h3>Examples of Phenotypes:</h3>
+      <p>• <strong>Brown eyes</strong> or <strong>blue eyes</strong> (you can see this!)</p>
+      <p>• <strong>Tall</strong> or <strong>short</strong> height (you can measure this!)</p>
+      <p>• <strong>Curly hair</strong> or <strong>straight hair</strong> (you can observe this!)</p>
+      <p>• <strong>Blood type A, B, AB, or O</strong> (you can test for this!)</p>
+    </div>
+    
+    <div class="key-point">
+      <p><strong>Remember:</strong> Phenotype = the traits you CAN SEE (observable characteristics)</p>
+    </div>
+    
+    <div class="slide-number">4 / 10</div>
+  </div>
+
+  <!-- Slide 5: Genotype vs Phenotype -->
+  <div class="slide blue">
+    <span class="time-badge">⚖️ Comparison</span>
+    <h2>Genotype vs Phenotype</h2>
+    
+    <div class="comparison-grid">
+      <div class="comparison-card">
+        <h4>GENOTYPE</h4>
+        <p><strong>What it is:</strong> The genes you have</p>
+        <p><strong>Can you see it?</strong> NO - hidden in DNA</p>
+        <p><strong>Written as:</strong> Letters like <span class="allele">BB</span>, <span class="allele">Bb</span>, <span class="allele">bb</span></p>
+        <p><strong>Example:</strong> <span class="allele">Bb</span> for eye color</p>
+      </div>
+      
+      <div class="comparison-card">
+        <h4>PHENOTYPE</h4>
+        <p><strong>What it is:</strong> The traits you observe</p>
+        <p><strong>Can you see it?</strong> YES - observable</p>
+        <p><strong>Written as:</strong> Descriptions like "brown eyes"</p>
+        <p><strong>Example:</strong> Brown eyes (what you see)</p>
+      </div>
+    </div>
+    
+    <div class="key-point">
+      <p><strong>Important Connection:</strong> Your GENOTYPE (genes) determines your PHENOTYPE (traits)!</p>
+      <p style="text-align: center; font-size: 1.1em; margin-top: 8px;">Genotype → creates → Phenotype</p>
+    </div>
+    
+    <div class="example-box">
+      <h3>Example Together:</h3>
+      <p>• Genotype: <span class="allele">Bb</span> (one brown eye gene, one blue eye gene)</p>
+      <p>• Phenotype: <strong>Brown eyes</strong> (because brown is dominant!)</p>
+    </div>
+    
+    <div class="slide-number">5 / 10</div>
+  </div>
+
+  <!-- Slide 6: Dominant vs Recessive -->
+  <div class="slide purple">
+    <span class="time-badge">🔑 Core Concept</span>
+    <h2>Dominant & Recessive Traits</h2>
+    
+    <div class="definition-box">
+      <h3>🔍 Dominant Traits</h3>
+      <p>A <strong>dominant</strong> trait shows up even if you only have <strong>ONE copy</strong> of the gene.</p>
+      <p>• Written with a <strong>CAPITAL letter</strong> (like <span class="allele">B</span>)</p>
+      <p>• Only need 1 copy to see the trait!</p>
+    </div>
+    
+    <div class="definition-box">
+      <h3>🔍 Recessive Traits</h3>
+      <p>A <strong>recessive</strong> trait only shows up if you have <strong>TWO copies</strong> of the gene.</p>
+      <p>• Written with a <strong>lowercase letter</strong> (like <span class="allele">b</span>)</p>
+      <p>• Need 2 copies to see the trait!</p>
+    </div>
+    
+    <div class="example-box">
+      <h3>Example: Eye Color</h3>
+      <p>• <span class="allele">B</span> = brown eyes (DOMINANT) &nbsp;|&nbsp; <span class="allele">b</span> = blue eyes (RECESSIVE)</p>
+      <p style="margin-top: 10px;"><strong>Possible Genotypes and Phenotypes:</strong></p>
+      <p>• <span class="allele">BB</span> → Brown eyes (2 dominant)</p>
+      <p>• <span class="allele">Bb</span> → Brown eyes (1 dominant is enough!)</p>
+      <p>• <span class="allele">bb</span> → Blue eyes (2 recessive needed)</p>
+    </div>
+    
+    <div class="slide-number">6 / 10</div>
+  </div>
+
+  <!-- Slide 7: Blood Groups Introduction -->
+  <div class="slide orange">
+    <span class="time-badge">🩸 Special Example</span>
+    <h2>Blood Groups - A Special Case</h2>
+    
+    <div class="definition-box">
+      <h3>Why Blood Groups are Different</h3>
+      <p>Blood groups have <strong>THREE</strong> possible alleles instead of just two!</p>
+      <p>• <span class="allele">I<sup>A</sup></span> = codes for type A</p>
+      <p>• <span class="allele">I<sup>B</sup></span> = codes for type B</p>
+      <p>• <span class="allele">i</span> = codes for type O (recessive)</p>
+    </div>
+    
+    <div class="framework">
+      <div class="step"><span class="label">Special Rules:</span></div>
+      <div class="step"><span>1.</span><span class="allele">I<sup>A</sup></span> and <span class="allele">I<sup>B</sup></span> are both DOMINANT over <span class="allele">i</span></div>
+      <div class="step"><span>2.</span><span class="allele">I<sup>A</sup></span> and <span class="allele">I<sup>B</sup></span> are CO-DOMINANT (both show up together)</div>
+      <div class="step"><span>3.</span><span class="allele">i</span> is RECESSIVE (needs 2 copies to show)</div>
+    </div>
+    
+    <div class="example-box">
+      <h3>What is Co-dominance?</h3>
+      <p>When you have both <span class="allele">I<sup>A</sup></span> and <span class="allele">I<sup>B</sup></span>, BOTH show up!</p>
+      <p>This creates blood type <strong>AB</strong> - a phenotype showing BOTH traits!</p>
+    </div>
+    
+    <div class="slide-number">7 / 10</div>
+  </div>
+
+  <!-- Slide 8: Blood Group Table -->
+  <div class="slide teal">
+    <span class="time-badge">📊 The Complete Picture</span>
+    <h2>Blood Group Genotypes & Phenotypes</h2>
+    
+    <table class="blood-table">
+      <tr>
+        <th>Phenotype (Blood Type)</th>
+        <th>Possible Genotypes</th>
+        <th>Explanation</th>
+      </tr>
+      <tr>
+        <td><strong>Type A</strong></td>
+        <td><span class="allele">I<sup>A</sup>I<sup>A</sup></span> or <span class="allele">I<sup>A</sup>i</span></td>
+        <td>Has at least one <span class="allele">I<sup>A</sup></span> (dominant)</td>
+      </tr>
+      <tr>
+        <td><strong>Type B</strong></td>
+        <td><span class="allele">I<sup>B</sup>I<sup>B</sup></span> or <span class="allele">I<sup>B</sup>i</span></td>
+        <td>Has at least one <span class="allele">I<sup>B</sup></span> (dominant)</td>
+      </tr>
+      <tr>
+        <td><strong>Type AB</strong></td>
+        <td><span class="allele">I<sup>A</sup>I<sup>B</sup></span></td>
+        <td>Has BOTH <span class="allele">I<sup>A</sup></span> and <span class="allele">I<sup>B</sup></span> (co-dominant)</td>
+      </tr>
+      <tr>
+        <td><strong>Type O</strong></td>
+        <td><span class="allele">ii</span></td>
+        <td>Has TWO recessive <span class="allele">i</span> alleles</td>
+      </tr>
+    </table>
+    
+    <div class="key-point">
+      <p><strong>Key Observation:</strong> Different genotypes can produce the SAME phenotype!</p>
+      <p>• Type A = <span class="allele">I<sup>A</sup>I<sup>A</sup></span> OR <span class="allele">I<sup>A</sup>i</span></p>
+      <p>• Type B = <span class="allele">I<sup>B</sup>I<sup>B</sup></span> OR <span class="allele">I<sup>B</sup>i</span></p>
+    </div>
+    
+    <div class="slide-number">8 / 10</div>
+  </div>
+
+  <!-- Slide 9: Blood Group Examples -->
+  <div class="slide orange">
+    <span class="time-badge">💡 Worked Examples</span>
+    <h2>Blood Group Examples Explained</h2>
+    
+    <div class="example-box">
+      <h3>Example 1: Type A Blood</h3>
+      <p><strong>Phenotype:</strong> Type A blood (observed in test)</p>
+      <p><strong>Genotype options:</strong> <span class="allele">I<sup>A</sup>I<sup>A</sup></span> or <span class="allele">I<sup>A</sup>i</span></p>
+      <p><strong>Why both work:</strong> <span class="allele">I<sup>A</sup></span> is dominant, so it masks <span class="allele">i</span></p>
+    </div>
+    
+    <div class="example-box">
+      <h3>Example 2: Type AB Blood</h3>
+      <p><strong>Phenotype:</strong> Type AB blood</p>
+      <p><strong>Genotype:</strong> <span class="allele">I<sup>A</sup>I<sup>B</sup></span> - ONLY ONE possible genotype!</p>
+      <p><strong>Why both show:</strong> Co-dominance means BOTH alleles appear!</p>
+    </div>
+    
+    <div class="example-box">
+      <h3>Example 3: Type O Blood</h3>
+      <p><strong>Phenotype:</strong> Type O blood</p>
+      <p><strong>Genotype:</strong> <span class="allele">ii</span> - ONLY ONE possible genotype!</p>
+      <p><strong>Why special:</strong> Must have TWO recessive alleles - no dominant ones!</p>
+    </div>
+    
+    <div class="slide-number">9 / 10</div>
+  </div>
+
+  <!-- Slide 10: Summary -->
+  <div class="slide blue">
+    <span class="time-badge">✅ Lesson Summary</span>
+    <h2>What We Learned Today</h2>
+    
+    <div class="closing-box">
+      Understanding genotype and phenotype helps us predict traits in offspring, explain why family members look similar (but not identical), and understand how genetic diseases are inherited. Blood groups show us that genetics can be more complex than simple dominant/recessive patterns!
+    </div>
+    
+    <div class="box" style="margin-top: 18px; background: #f3e5f5;">
+      <h3>🌟 Key Takeaways</h3>
+      <ul>
+        <li><strong>Genotype:</strong> Genes you have (hidden) vs <strong>Phenotype:</strong> Traits you see</li>
+        <li><strong>Dominant:</strong> Shows with 1 copy (capital) vs <strong>Recessive:</strong> Needs 2 copies (lowercase)</li>
+        <li>Blood groups show <strong>multiple alleles</strong> and <strong>co-dominance</strong></li>
+        <li>Different genotypes can create the <strong>same phenotype</strong></li>
+      </ul>
+    </div>
+    
+    <div class="box" style="margin-top: 16px; background: #e8f5e9;">
+      <h3>📌 Next Lesson Preview</h3>
+      <ul>
+        <li>Using <strong>Punnett squares</strong> to predict offspring</li>
+        <li>Practice with inheritance problems</li>
+      </ul>
+    </div>
+    
+    <div class="slide-number">10 / 10</div>
+  </div>
+
+</div>
+
+<!-- Navigation -->
+<div class="nav">
+  <button id="prev" onclick="changeSlide(-1)" disabled>◀ Prev</button>
+  <span class="counter" id="counter">1 / 10</span>
+  <button id="next" onclick="changeSlide(1)">Next ▶</button>
+</div>
+<div class="dot-nav" id="dots"></div>
+
+<script>
+  let current = 0;
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  const dotsContainer = document.getElementById('dots');
+
+  slides.forEach((_, i) => {
+    const d = document.createElement('div');
+    d.className = 'dot' + (i === 0 ? ' active' : '');
+    d.onclick = () => goTo(i);
+    dotsContainer.appendChild(d);
+  });
+
+  function goTo(n) {
+    slides[current].classList.remove('active');
+    document.querySelectorAll('.dot')[current].classList.remove('active');
+    current = n;
+    slides[current].classList.add('active');
+    document.querySelectorAll('.dot')[current].classList.add('active');
+    document.getElementById('counter').textContent = (current+1) + ' / ' + total;
+    document.getElementById('prev').disabled = current === 0;
+    document.getElementById('next').disabled = current === total - 1;
+  }
+
+  function changeSlide(dir) { goTo(current + dir); }
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' && current < total-1) changeSlide(1);
+    if (e.key === 'ArrowLeft' && current > 0) changeSlide(-1);
+  });
+</script>
+</body>
+</html>
