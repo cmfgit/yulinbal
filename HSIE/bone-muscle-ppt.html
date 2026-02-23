@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bones & Muscles Lesson</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', sans-serif; background: #1a1a2e; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; padding: 16px; }
+  .ppt-wrap { width: 100%; max-width: 860px; }
+  .slide { display: none; background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.5); aspect-ratio: 16/9; position: relative; flex-direction: column; }
+  .slide.active { display: flex; }
+
+  /* Slide themes */
+  .theme-title { background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); color: white; align-items: center; justify-content: center; text-align: center; }
+  .theme-bone { background: linear-gradient(135deg, #e8f4f8 0%, #d6eaf8 100%); }
+  .theme-muscle { background: linear-gradient(135deg, #fdf2f8 0%, #fde8f4 100%); }
+  .theme-activity { background: linear-gradient(135deg, #eafaf1 0%, #d5f5e3 100%); }
+
+  .slide-inner { padding: 5% 6%; height: 100%; display: flex; flex-direction: column; justify-content: center; }
+
+  /* Title slide */
+  .title-emoji { font-size: clamp(2.5rem, 7vw, 5rem); margin-bottom: 2%; }
+  .title-main { font-size: clamp(1.4rem, 4vw, 2.8rem); font-weight: 800; margin-bottom: 2%; letter-spacing: -0.5px; }
+  .title-sub { font-size: clamp(0.8rem, 2vw, 1.2rem); opacity: 0.7; margin-bottom: 4%; }
+  .tag-row { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+  .tag { background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); border-radius: 20px; padding: 4px 14px; font-size: clamp(0.65rem, 1.5vw, 0.85rem); }
+
+  /* Section header */
+  .section-banner { padding: 2% 6%; font-size: clamp(0.6rem, 1.5vw, 0.85rem); font-weight: 700; letter-spacing: 2px; text-transform: uppercase; display: flex; align-items: center; gap: 8px; }
+  .bone-banner { background: #2980b9; color: white; }
+  .muscle-banner { background: #c0392b; color: white; }
+  .activity-banner { background: #27ae60; color: white; }
+  .timer-pill { margin-left: auto; background: rgba(255,255,255,0.25); border-radius: 20px; padding: 2px 12px; }
+
+  .slide-title { font-size: clamp(1.1rem, 3vw, 2rem); font-weight: 800; margin-bottom: 3%; color: #1a1a2e; }
+  .slide-title.white { color: white; }
+
+  /* Cards grid */
+  .card-grid { display: grid; gap: 3%; }
+  .card-grid.col2 { grid-template-columns: 1fr 1fr; }
+  .card-grid.col3 { grid-template-columns: 1fr 1fr 1fr; }
+  .card { background: white; border-radius: 10px; padding: 4%; box-shadow: 0 2px 12px rgba(0,0,0,0.08); display: flex; flex-direction: column; gap: 6px; }
+  .card-icon { font-size: clamp(1.2rem, 3vw, 2rem); }
+  .card-label { font-size: clamp(0.7rem, 1.6vw, 1rem); font-weight: 700; color: #1a1a2e; }
+  .card-text { font-size: clamp(0.55rem, 1.3vw, 0.8rem); color: #555; line-height: 1.4; }
+
+  /* Clue cards */
+  .clue-list { display: flex; flex-direction: column; gap: 2%; }
+  .clue { background: white; border-left: 5px solid #2980b9; border-radius: 6px; padding: 2.5% 3%; display: flex; align-items: center; gap: 12px; box-shadow: 0 1px 8px rgba(0,0,0,0.07); }
+  .clue-num { background: #2980b9; color: white; border-radius: 50%; width: clamp(22px,3vw,32px); height: clamp(22px,3vw,32px); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: clamp(0.6rem,1.3vw,0.85rem); flex-shrink:0; }
+  .clue-text { font-size: clamp(0.6rem, 1.4vw, 0.9rem); color: #333; }
+  .clue-answer { margin-left: auto; font-size: clamp(0.55rem,1.2vw,0.8rem); font-weight: 700; color: #2980b9; background: #eaf4fb; border-radius: 20px; padding: 2px 10px; white-space: nowrap; }
+
+  /* Muscle type cards */
+  .muscle-card { background: white; border-radius: 10px; padding: 3.5%; box-shadow: 0 2px 12px rgba(0,0,0,0.08); border-top: 5px solid; }
+  .muscle-card.sk { border-color: #e74c3c; }
+  .muscle-card.ca { border-color: #e67e22; }
+  .muscle-card.sm { border-color: #9b59b6; }
+  .muscle-card-title { font-size: clamp(0.7rem, 1.6vw, 1rem); font-weight: 800; margin-bottom: 4px; }
+  .muscle-card.sk .muscle-card-title { color: #e74c3c; }
+  .muscle-card.ca .muscle-card-title { color: #e67e22; }
+  .muscle-card.sm .muscle-card-title { color: #9b59b6; }
+  .badge-row { display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 4px; }
+  .badge { font-size: clamp(0.45rem, 1vw, 0.65rem); border-radius: 20px; padding: 2px 8px; font-weight: 600; }
+  .badge.vol { background: #fdecea; color: #e74c3c; }
+  .badge.invol { background: #fef9e7; color: #d68910; }
+  .badge.stri { background: #eaf4fb; color: #2980b9; }
+  .badge.nonstri { background: #f4ecf7; color: #9b59b6; }
+  .muscle-card-text { font-size: clamp(0.5rem, 1.1vw, 0.72rem); color: #555; line-height: 1.4; }
+
+  /* Key fact banner */
+  .key-fact { background: linear-gradient(135deg, #c0392b, #e74c3c); color: white; border-radius: 10px; padding: 3% 4%; margin-top: 3%; display: flex; align-items: center; gap: 10px; }
+  .key-fact-icon { font-size: clamp(1rem, 2.5vw, 1.6rem); }
+  .key-fact-text { font-size: clamp(0.6rem, 1.4vw, 0.9rem); font-weight: 600; }
+
+  /* Steps list */
+  .step-list { display: flex; flex-direction: column; gap: 2%; }
+  .step { display: flex; align-items: flex-start; gap: 10px; }
+  .step-dot { width: clamp(20px,2.5vw,28px); height: clamp(20px,2.5vw,28px); border-radius: 50%; background: #27ae60; color: white; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: clamp(0.55rem,1.2vw,0.8rem); flex-shrink:0; margin-top:2px; }
+  .step-text { font-size: clamp(0.6rem, 1.35vw, 0.88rem); color: #333; line-height: 1.45; }
+  .step-text strong { color: #1a1a2e; }
+
+  /* Nav */
+  .nav { display: flex; align-items: center; justify-content: space-between; margin-top: 14px; padding: 0 4px; }
+  .nav-btn { background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.25); color: white; border-radius: 8px; padding: 8px 20px; cursor: pointer; font-size: 0.85rem; transition: background 0.2s; }
+  .nav-btn:hover { background: rgba(255,255,255,0.22); }
+  .nav-btn:disabled { opacity: 0.3; cursor: default; }
+  .slide-counter { color: rgba(255,255,255,0.7); font-size: 0.8rem; }
+  .dot-row { display: flex; gap: 6px; }
+  .dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,0.3); cursor: pointer; transition: background 0.2s; }
+  .dot.on { background: white; }
+
+  /* Divider */
+  .divider { height: 2px; background: linear-gradient(90deg, transparent, rgba(0,0,0,0.1), transparent); margin: 2% 0; }
+
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 4%; align-items: start; }
+  .highlight-box { background: #fff3cd; border-left: 4px solid #f39c12; border-radius: 6px; padding: 3%; }
+  .highlight-box p { font-size: clamp(0.55rem, 1.3vw, 0.82rem); color: #7d6608; line-height: 1.5; }
+  .highlight-box strong { color: #5d4e06; }
+</style>
+</head>
+<body>
+<div class="ppt-wrap">
+
+<!-- SLIDE 1: Title -->
+<div class="slide theme-title active">
+  <div class="slide-inner" style="text-align:center; align-items:center;">
+    <div class="title-emoji">🦴💪</div>
+    <div class="title-main">The Skeletal & Muscular Systems</div>
+    <div class="title-sub">How Our Body Moves, Protects & Supports Itself</div>
+    <div class="tag-row">
+      <span class="tag">⏱ 35 Minutes</span>
+      <span class="tag">🦴 Bones</span>
+      <span class="tag">💪 Muscles</span>
+      <span class="tag">🔬 Biology</span>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 2: Lesson Overview -->
+<div class="slide theme-bone">
+  <div class="bone-banner section-banner">📋 Lesson Overview</div>
+  <div class="slide-inner">
+    <div class="slide-title">What We're Covering Today</div>
+    <div class="card-grid col2">
+      <div class="card">
+        <div class="card-icon">🦴</div>
+        <div class="card-label">Part 1 — The Skeletal System</div>
+        <div class="card-text"><strong>Bone Hunt</strong> – locate bones on your own body (5 min)<br><br><strong>Skeleton Detective</strong> – identify & label key bones with clues (15 min)</div>
+      </div>
+      <div class="card">
+        <div class="card-icon">💪</div>
+        <div class="card-label">Part 2 — The Muscular System</div>
+        <div class="card-text"><strong>Muscle Flex Challenge</strong> – explore your own muscles (5 min)<br><br><strong>Muscle Types & Contraction</strong> – types, functions, sliding filament (12 min)</div>
+      </div>
+    </div>
+    <div class="divider"></div>
+    <div class="card" style="flex-direction:row; align-items:center; gap:12px; margin-top:2%;">
+      <div class="card-icon">🎯</div>
+      <div class="card-text" style="font-size:clamp(0.6rem,1.4vw,0.88rem);"><strong>Learning Goals:</strong> Name and locate key bones · Describe the 5 functions of bone · Distinguish the 3 muscle types · Explain how muscles produce movement</div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 3: Bone Hunt -->
+<div class="slide theme-activity">
+  <div class="activity-banner section-banner">🦴 Opening Activity <span class="timer-pill">⏱ 5 Minutes</span></div>
+  <div class="slide-inner">
+    <div class="slide-title">🔍 Bone Hunt!</div>
+    <div class="step-list">
+      <div class="step"><div class="step-dot">1</div><div class="step-text"><strong>Stand up</strong> and walk around the classroom. Try to find and feel as many bones as you can on your own body.</div></div>
+      <div class="step"><div class="step-dot">2</div><div class="step-text"><strong>Call out your discoveries!</strong> E.g., "I found my <em>clavicle!</em>" — Use the correct bone name if you know it.</div></div>
+      <div class="step"><div class="step-dot">3</div><div class="step-text"><strong>Think about it:</strong> Why can you feel some bones easily but not others? What's covering or protecting them?</div></div>
+    </div>
+    <div class="highlight-box" style="margin-top:4%;">
+      <p>💬 <strong>Discussion Prompt:</strong> "Why can you feel your shinbone but not your femur (thigh bone)? What does that tell us about how bones are protected?"</p>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 4: Key Bones Reference -->
+<div class="slide theme-bone">
+  <div class="bone-banner section-banner">🦴 Skeleton Detective — Clues</div>
+  <div class="slide-inner" style="justify-content:flex-start; padding-top:3%;">
+    <div class="slide-title" style="margin-bottom:2%;">Can You Guess These Bones?</div>
+    <div class="clue-list">
+      <div class="clue"><div class="clue-num">1</div><div class="clue-text">"This bone protects your brain."</div><div class="clue-answer">Skull / Cranium</div></div>
+      <div class="clue"><div class="clue-num">2</div><div class="clue-text">"This is the longest bone in your body."</div><div class="clue-answer">Femur</div></div>
+      <div class="clue"><div class="clue-num">3</div><div class="clue-text">"These bones form your ribcage."</div><div class="clue-answer">Ribs (Costae)</div></div>
+      <div class="clue"><div class="clue-num">4</div><div class="clue-text">"This column of bones supports your entire body upright."</div><div class="clue-answer">Vertebral Column</div></div>
+      <div class="clue"><div class="clue-num">5</div><div class="clue-text">"The bone that runs across the top of your chest — your collarbone."</div><div class="clue-answer">Clavicle</div></div>
+      <div class="clue"><div class="clue-num">6</div><div class="clue-text">"The large bone at the front of your hip."</div><div class="clue-answer">Pelvis / Ilium</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 5: Functions of Bone -->
+<div class="slide theme-bone">
+  <div class="bone-banner section-banner">🦴 Skeleton Detective — Functions</div>
+  <div class="slide-inner">
+    <div class="slide-title">The 5 Functions of the Skeleton</div>
+    <div class="card-grid col3">
+      <div class="card">
+        <div class="card-icon">🛡️</div>
+        <div class="card-label">Protection</div>
+        <div class="card-text">Skull protects the brain. Ribcage protects the heart and lungs.</div>
+      </div>
+      <div class="card">
+        <div class="card-icon">🏗️</div>
+        <div class="card-label">Support</div>
+        <div class="card-text">The skeleton gives our body its shape and supports our weight.</div>
+      </div>
+      <div class="card">
+        <div class="card-icon">🏃</div>
+        <div class="card-label">Movement</div>
+        <div class="card-text">Bones act as levers — muscles pull on them to create movement.</div>
+      </div>
+      <div class="card">
+        <div class="card-icon">⚗️</div>
+        <div class="card-label">Mineral Storage</div>
+        <div class="card-text">Bones store calcium and phosphorus, releasing them when needed.</div>
+      </div>
+      <div class="card" style="grid-column: span 2;">
+        <div class="card-icon">🩸</div>
+        <div class="card-label">Blood Cell Production</div>
+        <div class="card-text">Red bone marrow inside bones produces red blood cells, white blood cells, and platelets (haematopoiesis).</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 6: Muscle Flex Challenge -->
+<div class="slide theme-activity">
+  <div class="activity-banner section-banner">💪 Opening Activity <span class="timer-pill">⏱ 5 Minutes</span></div>
+  <div class="slide-inner">
+    <div class="slide-title">💪 Muscle Flex Challenge!</div>
+    <div class="two-col">
+      <div>
+        <div class="step-list">
+          <div class="step"><div class="step-dot">1</div><div class="step-text"><strong>Did you know?</strong> The human body has approximately <strong>~650 muscles</strong>!</div></div>
+          <div class="step"><div class="step-dot">2</div><div class="step-text"><strong>Watch & copy:</strong> Follow along as we flex different muscles — biceps, quadriceps, hamstrings, calves.</div></div>
+          <div class="step"><div class="step-dot">3</div><div class="step-text"><strong>Feel it:</strong> Place your hand on your bicep and flex. What do you notice happening to the muscle?</div></div>
+        </div>
+      </div>
+      <div>
+        <div class="card" style="background:#fff; margin-bottom:6%;">
+          <div class="card-icon">🧠</div>
+          <div class="card-label">Discussion Question</div>
+          <div class="card-text">"What do you notice when you flex your bicep? Does the muscle get longer or shorter? Harder or softer?"</div>
+        </div>
+        <div class="card" style="background:#fff;">
+          <div class="card-icon">👀</div>
+          <div class="card-label">Observe & Compare</div>
+          <div class="card-text">Try flexing your heart — can you do it? Why not? How is that different from flexing your arm?</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 7: Three Muscle Types -->
+<div class="slide theme-muscle">
+  <div class="muscle-banner section-banner" style="background:#c0392b;">💪 Muscle Types &amp; Contraction <span class="timer-pill">⏱ 12 Minutes</span></div>
+  <div class="slide-inner">
+    <div class="slide-title">The 3 Types of Muscle Tissue</div>
+    <div class="card-grid col3">
+      <div class="muscle-card sk">
+        <div class="muscle-card-title">Skeletal Muscle</div>
+        <div class="badge-row"><span class="badge stri">Striated</span><span class="badge vol">Voluntary</span></div>
+        <div class="muscle-card-text">Attached to bones via tendons. You control this muscle consciously. e.g., biceps, quadriceps, deltoids.<br><br>🔑 <em>Analogy: Like a car you're driving — you decide when to accelerate.</em></div>
+      </div>
+      <div class="muscle-card ca">
+        <div class="muscle-card-title">Cardiac Muscle</div>
+        <div class="badge-row"><span class="badge stri">Striated</span><span class="badge invol">Involuntary</span></div>
+        <div class="muscle-card-text">Found only in the heart. Contracts rhythmically without you thinking about it — never fatigues.<br><br>🔑 <em>Analogy: Like a self-driving car — runs on autopilot 24/7.</em></div>
+      </div>
+      <div class="muscle-card sm">
+        <div class="muscle-card-title">Smooth Muscle</div>
+        <div class="badge-row"><span class="badge nonstri">Non-Striated</span><span class="badge invol">Involuntary</span></div>
+        <div class="muscle-card-text">Lines organs like the stomach, intestines, and blood vessels. Controls digestion and circulation.<br><br>🔑 <em>Analogy: Like cruise control — steady and automatic.</em></div>
+      </div>
+    </div>
+    <div class="key-fact" style="margin-top:3%;">
+      <div class="key-fact-icon">⚡</div>
+      <div class="key-fact-text">Key Principle: <strong>Muscles PULL — they never push.</strong> They contract (shorten) to move bones. Opposing muscle pairs work together to allow full range of motion.</div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 8: How Muscles Move (Simplified) -->
+<div class="slide theme-muscle">
+  <div class="muscle-banner section-banner" style="background:#c0392b;">💪 How Do Muscles Move Us?</div>
+  <div class="slide-inner">
+    <div class="slide-title">Muscles Work in Pairs!</div>
+    <div class="card-grid col3" style="margin-bottom:3%;">
+      <div class="card">
+        <div class="card-icon">📡</div>
+        <div class="card-label">Step 1 — Brain Sends a Signal</div>
+        <div class="card-text">Your brain tells the muscle to move by sending an electrical signal through your nerves.</div>
+      </div>
+      <div class="card">
+        <div class="card-icon">🤜</div>
+        <div class="card-label">Step 2 — Muscle Contracts</div>
+        <div class="card-text">The muscle gets shorter and tighter — it <strong>pulls</strong> on the bone it's attached to. Muscles never push!</div>
+      </div>
+      <div class="card">
+        <div class="card-icon">🔄</div>
+        <div class="card-label">Step 3 — The Pair Relaxes</div>
+        <div class="card-text">The opposite muscle relaxes to let the bone move. Then they swap to move it back the other way.</div>
+      </div>
+    </div>
+    <div class="highlight-box">
+      <p>💪 <strong>Try it!</strong> Bend your arm — your <strong>bicep contracts</strong> (gets shorter) and your <strong>tricep relaxes</strong>. Now straighten it — they swap! These are called <strong>antagonistic muscle pairs</strong>.</p>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 9: Summary -->
+<div class="slide theme-title">
+  <div class="slide-inner" style="align-items:center; text-align:center;">
+    <div class="title-emoji">🎯</div>
+    <div class="title-main">Lesson Summary</div>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:3%; width:90%; margin-top:3%; text-align:left;">
+      <div class="card" style="background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); color:white;">
+        <div class="card-icon">🦴</div>
+        <div class="card-label" style="color:white;">Skeletal System</div>
+        <div class="card-text" style="color:rgba(255,255,255,0.8);">206 bones in the adult body • 5 functions: protection, support, movement, mineral storage, blood cell production • Bones are palpable when close to the skin surface.</div>
+      </div>
+      <div class="card" style="background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); color:white;">
+        <div class="card-icon">💪</div>
+        <div class="card-label" style="color:white;">Muscular System</div>
+        <div class="card-text" style="color:rgba(255,255,255,0.8);">~650 muscles • 3 types: skeletal (voluntary), cardiac (involuntary), smooth (involuntary) • Muscles PULL via sliding filament contraction • Antagonistic pairs allow full movement.</div>
+      </div>
+    </div>
+    <div style="margin-top:3%; font-size:clamp(0.6rem,1.5vw,0.9rem); opacity:0.6;">Great work today! 🎉</div>
+  </div>
+</div>
+
+</div><!-- end ppt-wrap -->
+
+<!-- Nav Controls -->
+<div class="nav" style="width:100%; max-width:860px;">
+  <button class="nav-btn" id="prev" onclick="go(-1)" disabled>← Prev</button>
+  <div style="display:flex; flex-direction:column; align-items:center; gap:6px;">
+    <div class="dot-row" id="dots"></div>
+    <div class="slide-counter" id="counter">Slide 1 / 9</div>
+  </div>
+  <button class="nav-btn" id="next" onclick="go(1)">Next →</button>
+</div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  let cur = 0;
+  const dotsEl = document.getElementById('dots');
+  const counter = document.getElementById('counter');
+
+  slides.forEach((_, i) => {
+    const d = document.createElement('div');
+    d.className = 'dot' + (i === 0 ? ' on' : '');
+    d.onclick = () => goTo(i);
+    dotsEl.appendChild(d);
+  });
+
+  function goTo(n) {
+    slides[cur].classList.remove('active');
+    dotsEl.children[cur].classList.remove('on');
+    cur = n;
+    slides[cur].classList.add('active');
+    dotsEl.children[cur].classList.add('on');
+    counter.textContent = `Slide ${cur+1} / ${slides.length}`;
+    document.getElementById('prev').disabled = cur === 0;
+    document.getElementById('next').disabled = cur === slides.length - 1;
+  }
+
+  function go(d) { goTo(cur + d); }
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' && cur < slides.length - 1) go(1);
+    if (e.key === 'ArrowLeft' && cur > 0) go(-1);
+  });
+</script>
+</body>
+</html>
