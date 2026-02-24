@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Biomechanics – Lesson 1</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', sans-serif; background: #0f172a; color: #fff; height: 100vh; overflow: hidden; }
+
+  .pres { width: 100%; height: 100vh; position: relative; }
+
+  .slide { display: none; width: 100%; height: 100%; position: absolute; top: 0; left: 0; flex-direction: column; overflow-y: auto; padding-bottom: 56px; }
+  .slide.active { display: flex; }
+
+  /* ── Slide layouts ── */
+  .slide-title { background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 60%, #0ea5e9 100%); align-items: center; justify-content: center; text-align: center; overflow-y: auto; }
+  .slide-section { background: linear-gradient(135deg, #1e3a5f, #0f4c75); align-items: center; justify-content: center; text-align: center; }
+  .slide-content { background: #0f172a; padding: 20px 40px; }
+  .slide-activity { background: linear-gradient(135deg, #0f172a, #1a1a2e); padding: 20px 40px; }
+  .slide-compare { background: #0f172a; padding: 20px 40px; }
+  .slide-summary { background: linear-gradient(135deg, #0f4c75, #0f172a); padding: 20px 40px; }
+
+  /* ── Header bar ── */
+  .header-bar { background: rgba(14,165,233,0.15); border-left: 5px solid #0ea5e9; padding: 8px 16px; margin-bottom: 14px; border-radius: 0 8px 8px 0; flex-shrink: 0; }
+  .header-bar h2 { font-size: 1.15rem; color: #7dd3fc; text-transform: uppercase; letter-spacing: 2px; }
+  .header-bar .sub { font-size: 0.78rem; color: #94a3b8; margin-top: 2px; }
+
+  /* ── Title slide ── */
+  .title-badge { background: #0ea5e9; color: #fff; padding: 5px 16px; border-radius: 20px; font-size: 0.78rem; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 14px; display: inline-block; }
+  .title-main { font-size: 2.2rem; font-weight: 800; line-height: 1.2; margin-bottom: 12px; }
+  .title-sub { font-size: 1rem; color: #7dd3fc; margin-bottom: 22px; }
+  .title-meta { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; }
+  .meta-pill { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); padding: 6px 16px; border-radius: 20px; font-size: 0.82rem; color: #cbd5e1; }
+
+  /* ── Section slide ── */
+  .section-num { font-size: 4rem; font-weight: 900; color: rgba(14,165,233,0.2); line-height: 1; }
+  .section-title { font-size: 1.7rem; font-weight: 700; color: #7dd3fc; margin: 8px 0; }
+  .section-desc { color: #94a3b8; font-size: 0.92rem; }
+  .time-badge { margin-top: 16px; background: #0ea5e9; display: inline-block; padding: 5px 18px; border-radius: 20px; font-size: 0.8rem; }
+
+  /* ── Cards ── */
+  .cards { display: grid; gap: 10px; }
+  .cards-2 { grid-template-columns: 1fr 1fr; }
+  .cards-3 { grid-template-columns: 1fr 1fr 1fr; }
+  .card { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 12px 14px; }
+  .card-icon { font-size: 1.4rem; margin-bottom: 6px; }
+  .card h3 { font-size: 0.8rem; color: #7dd3fc; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 1px; }
+  .card p { font-size: 0.78rem; color: #cbd5e1; line-height: 1.45; }
+  .card.accent { border-color: #0ea5e9; background: rgba(14,165,233,0.08); }
+
+  /* ── Compare table ── */
+  .compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 8px; }
+  .compare-col { border-radius: 10px; overflow: hidden; }
+  .compare-head { padding: 10px 16px; font-weight: 700; font-size: 0.88rem; text-align: center; }
+  .bad-head { background: #7f1d1d; color: #fca5a5; }
+  .good-head { background: #14532d; color: #86efac; }
+  .compare-item { padding: 9px 14px; font-size: 0.78rem; color: #cbd5e1; border-bottom: 1px solid rgba(255,255,255,0.06); display: flex; align-items: flex-start; gap: 8px; line-height: 1.4; }
+  .compare-item:last-child { border-bottom: none; }
+  .bad-body { background: rgba(127,29,29,0.2); }
+  .good-body { background: rgba(20,83,45,0.2); }
+  .dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; margin-top: 4px; }
+  .dot-red { background: #f87171; }
+  .dot-green { background: #4ade80; }
+
+  /* ── Principles list ── */
+  .principle { display: flex; align-items: flex-start; gap: 12px; background: rgba(255,255,255,0.04); border-radius: 8px; padding: 10px 14px; margin-bottom: 8px; border-left: 3px solid #0ea5e9; }
+  .p-num { font-size: 1.2rem; font-weight: 900; color: #0ea5e9; min-width: 30px; }
+  .p-content h3 { font-size: 0.83rem; color: #7dd3fc; margin-bottom: 3px; }
+  .p-content p { font-size: 0.76rem; color: #94a3b8; line-height: 1.4; }
+
+  /* ── Activity box ── */
+  .activity-box { background: rgba(14,165,233,0.08); border: 1px solid #0ea5e9; border-radius: 12px; padding: 14px 18px; margin-bottom: 12px; }
+  .activity-box h3 { color: #7dd3fc; font-size: 0.88rem; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+  .activity-box ul { list-style: none; }
+  .activity-box ul li { font-size: 0.78rem; color: #cbd5e1; padding: 4px 0; padding-left: 16px; position: relative; line-height: 1.4; }
+  .activity-box ul li::before { content: '→'; position: absolute; left: 0; color: #0ea5e9; }
+
+  .question-box { background: rgba(234,179,8,0.08); border: 1px solid #eab308; border-radius: 12px; padding: 12px 18px; }
+  .question-box h3 { color: #fde047; margin-bottom: 6px; font-size: 0.85rem; }
+  .question-box p { font-size: 0.78rem; color: #fef9c3; line-height: 1.45; }
+
+  /* ── Kinetic chain ── */
+  .chain { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 4px; margin: 12px 0; }
+  .chain-node { background: rgba(14,165,233,0.15); border: 2px solid #0ea5e9; border-radius: 8px; padding: 7px 10px; font-size: 0.7rem; color: #7dd3fc; text-align: center; min-width: 66px; line-height: 1.3; }
+  .chain-arrow { color: #0ea5e9; font-size: 1.1rem; }
+
+  /* ── Summary ── */
+  .summary-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+  .summary-item { background: rgba(255,255,255,0.05); border-radius: 8px; padding: 10px 14px; display: flex; gap: 10px; align-items: flex-start; }
+  .s-icon { font-size: 1.1rem; }
+  .s-text h4 { font-size: 0.8rem; color: #7dd3fc; margin-bottom: 2px; }
+  .s-text p { font-size: 0.72rem; color: #94a3b8; line-height: 1.35; }
+
+  /* ── Nav ── */
+  .nav { position: fixed; bottom: 0; left: 0; right: 0; background: rgba(15,23,42,0.97); border-top: 1px solid rgba(255,255,255,0.1); padding: 10px 24px; display: flex; align-items: center; justify-content: space-between; z-index: 100; height: 52px; }
+  .nav-btn { background: rgba(14,165,233,0.2); border: 1px solid #0ea5e9; color: #7dd3fc; padding: 6px 20px; border-radius: 8px; cursor: pointer; font-size: 0.85rem; transition: all 0.2s; }
+  .nav-btn:hover { background: #0ea5e9; color: #fff; }
+  .nav-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+  .slide-counter { color: #64748b; font-size: 0.8rem; }
+  .progress { position: fixed; top: 0; left: 0; height: 3px; background: #0ea5e9; transition: width 0.3s; z-index: 200; }
+  .slide-title-label { font-size: 0.68rem; color: #64748b; max-width: 280px; text-align: center; }
+</style>
+</head>
+<body>
+<div class="progress" id="progress"></div>
+
+<div class="pres" id="pres">
+
+  <!-- SLIDE 1: Title -->
+  <div class="slide slide-title active">
+    <div style="padding: 30px 20px; display:flex; flex-direction:column; align-items:center;">
+      <div class="title-badge">Performance & Injury Prevention Through Biomechanics</div>
+      <div class="title-main">Optimising Movement<br>for Performance</div>
+      <div class="title-sub">Lesson 1 of the Biomechanics Series</div>
+      <div class="title-meta">
+        <div class="meta-pill">⏱ 35 Minutes</div>
+        <div class="meta-pill">📋 Theory + Activity</div>
+        <div class="meta-pill">🏃 Sport & Exercise Science</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 2: Lesson Overview -->
+  <div class="slide slide-content">
+    <div class="header-bar"><h2>Lesson Overview</h2><div class="sub">What we will cover today</div></div>
+    <div class="cards cards-3" style="margin-bottom:10px">
+      <div class="card accent">
+        <div class="card-icon">🎯</div>
+        <h3>Learning Objectives</h3>
+        <p>Understand how biomechanics underpins efficient movement, force production, and injury prevention in sport.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">📚</div>
+        <h3>Key Concepts</h3>
+        <p>Proper alignment · Energy expenditure · Kinetic chain · Technology transfer · Fatigue resistance</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">🗓</div>
+        <h3>Lesson Structure</h3>
+        <p><strong style="color:#7dd3fc">5 min</strong> — Opening Activity<br><strong style="color:#7dd3fc">8 min</strong> — Efficiency Principles<br><strong style="color:#7dd3fc">10 min</strong> — Alignment & Technique<br><strong style="color:#7dd3fc">7 min</strong> — Technology Transfer<br><strong style="color:#7dd3fc">5 min</strong> — Review & Exit Ticket</p>
+      </div>
+    </div>
+    <div class="card" style="border-color:#7dd3fc; background:rgba(125,211,252,0.05)">
+      <p style="color:#e2e8f0; font-size:0.82rem;">💡 <strong>Big Idea:</strong> Efficient movement isn't just about working harder — it's about working <em>smarter</em> through optimal biomechanics. Every elite athlete is essentially an expert in applied biomechanics, whether they know it or not.</p>
+    </div>
+  </div>
+
+  <!-- SLIDE 3: Section Banner – Opening Activity -->
+  <div class="slide slide-section">
+    <div class="section-num">01</div>
+    <div class="section-title">Opening Activity</div>
+    <div class="section-desc">The Inefficient Movement Challenge</div>
+    <div class="time-badge">⏱ 5 Minutes</div>
+  </div>
+
+  <!-- SLIDE 4: Inefficient Movement Challenge -->
+  <div class="slide slide-activity">
+    <div class="header-bar"><h2>The Inefficient Movement Challenge</h2><div class="sub">⏱ Opening Activity – 5 minutes</div></div>
+    <div class="activity-box">
+      <h3>🏃 Teacher Demonstrates — Inefficient Movements</h3>
+      <ul>
+        <li>Running with stiff legs and excessive upper body tension — arms rigid, trunk locked, no rotation</li>
+        <li>Throwing a ball using only the arm — no leg drive, no hip or torso rotation involved</li>
+        <li>Walking with poor posture — forward head position, rounded shoulders, exaggerated arm swing</li>
+        <li>Jumping with knees caving inward (valgus) and landing flat-footed with no soft absorption</li>
+      </ul>
+    </div>
+    <div class="question-box">
+      <h3>💬 Discussion Prompts — Ask the Class:</h3>
+      <p>
+        <strong>"What is wrong with these movements? Why do they look inefficient?"</strong><br><br>
+        Follow up: <em>"Which muscles or body parts aren't being used correctly? What effect could this have on performance and the body over time?"</em><br><br>
+        Guide students toward: <strong>Efficient movement requires the whole body working together in the correct sequence — this is biomechanics in action.</strong>
+      </p>
+    </div>
+  </div>
+
+  <!-- SLIDE 5: Section Banner – Efficiency Principles -->
+  <div class="slide slide-section">
+    <div class="section-num">02</div>
+    <div class="section-title">Efficiency Principles</div>
+    <div class="section-desc">The 5 Core Concepts of Biomechanical Efficiency</div>
+    <div class="time-badge">⏱ 8 Minutes</div>
+  </div>
+
+  <!-- SLIDE 6: The 5 Principles -->
+  <div class="slide slide-content">
+    <div class="header-bar"><h2>5 Principles of Efficient Movement</h2><div class="sub">⏱ Main Teaching – 8 minutes</div></div>
+    <div class="principle">
+      <div class="p-num">01</div>
+      <div class="p-content"><h3>Energy Conservation</h3><p>Proper technique minimises wasted energy by recruiting muscles in the correct sequence and avoiding unnecessary co-contractions. Less energy wasted = more available for performance output.</p></div>
+    </div>
+    <div class="principle">
+      <div class="p-num">02</div>
+      <div class="p-content"><h3>Force Production via the Kinetic Chain</h3><p>Using multiple body segments in sequence (legs → hips → trunk → arm) generates far greater force than isolated muscle use. Each segment adds to and amplifies the last.</p></div>
+    </div>
+    <div class="principle">
+      <div class="p-num">03</div>
+      <div class="p-content"><h3>Injury Prevention Through Correct Alignment</h3><p>Optimal joint alignment distributes load evenly across tissues. Misalignment concentrates stress on specific structures (ligaments, cartilage, tendons), significantly increasing injury risk over time.</p></div>
+    </div>
+    <div class="principle">
+      <div class="p-num">04</div>
+      <div class="p-content"><h3>Technique Transfer (Automaticity)</h3><p>Practising correct form builds motor programmes — movements become automatic. This frees cognitive resources during competition and ensures consistency under pressure and fatigue.</p></div>
+    </div>
+    <div class="principle">
+      <div class="p-num">05</div>
+      <div class="p-content"><h3>Fatigue Resistance</h3><p>Efficient movement uses less energy per repetition. As fatigue sets in, athletes with better biomechanics maintain form for longer — crucial in endurance sport, team games, and late-match performance.</p></div>
+    </div>
+  </div>
+
+  <!-- SLIDE 7: The Kinetic Chain Explained -->
+  <div class="slide slide-content">
+    <div class="header-bar"><h2>The Kinetic Chain</h2><div class="sub">How force travels through the body from ground to point of release</div></div>
+    <p style="color:#94a3b8; margin-bottom:4px; font-size:0.78rem;">Force is generated from the ground up and transferred through the body in a sequential chain. Each segment adds to the total force output — a break anywhere in the chain reduces performance and increases injury risk.</p>
+    <div class="chain">
+      <div class="chain-node">⬇<br>Ground<br>Reaction</div>
+      <div class="chain-arrow">→</div>
+      <div class="chain-node">🦶<br>Ankle</div>
+      <div class="chain-arrow">→</div>
+      <div class="chain-node">🦵<br>Knee</div>
+      <div class="chain-arrow">→</div>
+      <div class="chain-node">🍑<br>Hip</div>
+      <div class="chain-arrow">→</div>
+      <div class="chain-node">🔄<br>Trunk<br>Rotation</div>
+      <div class="chain-arrow">→</div>
+      <div class="chain-node">💪<br>Shoulder</div>
+      <div class="chain-arrow">→</div>
+      <div class="chain-node">🤚<br>Elbow &<br>Wrist</div>
+      <div class="chain-arrow">→</div>
+      <div class="chain-node">🎯<br>Force<br>Output</div>
+    </div>
+    <div class="cards cards-2" style="margin-top:8px">
+      <div class="card">
+        <div class="card-icon">⚾</div>
+        <h3>Throwing Example</h3>
+        <p>A baseball pitcher generates ~50% of throwing velocity from the legs and core. An arm-only throw produces significantly less speed and places dangerous levels of stress on the elbow and shoulder joint structures.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">🏃</div>
+        <h3>Running Example</h3>
+        <p>Elite runners store elastic energy in tendons (especially the Achilles) and rotate their hips through a full range of motion. Stiff, rigid runners lose this free energy return — wasting effort on every stride.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 8: Efficient vs Inefficient Comparison -->
+  <div class="slide slide-compare">
+    <div class="header-bar"><h2>Efficient vs Inefficient Movement</h2><div class="sub">Side-by-side comparison across three key movement patterns</div></div>
+    <div class="compare-grid">
+      <div class="compare-col">
+        <div class="compare-head bad-head">❌ Inefficient Movement</div>
+        <div class="bad-body">
+          <div class="compare-item"><div class="dot dot-red"></div><div><strong>Running:</strong> Overstriding, stiff knees, arms crossing midline, trunk rigidity, heel striking far ahead of centre of mass</div></div>
+          <div class="compare-item"><div class="dot dot-red"></div><div><strong>Throwing:</strong> Arm-only delivery, no hip rotation, front foot not planted, elbow drops below shoulder height at release</div></div>
+          <div class="compare-item"><div class="dot dot-red"></div><div><strong>Jumping:</strong> Knee valgus on takeoff/landing, excessive forward trunk lean, flat-footed landing, no upward arm drive</div></div>
+          <div class="compare-item"><div class="dot dot-red"></div><div><strong>Overall Effect:</strong> Higher energy cost, reduced power output, increased injury risk to joints and soft tissue, early fatigue onset</div></div>
+        </div>
+      </div>
+      <div class="compare-col">
+        <div class="compare-head good-head">✅ Efficient Movement</div>
+        <div class="good-body">
+          <div class="compare-item"><div class="dot dot-green"></div><div><strong>Running:</strong> Foot strike under centre of mass, 90° elbow angle, slight forward lean from ankles, high cadence, elastic rebound</div></div>
+          <div class="compare-item"><div class="dot dot-green"></div><div><strong>Throwing:</strong> Full hip-to-shoulder sequential rotation, stride toward target, elbow at shoulder height, strong wrist snap at release</div></div>
+          <div class="compare-item"><div class="dot dot-green"></div><div><strong>Jumping:</strong> Triple extension (ankle/knee/hip), arms drive upward, soft knee-flexed landing, load absorbed through mid-foot</div></div>
+          <div class="compare-item"><div class="dot dot-green"></div><div><strong>Overall Effect:</strong> Lower energy cost, maximum force transfer, joint protection, maintained technique under fatigue</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 9: Section – Alignment & Energy -->
+  <div class="slide slide-section">
+    <div class="section-num">03</div>
+    <div class="section-title">Alignment & Energy</div>
+    <div class="section-desc">How proper alignment reduces energy expenditure</div>
+    <div class="time-badge">⏱ 10 Minutes</div>
+  </div>
+
+  <!-- SLIDE 10: Alignment Concepts -->
+  <div class="slide slide-content">
+    <div class="header-bar"><h2>Proper Alignment & Energy Expenditure</h2><div class="sub">Why posture and joint position matter biomechanically</div></div>
+    <div class="cards cards-2">
+      <div style="display:flex; flex-direction:column; gap:10px;">
+        <div class="card accent">
+          <div class="card-icon">⚖️</div>
+          <h3>Centre of Mass (CoM)</h3>
+          <p>Keeping CoM over the base of support reduces the muscular effort required to maintain balance. Poor posture shifts CoM, forcing constant compensatory muscle activation — wasting energy even at rest.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">🦴</div>
+          <h3>Joint Congruence</h3>
+          <p>Properly aligned joints (e.g. knee tracking over 2nd toe) distribute compressive and shear forces across cartilage evenly. Misalignment causes focal loading — up to 3× the stress on a small area of tissue.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">💡</div>
+          <h3>Postural Control</h3>
+          <p>Deep stabiliser muscles (transverse abdominis, rotator cuff) work continuously to maintain alignment. Trained athletes activate these automatically — freeing prime movers exclusively for performance tasks.</p>
+        </div>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:10px;">
+        <div class="card" style="background:rgba(14,165,233,0.06); border-color:#0ea5e9;">
+          <div class="card-icon">📊</div>
+          <h3>Research Insight — Running Economy</h3>
+          <p>Athletes with better running alignment use <strong style="color:#7dd3fc">~8–10% less oxygen</strong> at the same speed compared to those with poor form (Saunders et al., 2004). Over a 10km race, this energy saving is substantial.</p>
+        </div>
+        <div class="card" style="background:rgba(14,165,233,0.06); border-color:#0ea5e9;">
+          <div class="card-icon">🎾</div>
+          <h3>Overhead Athletes</h3>
+          <p>In tennis and swimming, scapular alignment directly affects how force is transferred from the trunk to the arm. Scapular dyskinesis (poor blade position) reduces power output and is a key predictor of shoulder injury.</p>
+        </div>
+        <div class="card" style="background:rgba(14,165,233,0.06); border-color:#0ea5e9;">
+          <div class="card-icon">🦶</div>
+          <h3>Ground Reaction Force</h3>
+          <p>Landing alignment determines how ground reaction forces (up to 8× body weight in running) are absorbed. Hip and knee alignment controls whether these forces are safely distributed or create concentrated injury risk.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 11: Section – Technology Transfer -->
+  <div class="slide slide-section">
+    <div class="section-num">04</div>
+    <div class="section-title">Technology Transfer</div>
+    <div class="section-desc">Using technology to analyse and improve movement</div>
+    <div class="time-badge">⏱ 7 Minutes</div>
+  </div>
+
+  <!-- SLIDE 12: Technology Transfer Tools -->
+  <div class="slide slide-content">
+    <div class="header-bar"><h2>Technology Transfer in Biomechanics</h2><div class="sub">Tools used to identify faults, educate athletes, and improve movement patterns</div></div>
+    <div class="cards cards-3">
+      <div class="card accent">
+        <div class="card-icon">🎥</div>
+        <h3>Video Analysis</h3>
+        <p>Slow-motion footage reveals alignment faults invisible at normal speed. Apps like Hudl Technique or Coach's Eye provide frame-by-frame review with angle measurement overlays.</p>
+      </div>
+      <div class="card accent">
+        <div class="card-icon">📡</div>
+        <h3>Wearable Sensors (IMUs)</h3>
+        <p>Inertial measurement units embedded in clothing track joint angles, acceleration, and symmetry in real time — providing objective movement quality data during training sessions.</p>
+      </div>
+      <div class="card accent">
+        <div class="card-icon">💻</div>
+        <h3>Force Plates</h3>
+        <p>Measure ground reaction forces across three planes. Reveals limb asymmetries, landing patterns, and power output — used in elite sport, rehabilitation, and return-to-play assessments.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">🖥️</div>
+        <h3>3D Motion Capture</h3>
+        <p>Infrared cameras track reflective markers to generate a full 3D skeletal model of the athlete — the gold standard for research and elite performance biomechanical analysis.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">🤖</div>
+        <h3>AI Pose Estimation</h3>
+        <p>Emerging tools (e.g. Google MediaPipe) analyse movement from standard video without markers — making biomechanical feedback increasingly accessible at community and school level.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">🔁</div>
+        <h3>Biofeedback Systems</h3>
+        <p>Real-time feedback (e.g. vibration alerts when knee valgus occurs) accelerates motor learning — athletes self-correct in the moment rather than waiting for a post-session review.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 13: Technology Transfer – The Pipeline -->
+  <div class="slide slide-activity">
+    <div class="header-bar"><h2>Why Technology Transfer Matters</h2><div class="sub">From the research lab → training ground → competition performance</div></div>
+    <div class="activity-box">
+      <h3>🔬 The Transfer Pipeline — 5 Stages</h3>
+      <ul>
+        <li><strong>Identify:</strong> Technology reveals inefficiency or injury risk that the naked eye misses (e.g. subtle Achilles loading asymmetry between left and right legs)</li>
+        <li><strong>Educate:</strong> Athletes who see their own movement data develop greater body awareness — combining proprioceptive and cognitive feedback for faster learning</li>
+        <li><strong>Modify:</strong> Coaches use objective data to design targeted drills — technique changes are evidence-based rather than based on guesswork or subjective observation</li>
+        <li><strong>Automate:</strong> Repeated correct practice builds motor programmes — the efficient movement becomes unconscious, freeing attention for tactical and competitive demands</li>
+        <li><strong>Monitor:</strong> Ongoing tracking detects fatigue-related technique deterioration before it leads to injury — enabling timely intervention</li>
+      </ul>
+    </div>
+    <div class="cards cards-2">
+      <div class="question-box">
+        <h3>💬 Discussion Question</h3>
+        <p>Elite sprinters use 3D motion capture to refine their start. How might this knowledge translate into a useful coaching drill for a school athlete without access to that technology?</p>
+      </div>
+      <div class="card accent">
+        <div class="card-icon">📱</div>
+        <h3>Accessible Tech at School Level</h3>
+        <p>Smartphone slow-motion video · Mirror drills · Partner observation checklists · Chalk footprint landing analysis · Jump mat timing apps · Reaction light systems</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 14: Student Activity -->
+  <div class="slide slide-activity">
+    <div class="header-bar"><h2>Student Activity — Partner Movement Analysis</h2><div class="sub">⏱ Embedded within teaching — approx. 7 minutes</div></div>
+    <div class="activity-box">
+      <h3>🏃 Task Instructions</h3>
+      <ul>
+        <li>In pairs, one student performs a <strong>jog of 20m</strong>, the other observes using the checklist below — take notes on what you see</li>
+        <li>Swap roles and repeat — then compare your feedback with your partner</li>
+        <li>Each pair identifies <strong>one clear efficiency strength</strong> and <strong>one area that could be improved</strong></li>
+        <li>Pairs share findings with the class — teacher compiles observations on the board and links back to the 5 principles</li>
+      </ul>
+    </div>
+    <div class="card" style="margin-bottom:10px;">
+      <h3 style="color:#7dd3fc; margin-bottom:8px; font-size:0.83rem;">📋 Observation Checklist — Running Form</h3>
+      <div class="cards cards-2" style="gap:6px;">
+        <div>
+          <p style="font-size:0.76rem; color:#cbd5e1; margin-bottom:4px;">☐ Foot strike landing under the centre of mass?</p>
+          <p style="font-size:0.76rem; color:#cbd5e1; margin-bottom:4px;">☐ Arms held at ~90° and driving forward (not crossing midline)?</p>
+          <p style="font-size:0.76rem; color:#cbd5e1;">☐ Upright trunk posture — not hunched forward at the waist?</p>
+        </div>
+        <div>
+          <p style="font-size:0.76rem; color:#cbd5e1; margin-bottom:4px;">☐ Knees lifting forward cleanly (not rotating outward)?</p>
+          <p style="font-size:0.76rem; color:#cbd5e1; margin-bottom:4px;">☐ Smooth, rhythmic stride pattern — no excessive up-and-down bouncing?</p>
+          <p style="font-size:0.76rem; color:#cbd5e1;">☐ Head in a neutral position — not tilted forward or to the side?</p>
+        </div>
+      </div>
+    </div>
+    <div class="question-box">
+      <h3>💬 Reflection Question</h3>
+      <p>Which of the 5 Efficiency Principles did the faults you observed relate to most closely? How might correcting this improve either performance output or long-term injury risk for that athlete?</p>
+    </div>
+  </div>
+
+  <!-- SLIDE 15: Summary & Exit Ticket -->
+  <div class="slide slide-summary">
+    <div class="header-bar"><h2>Lesson Summary & Exit Ticket</h2><div class="sub">⏱ Final 5 Minutes — consolidate understanding</div></div>
+    <p style="font-size:0.8rem; color:#94a3b8; margin-bottom:10px;">Six key takeaways from today's lesson on optimising movement for performance:</p>
+    <div class="summary-grid">
+      <div class="summary-item"><div class="s-icon">⚡</div><div class="s-text"><h4>Energy Conservation</h4><p>Correct technique reduces energy cost per movement — more energy remains available for performance and delaying the onset of fatigue.</p></div></div>
+      <div class="summary-item"><div class="s-icon">🔗</div><div class="s-text"><h4>Kinetic Chain</h4><p>Maximum force production relies on the whole body working in sequence — not isolated muscles operating independently of each other.</p></div></div>
+      <div class="summary-item"><div class="s-icon">⚖️</div><div class="s-text"><h4>Alignment</h4><p>Proper joint alignment distributes mechanical load across tissues evenly, protects structures, and reduces unnecessary compensatory muscle activation.</p></div></div>
+      <div class="summary-item"><div class="s-icon">🔁</div><div class="s-text"><h4>Automaticity</h4><p>Deliberate practice of correct form builds motor programmes — efficient movement patterns become automatic and consistent under fatigue.</p></div></div>
+      <div class="summary-item"><div class="s-icon">📱</div><div class="s-text"><h4>Technology Transfer</h4><p>Biomechanical technology identifies faults, educates athletes visually, and accelerates the learning and reinforcement of correct movement patterns.</p></div></div>
+      <div class="summary-item"><div class="s-icon">🛡</div><div class="s-text"><h4>Injury Prevention</h4><p>Biomechanical efficiency underpins both peak athletic performance AND long-term health — you cannot have one without the other.</p></div></div>
+    </div>
+    <div class="question-box">
+      <h3>✏️ Exit Ticket — Write Before You Leave</h3>
+      <p>In 2–3 sentences, answer: <strong>"Explain how one of the 5 efficiency principles could be applied to a sport of your choice to either improve performance or reduce the risk of injury."</strong></p>
+    </div>
+  </div>
+
+  <!-- SLIDE 16: Next Lesson Preview -->
+  <div class="slide slide-section">
+    <div class="section-num">→</div>
+    <div class="section-title">Coming Up: Lesson 2</div>
+    <div class="section-desc" style="margin-top:10px; max-width:520px; margin-left:auto; margin-right:auto; line-height:1.6;">
+      <strong style="color:#7dd3fc; font-size:1.1rem;">Injury Mechanisms & Risk Factors</strong><br><br>
+      We'll examine how biomechanical faults contribute to common sport injuries, explore intrinsic vs extrinsic risk factors, and begin applying injury prevention movement screening tools in practical settings.
+    </div>
+    <div class="time-badge" style="margin-top:20px;">📖 Recommended Reading: Nordin & Frankel — Basic Biomechanics, Ch. 1–2</div>
+  </div>
+
+</div><!-- /pres -->
+
+<div class="nav">
+  <button class="nav-btn" id="prev" onclick="changeSlide(-1)" disabled>← Prev</button>
+  <div style="text-align:center">
+    <div class="slide-counter" id="counter">Slide 1 of 16</div>
+    <div class="slide-title-label" id="slideLabel"></div>
+  </div>
+  <button class="nav-btn" id="next" onclick="changeSlide(1)">Next →</button>
+</div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const labels = [
+    'Title — Lesson 1','Lesson Overview','Section: Opening Activity','The Inefficient Movement Challenge',
+    'Section: Efficiency Principles','5 Principles of Efficient Movement','The Kinetic Chain Explained',
+    'Efficient vs Inefficient Movement','Section: Alignment & Energy','Proper Alignment & Energy Expenditure',
+    'Section: Technology Transfer','Technology Transfer — Tools','Why Technology Transfer Matters',
+    'Student Activity — Movement Analysis','Lesson Summary & Exit Ticket','Coming Up: Lesson 2'
+  ];
+  let cur = 0;
+
+  function changeSlide(dir) {
+    slides[cur].classList.remove('active');
+    cur = Math.max(0, Math.min(slides.length - 1, cur + dir));
+    slides[cur].classList.add('active');
+    slides[cur].scrollTop = 0;
+    document.getElementById('counter').textContent = `Slide ${cur+1} of ${slides.length}`;
+    document.getElementById('slideLabel').textContent = labels[cur] || '';
+    document.getElementById('prev').disabled = cur === 0;
+    document.getElementById('next').disabled = cur === slides.length - 1;
+    document.getElementById('progress').style.width = ((cur+1)/slides.length*100) + '%';
+  }
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') changeSlide(1);
+    if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') changeSlide(-1);
+  });
+
+  changeSlide(0);
+</script>
+</body>
+</html>
