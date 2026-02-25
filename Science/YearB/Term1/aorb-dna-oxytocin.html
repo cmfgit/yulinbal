@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Is It A or B? — DNA, Oxytocin & Dopamine</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: Arial, sans-serif; overflow: hidden; height: 100vh; }
+        .presentation { display: flex; flex-direction: column; height: 100vh; background: linear-gradient(to bottom right, #eff6ff, #faf5ff); }
+        .slide-container { flex: 1; display: flex; align-items: center; justify-content: center; padding: 3rem; }
+        .slide { display: none; width: 100%; height: 100%; align-items: center; justify-content: center; }
+        .slide.active { display: flex; }
+
+        .title-slide { text-align: center; flex-direction: column; }
+        .title-slide h1 { font-size: 5rem; color: #2563eb; margin-bottom: 2rem; font-weight: bold; }
+        .title-slide h2 { font-size: 3.5rem; color: #374151; margin-bottom: 3rem; font-weight: 600; }
+        .title-slide p { font-size: 2rem; color: #4b5563; margin-top: 2rem; }
+        .topic-tags { display: flex; gap: 1.5rem; justify-content: center; margin-top: 2.5rem; flex-wrap: wrap; }
+        .tag { font-size: 1.6rem; padding: 0.5rem 1.5rem; border-radius: 2rem; font-weight: 700; }
+        .tag-dna { background: #d1fae5; color: #065f46; }
+        .tag-oxy { background: #fce7f3; color: #9d174d; }
+        .tag-dop { background: #fef3c7; color: #92400e; }
+
+        .section-slide { flex-direction: column; text-align: center; }
+        .section-slide h2 { font-size: 4.5rem; font-weight: 800; margin-bottom: 1.5rem; }
+        .section-slide p { font-size: 2.2rem; color: #4b5563; }
+        .section-dna { color: #065f46; }
+        .section-oxy { color: #9d174d; }
+        .section-dop { color: #92400e; }
+
+        .question-slide { flex-direction: column; text-align: center; }
+        .question-slide h2 { font-size: 3rem; color: #2563eb; margin-bottom: 2rem; font-weight: bold; }
+        .question-slide .question-text { font-size: 2.4rem; color: #1f2937; margin-bottom: 3.5rem; font-weight: 600; line-height: 1.35; }
+        .options { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; width: 100%; max-width: 1200px; }
+        .option { border: 4px solid; border-radius: 1.5rem; padding: 2rem; text-align: center; }
+        .option.option-a { background-color: #fee2e2; border-color: #ef4444; }
+        .option.option-b { background-color: #dbeafe; border-color: #3b82f6; }
+        .option h3 { font-size: 4rem; margin-bottom: 1rem; font-weight: bold; }
+        .option.option-a h3 { color: #dc2626; }
+        .option.option-b h3 { color: #2563eb; }
+        .option p { font-size: 2rem; color: #1f2937; line-height: 1.3; }
+
+        .answer-slide { flex-direction: column; text-align: center; align-items: center; }
+        .answer-slide h2 { font-size: 3.5rem; color: #16a34a; margin-bottom: 2rem; font-weight: bold; }
+        .answer-box { border: 4px solid; border-radius: 1.5rem; padding: 3rem; max-width: 1000px; text-align: center; }
+        .answer-box.answer-a { background-color: #fee2e2; border-color: #ef4444; }
+        .answer-box.answer-b { background-color: #dbeafe; border-color: #3b82f6; }
+        .answer-box .explanation { font-size: 2.5rem; color: #1f2937; font-weight: 600; margin-bottom: 1rem; }
+        .answer-box .subtext { font-size: 1.9rem; color: #4b5563; font-style: italic; margin-top: 1.5rem; line-height: 1.4; }
+
+        .conclusion-slide { flex-direction: column; text-align: center; }
+        .conclusion-slide h1 { font-size: 5rem; color: #16a34a; margin-bottom: 3rem; font-weight: bold; }
+        .conclusion-content { text-align: left; max-width: 1000px; margin: 0 auto; }
+        .conclusion-content ul { list-style: none; font-size: 2rem; color: #4b5563; }
+        .conclusion-content li { margin: 1rem 0 1rem 2rem; }
+
+        .navigation { background-color: #1f2937; color: white; padding: 1rem 2rem; display: flex; align-items: center; justify-content: space-between; }
+        .nav-button { display: flex; align-items: center; padding: 0.75rem 1.5rem; border: none; border-radius: 0.5rem; font-size: 1.125rem; font-weight: 600; cursor: pointer; background-color: #2563eb; color: white; }
+        .nav-button:hover:not(:disabled) { background-color: #1d4ed8; }
+        .nav-button:disabled { background-color: #4b5563; cursor: not-allowed; opacity: 0.5; }
+        .slide-info { display: flex; align-items: center; gap: 0.5rem; }
+        .slide-counter { font-size: 1.125rem; font-weight: 600; margin-right: 1rem; }
+        .dot { width: 0.75rem; height: 0.75rem; border-radius: 50%; background-color: #6b7280; cursor: pointer; }
+        .dot.active { background-color: #3b82f6; }
+        .keyboard-hint { background-color: #374151; color: #d1d5db; text-align: center; padding: 0.5rem; font-size: 0.875rem; }
+    </style>
+</head>
+<body>
+<div class="presentation">
+<div class="slide-container">
+
+    <!-- Slide 1: Title -->
+    <div class="slide active title-slide">
+        <h1>Is It A or B?</h1>
+        <h2>DNA, Oxytocin &amp; Dopamine Review</h2>
+        <p>Stand on the side of the room that matches your answer!</p>
+        <div class="topic-tags">
+            <span class="tag tag-dna">🧬 DNA &amp; Base Pairs</span>
+            <span class="tag tag-oxy">💗 Oxytocin</span>
+            <span class="tag tag-dop">⚡ Dopamine</span>
+        </div>
+    </div>
+
+    <!-- Section: DNA -->
+    <div class="slide section-slide">
+        <h2 class="section-dna">🧬 Section 1</h2>
+        <p style="font-size:3rem; font-weight:700; color:#065f46;">DNA &amp; Base Pairs</p>
+        <p style="margin-top:1.5rem;">Questions 1 – 4</p>
+    </div>
+
+    <!-- Q1 — Answer: A -->
+    <div class="slide question-slide">
+        <h2>Question 1 — DNA Base Pairs</h2>
+        <p class="question-text">Which base pairs with Adenine (A) in a DNA molecule?</p>
+        <div class="options">
+            <div class="option option-a"><h3>A</h3><p>Thymine (T)</p></div>
+            <div class="option option-b"><h3>B</h3><p>Cytosine (C)</p></div>
+        </div>
+    </div>
+    <div class="slide answer-slide">
+        <h2>✅ Answer: A</h2>
+        <div class="answer-box answer-a">
+            <p class="explanation">Thymine (T)</p>
+            <p class="subtext">Remember the rule: <strong>A pairs with T</strong>, and <strong>G pairs with C</strong>. These are complementary base pairs — they always bond together in the double helix. Think: "AT the GC"!</p>
+        </div>
+    </div>
+
+    <!-- Q2 — Answer: B -->
+    <div class="slide question-slide">
+        <h2>Question 2 — DNA Structure</h2>
+        <p class="question-text">A DNA strand reads: <strong>A – T – G – C</strong><br>What does the complementary strand read?</p>
+        <div class="options">
+            <div class="option option-a"><h3>A</h3><p>A – T – G – C</p></div>
+            <div class="option option-b"><h3>B</h3><p>T – A – C – G</p></div>
+        </div>
+    </div>
+    <div class="slide answer-slide">
+        <h2>✅ Answer: B</h2>
+        <div class="answer-box answer-b">
+            <p class="explanation">T – A – C – G</p>
+            <p class="subtext">Each base matches its complementary pair: <strong>A→T, T→A, G→C, C→G</strong>. The two strands are mirror images of each other — this is how DNA copies itself perfectly every time a cell divides!</p>
+        </div>
+    </div>
+
+    <!-- Q3 — Answer: B -->
+    <div class="slide question-slide">
+        <h2>Question 3 — DNA Building Blocks</h2>
+        <p class="question-text">DNA is a polymer. What is the small building block (monomer) that joins together to make DNA?</p>
+        <div class="options">
+            <div class="option option-a"><h3>A</h3><p>An amino acid</p></div>
+            <div class="option option-b"><h3>B</h3><p>A nucleotide</p></div>
+        </div>
+    </div>
+    <div class="slide answer-slide">
+        <h2>✅ Answer: B</h2>
+        <div class="answer-box answer-b">
+            <p class="explanation">A nucleotide</p>
+            <p class="subtext">DNA is a <strong>polymer</strong> made from millions of <strong>nucleotides</strong> joined together. Each nucleotide contains a sugar, a phosphate group, and one of the four bases (A, T, G or C). Amino acids are the building blocks of <em>proteins</em>, not DNA.</p>
+        </div>
+    </div>
+
+    <!-- Q4 — Answer: A -->
+    <div class="slide question-slide">
+        <h2>Question 4 — DNA in the Cell</h2>
+        <p class="question-text">A scientist is studying a cell. They find that one strand of DNA has 30% Adenine (A). What percentage of the whole DNA molecule is Thymine (T)?</p>
+        <div class="options">
+            <div class="option option-a"><h3>A</h3><p>30% — because A always pairs with T</p></div>
+            <div class="option option-b"><h3>B</h3><p>70% — because the rest must be T</p></div>
+        </div>
+    </div>
+    <div class="slide answer-slide">
+        <h2>✅ Answer: A</h2>
+        <div class="answer-box answer-a">
+            <p class="explanation">30% — because A always pairs with T</p>
+            <p class="subtext">This is called <strong>Chargaff's Rule</strong>: the amount of Adenine always equals the amount of Thymine, and the amount of Guanine always equals the amount of Cytosine. If A = 30%, then T = 30%, and G + C share the remaining 40%.</p>
+        </div>
+    </div>
+
+    <!-- Section: Oxytocin -->
+    <div class="slide section-slide">
+        <h2 class="section-oxy">💗 Section 2</h2>
+        <p style="font-size:3rem; font-weight:700; color:#9d174d;">Oxytocin</p>
+        <p style="margin-top:1.5rem;">Questions 5 – 6</p>
+    </div>
+
+    <!-- Q5 — Answer: B -->
+    <div class="slide question-slide">
+        <h2>Question 5 — Oxytocin</h2>
+        <p class="question-text">What is oxytocin commonly known as?</p>
+        <div class="options">
+            <div class="option option-a"><h3>A</h3><p>The reward hormone</p></div>
+            <div class="option option-b"><h3>B</h3><p>The trust / bonding hormone</p></div>
+        </div>
+    </div>
+    <div class="slide answer-slide">
+        <h2>✅ Answer: B</h2>
+        <div class="answer-box answer-b">
+            <p class="explanation">The trust / bonding hormone</p>
+            <p class="subtext">Oxytocin is known as the <strong>"trust hormone"</strong> or <strong>"bonding hormone"</strong>. It is released during physical touch, eye contact, teamwork and acts of kindness — making us feel connected, safe and calm. Dopamine is the reward hormone.</p>
+        </div>
+    </div>
+
+    <!-- Q6 — Answer: A -->
+    <div class="slide question-slide">
+        <h2>Question 6 — Oxytocin</h2>
+        <p class="question-text">Which activity would release oxytocin?</p>
+        <div class="options">
+            <div class="option option-a"><h3>A</h3><p>Hugging a family member</p></div>
+            <div class="option option-b"><h3>B</h3><p>Studying alone in a quiet room</p></div>
+        </div>
+    </div>
+    <div class="slide answer-slide">
+        <h2>✅ Answer: A</h2>
+        <div class="answer-box answer-a">
+            <p class="explanation">Hugging a family member</p>
+            <p class="subtext">Oxytocin is released through <strong>physical touch</strong> (hugging, handshakes), eye contact, laughing with others, teamwork, and acts of kindness. Studying alone doesn't trigger oxytocin — but working with classmates does!</p>
+        </div>
+    </div>
+
+    <!-- Section: Dopamine -->
+    <div class="slide section-slide">
+        <h2 class="section-dop">⚡ Section 3</h2>
+        <p style="font-size:3rem; font-weight:700; color:#92400e;">Dopamine</p>
+        <p style="margin-top:1.5rem;">Question 7</p>
+    </div>
+
+    <!-- Q7 — Answer: B -->
+    <div class="slide question-slide">
+        <h2>Question 7 — Dopamine</h2>
+        <p class="question-text">What does dopamine motivate us to do?</p>
+        <div class="options">
+            <div class="option option-a"><h3>A</h3><p>Bond with and trust other people</p></div>
+            <div class="option option-b"><h3>B</h3><p>Seek rewards and achieve goals</p></div>
+        </div>
+    </div>
+    <div class="slide answer-slide">
+        <h2>✅ Answer: B</h2>
+        <div class="answer-box answer-b">
+            <p class="explanation">Seek rewards and achieve goals</p>
+            <p class="subtext">Dopamine is the <strong>reward hormone</strong> — it motivates us to set goals, work hard, and gives us a feeling of satisfaction when we achieve something. It is released when we complete tasks, earn praise, or reach a target. Bonding is oxytocin's job!</p>
+        </div>
+    </div>
+
+    <!-- Conclusion -->
+    <div class="slide conclusion-slide">
+        <h1>Great Work! 🎉</h1>
+        <div class="conclusion-content">
+            <ul>
+                <li>✅ A pairs with T, and G pairs with C (complementary base pairing)</li>
+                <li>✅ Complementary strand of A-T-G-C is T-A-C-G</li>
+                <li>✅ DNA is a polymer made of monomers called nucleotides</li>
+                <li>✅ Chargaff's Rule: %A always equals %T, and %G always equals %C</li>
+                <li>✅ Oxytocin = the trust / bonding hormone</li>
+                <li>✅ Oxytocin is released through touch, eye contact &amp; teamwork</li>
+                <li>✅ Dopamine motivates us to seek rewards and achieve goals</li>
+            </ul>
+        </div>
+    </div>
+
+</div>
+
+<div class="navigation">
+    <button class="nav-button" id="prevBtn" onclick="changeSlide(-1)">← Previous</button>
+    <div class="slide-info">
+        <span class="slide-counter" id="slideCounter">Slide 1 of 24</span>
+        <div id="dotContainer"></div>
+    </div>
+    <button class="nav-button" id="nextBtn" onclick="changeSlide(1)">Next →</button>
+</div>
+<div class="keyboard-hint">Use ← → arrow keys or click buttons to navigate | Press F11 for fullscreen</div>
+</div>
+
+<script>
+    let cur = 0;
+    const slides = document.querySelectorAll('.slide');
+    const total = slides.length;
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const counter = document.getElementById('slideCounter');
+    const dotContainer = document.getElementById('dotContainer');
+
+    for (let i = 0; i < total; i++) {
+        const d = document.createElement('div');
+        d.className = 'dot' + (i === 0 ? ' active' : '');
+        d.onclick = () => goTo(i);
+        dotContainer.appendChild(d);
+    }
+    const dots = document.querySelectorAll('.dot');
+
+    function goTo(n) {
+        slides[cur].classList.remove('active');
+        dots[cur].classList.remove('active');
+        cur = n;
+        slides[cur].classList.add('active');
+        dots[cur].classList.add('active');
+        counter.textContent = `Slide ${cur + 1} of ${total}`;
+        prevBtn.disabled = cur === 0;
+        nextBtn.disabled = cur === total - 1;
+    }
+    function changeSlide(d) {
+        if (cur + d >= 0 && cur + d < total) goTo(cur + d);
+    }
+    document.addEventListener('keydown', e => {
+        if (e.key === 'ArrowRight') changeSlide(1);
+        if (e.key === 'ArrowLeft')  changeSlide(-1);
+    });
+    goTo(0);
+</script>
+</body>
+</html>

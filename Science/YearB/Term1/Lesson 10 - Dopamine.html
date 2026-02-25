@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dopamine & Your Brain – Stage 5 Science</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: Arial, sans-serif; background: #1a1a2e; display: flex; flex-direction: column; align-items: center; min-height: 100vh; padding: 20px; }
+
+  .slide-counter { color: #c39bd3; font-size: 0.9em; margin-bottom: 10px; letter-spacing: 1px; }
+
+  /* SLIDE */
+  .slide { display: none; width: 100%; max-width: 860px; background: white; border-radius: 16px; overflow: hidden; box-shadow: 0 8px 32px rgba(0,0,0,0.4); min-height: 520px; flex-direction: column; }
+  .slide.active { display: flex; }
+
+  .slide-header { padding: 28px 36px 20px; }
+  .slide-num { font-size: 0.75em; font-weight: bold; letter-spacing: 2px; text-transform: uppercase; opacity: 0.7; margin-bottom: 6px; }
+  .slide-title { font-size: 1.7em; font-weight: bold; line-height: 1.2; }
+  .slide-subtitle { font-size: 0.95em; margin-top: 6px; opacity: 0.8; }
+  .slide-body { flex: 1; padding: 0 36px 28px; }
+
+  /* SLIDE 1 COLOURS */
+  .s1 .slide-header { background: linear-gradient(135deg, #6c3483, #1a5276); color: white; }
+  .s1 .slide-num { color: #d7bde2; }
+
+  /* SLIDE 2 COLOURS */
+  .s2 .slide-header { background: linear-gradient(135deg, #1a5276, #117a65); color: white; }
+  .s2 .slide-num { color: #a9cce3; }
+
+  /* SLIDE 3 COLOURS */
+  .s3 .slide-header { background: linear-gradient(135deg, #1a1a2e, #4a235a); color: white; }
+  .s3 .slide-num { color: #d7bde2; }
+
+  /* INFO BOX */
+  .info-box { background: #f4ecf7; border: 1.5px solid #c39bd3; border-radius: 10px; padding: 14px 18px; margin: 16px 0; line-height: 1.75; font-size: 0.95em; }
+  .info-box strong { color: #6c3483; }
+
+  .analogy { background: #eaf4fb; border: 1.5px solid #85c1e9; border-radius: 10px; padding: 12px 16px; margin: 12px 0; font-size: 0.9em; line-height: 1.65; }
+  .analogy strong { color: #1a5276; }
+
+  /* PATHWAY DIAGRAM */
+  .diagram-wrap { background: #fef9e7; border: 2px dashed #f0c040; border-radius: 10px; padding: 16px; margin: 14px 0; text-align: center; }
+  .diagram-wrap p.label { font-size: 0.82em; color: #7d6608; margin-top: 8px; }
+  .pathway { display: flex; align-items: center; justify-content: center; gap: 8px; flex-wrap: wrap; }
+  .step { background: white; border: 2px solid #8e44ad; border-radius: 8px; padding: 10px 10px; font-size: 0.82em; text-align: center; min-width: 95px; }
+  .step .icon { font-size: 1.6em; display: block; margin-bottom: 4px; }
+  .arrow { font-size: 1.4em; color: #8e44ad; }
+
+  /* SLIDE 2 – QUESTIONS */
+  .q-list { margin-top: 14px; }
+  .q-item { display: flex; gap: 12px; margin-bottom: 18px; align-items: flex-start; }
+  .q-num { background: #1a5276; color: white; border-radius: 50%; min-width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 0.85em; margin-top: 1px; flex-shrink: 0; }
+  .q-text { font-size: 0.92em; line-height: 1.65; flex: 1; }
+  .answer-line { border-bottom: 1.5px solid #bbb; height: 24px; margin: 6px 0 2px; }
+
+  /* SLIDE 3 – THINK DEEPER */
+  .think-box { background: #1a1a2e; color: #e8d5f5; border-radius: 10px; padding: 18px 20px; margin: 16px 0; line-height: 1.75; font-size: 0.92em; }
+  .think-box strong { color: #d7bde2; }
+
+  .response-box { background: #f9f9f9; border: 1.5px solid #8e44ad; border-radius: 10px; padding: 14px 16px; margin-top: 12px; }
+  .response-box h4 { color: #5b2c6f; margin-bottom: 10px; font-size: 0.95em; }
+  .response-item { display: flex; gap: 10px; margin-bottom: 14px; align-items: flex-start; }
+  .badge { background: #8e44ad; color: white; border-radius: 6px; padding: 2px 10px; font-size: 0.78em; font-weight: bold; white-space: nowrap; margin-top: 3px; }
+  .badge.challenge { background: #1a5276; }
+
+  /* EXIT TICKET */
+  .exit { background: #fef9e7; border: 2px solid #f0c040; border-radius: 10px; padding: 14px 16px; margin-top: 12px; }
+  .exit h4 { color: #7d6608; margin-bottom: 10px; font-size: 0.92em; }
+  .exit p { font-size: 0.88em; margin-top: 8px; }
+
+  /* NAV */
+  .nav { display: flex; align-items: center; gap: 16px; margin-top: 18px; }
+  .nav-btn { background: #6c3483; color: white; border: none; border-radius: 8px; padding: 10px 24px; font-size: 0.95em; cursor: pointer; transition: background 0.2s; }
+  .nav-btn:hover { background: #8e44ad; }
+  .nav-btn:disabled { background: #444; cursor: default; }
+  .dot-wrap { display: flex; gap: 8px; }
+  .dot { width: 10px; height: 10px; border-radius: 50%; background: #555; cursor: pointer; transition: background 0.2s; }
+  .dot.active { background: #8e44ad; }
+
+  .download-btn { margin-top: 14px; background: #27ae60; color: white; border: none; border-radius: 8px; padding: 9px 22px; font-size: 0.88em; cursor: pointer; }
+  .download-btn:hover { background: #1e8449; }
+
+  @media print {
+    body { background: white; padding: 0; }
+    .nav, .download-btn, .slide-counter { display: none; }
+    .slide { display: flex !important; page-break-after: always; box-shadow: none; border: 1px solid #ddd; margin-bottom: 10mm; }
+  }
+</style>
+</head>
+<body>
+
+<div class="slide-counter" id="counter">Slide 1 of 3</div>
+
+<!-- SLIDE 1: What Is Dopamine? -->
+<div class="slide s1 active" id="slide-1">
+  <div class="slide-header">
+    <div class="slide-num">Slide 01</div>
+    <div class="slide-title">🧠 What Is Dopamine?</div>
+    <div class="slide-subtitle">The brain's reward chemical — and how it works</div>
+  </div>
+  <div class="slide-body">
+    <div class="info-box">
+      <strong>Dopamine</strong> is a chemical messenger (neurotransmitter) made by nerve cells in your brain. It is released when something feels <strong>rewarding</strong> — like eating food you love, winning a game, getting a like on social media, or hearing music you enjoy.<br><br>
+      Dopamine travels across a tiny gap between two brain cells called a <strong>synapse</strong> and attaches to a <strong>receptor</strong> on the other side — sending a signal that says: <em>"That felt good — do it again!"</em>
+    </div>
+    <div class="analogy">
+      🔑 <strong>Analogy:</strong> Think of dopamine like a text message your brain sends to itself. The receptor is like your phone — if it works well, the message gets through clearly. If your phone (receptor) is faulty or your signal (dopamine) is too low, the message gets lost.
+    </div>
+    <div class="diagram-wrap">
+      <strong style="color:#7d6608;">The Dopamine Reward Pathway</strong>
+      <div class="pathway" style="margin-top:12px;">
+        <div class="step"><span class="icon">⭐</span>Rewarding<br>event happens</div>
+        <div class="arrow">→</div>
+        <div class="step"><span class="icon">🧪</span>Brain releases<br>dopamine</div>
+        <div class="arrow">→</div>
+        <div class="step"><span class="icon">🔗</span>Dopamine binds<br>to receptor</div>
+        <div class="arrow">→</div>
+        <div class="step"><span class="icon">😊</span>You feel<br>pleasure/motivation</div>
+        <div class="arrow">→</div>
+        <div class="step"><span class="icon">🔄</span>Transporter<br>recycles dopamine</div>
+      </div>
+      <p class="label">Your genes control how well each step in this pathway works.</p>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 2: Check Your Understanding -->
+<div class="slide s2" id="slide-2">
+  <div class="slide-header">
+    <div class="slide-num">Slide 02</div>
+    <div class="slide-title">✏️ Check Your Understanding</div>
+    <div class="slide-subtitle">Answer these questions using what you just read</div>
+  </div>
+  <div class="slide-body">
+    <div class="q-list">
+      <div class="q-item">
+        <div class="q-num">1</div>
+        <div class="q-text">In your own words, what does dopamine do in the brain?
+          <div class="answer-line"></div>
+          <div class="answer-line"></div>
+        </div>
+      </div>
+      <div class="q-item">
+        <div class="q-num">2</div>
+        <div class="q-text">What is a receptor? Use the phone analogy to help explain.
+          <div class="answer-line"></div>
+          <div class="answer-line"></div>
+        </div>
+      </div>
+      <div class="q-item">
+        <div class="q-num">3</div>
+        <div class="q-text">Look at the reward pathway diagram on Slide 1. What happens to dopamine <em>after</em> it binds to the receptor?
+          <div class="answer-line"></div>
+          <div class="answer-line"></div>
+        </div>
+      </div>
+      <div class="q-item">
+        <div class="q-num">4</div>
+        <div class="q-text">Give TWO examples of everyday activities that cause your brain to release dopamine.
+          <div class="answer-line"></div>
+          <div class="answer-line"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 3: Think Deeper -->
+<div class="slide s3" id="slide-3">
+  <div class="slide-header">
+    <div class="slide-num">Slide 03</div>
+    <div class="slide-title">🔭 Think Deeper</div>
+    <div class="slide-subtitle">Genes, society & fairness — is addiction really a choice?</div>
+  </div>
+  <div class="slide-body">
+    <div class="think-box">
+      Some researchers argue that people born with certain dopamine gene variants are at higher risk of addiction — not because of bad choices, but because of their biology.<br><br>
+      However, others point out that people in lower socioeconomic communities face more environmental stressors that also damage the dopamine system, regardless of their genetics.<br><br>
+      <strong>💭 Discussion Question:</strong> If someone has both a genetic risk factor AND grew up in a stressful environment — how responsible are they for becoming addicted? What role should society play in prevention and treatment?
+    </div>
+
+    <div class="response-box">
+      <h4>📝 Written Response — Choose ONE level:</h4>
+      <div class="response-item">
+        <div class="badge">Standard</div>
+        <div class="q-text" style="font-size:0.88em;">Do you think addiction is more about genes or environment? Use at least ONE piece of evidence to support your answer.
+          <div class="answer-line"></div>
+          <div class="answer-line"></div>
+          <div class="answer-line"></div>
+        </div>
+      </div>
+      <div class="response-item">
+        <div class="badge challenge">Challenge</div>
+        <div class="q-text" style="font-size:0.88em;">"Having a high-risk dopamine gene means a person will definitely develop addiction." Do you agree or disagree? Use evidence to justify your answer, referring to both <em>genotype</em> AND <em>phenotype</em>.
+          <div class="answer-line"></div>
+          <div class="answer-line"></div>
+          <div class="answer-line"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="exit">
+      <h4>⭐ Exit Ticket</h4>
+      <p>One thing I learned today: <div class="answer-line"></div></p>
+      <p>One question I still have: <div class="answer-line"></div></p>
+    </div>
+  </div>
+</div>
+
+<!-- NAVIGATION -->
+<div class="nav">
+  <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)" disabled>← Back</button>
+  <div class="dot-wrap">
+    <div class="dot active" onclick="goTo(0)"></div>
+    <div class="dot" onclick="goTo(1)"></div>
+    <div class="dot" onclick="goTo(2)"></div>
+  </div>
+  <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)">Next →</button>
+</div>
+
+<button class="download-btn" onclick="window.print()">🖨️ Print / Save as PDF</button>
+
+<script>
+  let cur = 0;
+  const slides = document.querySelectorAll('.slide');
+  const dots = document.querySelectorAll('.dot');
+  const counter = document.getElementById('counter');
+
+  function show(n) {
+    slides.forEach(s => s.classList.remove('active'));
+    dots.forEach(d => d.classList.remove('active'));
+    slides[n].classList.add('active');
+    dots[n].classList.add('active');
+    counter.textContent = `Slide ${n+1} of ${slides.length}`;
+    document.getElementById('prevBtn').disabled = n === 0;
+    document.getElementById('nextBtn').disabled = n === slides.length - 1;
+  }
+
+  function changeSlide(dir) { cur = Math.max(0, Math.min(slides.length-1, cur+dir)); show(cur); }
+  function goTo(n) { cur = n; show(cur); }
+</script>
+</body>
+</html>
