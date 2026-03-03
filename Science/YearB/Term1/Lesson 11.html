@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DNA & Environmental Mutations — Week 4</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', sans-serif; background: #1a1a2e; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; padding: 16px; }
+  .ppt-wrap { width: 100%; max-width: 860px; }
+  .slide { display: none; background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.5); aspect-ratio: 16/9; position: relative; flex-direction: column; }
+  .slide.active { display: flex; }
+
+  .theme-title { background: linear-gradient(135deg, #0d1b2a 0%, #1b2838 50%, #1a3a2a 100%); color: white; align-items: center; justify-content: center; text-align: center; }
+  .theme-dna   { background: linear-gradient(135deg, #e8f8f0 0%, #d0f0e0 100%); }
+  .theme-case  { background: linear-gradient(135deg, #fdf2e9 0%, #fde8d8 100%); }
+  .theme-activity { background: linear-gradient(135deg, #eaf0fb 0%, #d5e8f5 100%); }
+
+  .slide-inner { padding: 5% 6%; height: 100%; display: flex; flex-direction: column; justify-content: center; }
+
+  .title-emoji { font-size: clamp(2.5rem, 7vw, 5rem); margin-bottom: 2%; }
+  .title-main  { font-size: clamp(1.3rem, 3.8vw, 2.6rem); font-weight: 800; margin-bottom: 2%; letter-spacing: -0.5px; }
+  .title-sub   { font-size: clamp(0.75rem, 1.9vw, 1.15rem); opacity: 0.75; margin-bottom: 4%; }
+  .tag-row { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+  .tag { background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); border-radius: 20px; padding: 4px 14px; font-size: clamp(0.62rem, 1.4vw, 0.82rem); }
+
+  .section-banner { padding: 2% 6%; font-size: clamp(0.58rem, 1.4vw, 0.82rem); font-weight: 700; letter-spacing: 2px; text-transform: uppercase; display: flex; align-items: center; gap: 8px; }
+  .dna-banner    { background: #1e8449; color: white; }
+  .case-banner   { background: #ca6f1e; color: white; }
+  .activity-banner { background: #1a5276; color: white; }
+  .timer-pill { margin-left: auto; background: rgba(255,255,255,0.25); border-radius: 20px; padding: 2px 12px; }
+
+  .slide-title { font-size: clamp(1rem, 2.8vw, 1.9rem); font-weight: 800; margin-bottom: 3%; color: #1a1a2e; }
+
+  .card-grid { display: grid; gap: 3%; }
+  .card-grid.col2 { grid-template-columns: 1fr 1fr; }
+  .card-grid.col3 { grid-template-columns: 1fr 1fr 1fr; }
+  .card-grid.col4 { grid-template-columns: 1fr 1fr 1fr 1fr; }
+  .card { background: white; border-radius: 10px; padding: 4%; box-shadow: 0 2px 12px rgba(0,0,0,0.08); display: flex; flex-direction: column; gap: 5px; }
+  .card-icon  { font-size: clamp(1.1rem, 2.8vw, 1.8rem); }
+  .card-label { font-size: clamp(0.65rem, 1.5vw, 0.95rem); font-weight: 700; color: #1a1a2e; }
+  .card-text  { font-size: clamp(0.52rem, 1.2vw, 0.76rem); color: #555; line-height: 1.4; }
+
+  .clue-list { display: flex; flex-direction: column; gap: 2%; }
+  .clue { background: white; border-left: 5px solid #1e8449; border-radius: 6px; padding: 2.5% 3%; display: flex; align-items: flex-start; gap: 10px; box-shadow: 0 1px 8px rgba(0,0,0,0.07); }
+  .clue-num { background: #1e8449; color: white; border-radius: 50%; width: clamp(22px,3vw,32px); height: clamp(22px,3vw,32px); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: clamp(0.6rem,1.3vw,0.85rem); flex-shrink:0; margin-top:2px; }
+  .clue-text { font-size: clamp(0.58rem, 1.35vw, 0.86rem); color: #333; line-height: 1.45; flex:1; }
+
+  .case-card { background: white; border-radius: 10px; padding: 3.5%; box-shadow: 0 2px 12px rgba(0,0,0,0.08); border-top: 5px solid; }
+  .case-card.c1 { border-color: #e74c3c; }
+  .case-card.c2 { border-color: #e67e22; }
+  .case-card.c3 { border-color: #2980b9; }
+  .case-card.c4 { border-color: #8e44ad; }
+  .case-title { font-size: clamp(0.65rem, 1.5vw, 0.95rem); font-weight: 800; margin-bottom: 4px; }
+  .case-card.c1 .case-title { color: #e74c3c; }
+  .case-card.c2 .case-title { color: #e67e22; }
+  .case-card.c3 .case-title { color: #2980b9; }
+  .case-card.c4 .case-title { color: #8e44ad; }
+  .case-text { font-size: clamp(0.49rem, 1.1vw, 0.7rem); color: #555; line-height: 1.4; }
+  .badge-row { display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 4px; }
+  .badge { font-size: clamp(0.42rem, 0.95vw, 0.6rem); border-radius: 20px; padding: 2px 7px; font-weight: 600; }
+  .b-red  { background: #fdecea; color: #c0392b; }
+  .b-ora  { background: #fef5e7; color: #ca6f1e; }
+  .b-blu  { background: #eaf4fb; color: #1a5276; }
+  .b-pur  { background: #f4ecf7; color: #6c3483; }
+
+  .key-fact { border-radius: 10px; padding: 3% 4%; margin-top: 3%; display: flex; align-items: center; gap: 10px; }
+  .kf-green { background: linear-gradient(135deg, #1e8449, #27ae60); color: white; }
+  .kf-red   { background: linear-gradient(135deg, #c0392b, #e74c3c); color: white; }
+  .key-fact-icon { font-size: clamp(1rem, 2.5vw, 1.5rem); }
+  .key-fact-text { font-size: clamp(0.57rem, 1.3vw, 0.85rem); font-weight: 600; }
+
+  .step-list { display: flex; flex-direction: column; gap: 2.5%; }
+  .step { display: flex; align-items: flex-start; gap: 10px; }
+  .step-dot { width: clamp(20px,2.5vw,28px); height: clamp(20px,2.5vw,28px); border-radius: 50%; background: #1a5276; color: white; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: clamp(0.52rem,1.2vw,0.78rem); flex-shrink:0; margin-top:2px; }
+  .step-text { font-size: clamp(0.58rem, 1.3vw, 0.85rem); color: #333; line-height: 1.45; }
+  .step-text strong { color: #1a1a2e; }
+
+  .divider { height: 2px; background: linear-gradient(90deg, transparent, rgba(0,0,0,0.1), transparent); margin: 2% 0; }
+
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 4%; align-items: start; }
+  .highlight-box { border-radius: 6px; padding: 3%; }
+  .hb-yellow { background: #fef9e7; border-left: 4px solid #f39c12; }
+  .hb-green  { background: #eafaf1; border-left: 4px solid #27ae60; }
+  .hb-red    { background: #fdecea; border-left: 4px solid #e74c3c; }
+  .highlight-box p { font-size: clamp(0.53rem, 1.25vw, 0.8rem); line-height: 1.5; }
+  .hb-yellow p { color: #7d6608; }
+  .hb-green  p { color: #1e5631; }
+  .hb-red    p { color: #922b21; }
+
+  .nav { display: flex; align-items: center; justify-content: space-between; margin-top: 14px; padding: 0 4px; width: 100%; max-width: 860px; }
+  .nav-btn { background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.25); color: white; border-radius: 8px; padding: 8px 20px; cursor: pointer; font-size: 0.85rem; transition: background 0.2s; }
+  .nav-btn:hover { background: rgba(255,255,255,0.22); }
+  .nav-btn:disabled { opacity: 0.3; cursor: default; }
+  .slide-counter { color: rgba(255,255,255,0.7); font-size: 0.8rem; }
+  .dot-row { display: flex; gap: 6px; }
+  .dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,0.3); cursor: pointer; transition: background 0.2s; }
+  .dot.on { background: white; }
+</style>
+</head>
+<body>
+<div class="ppt-wrap">
+
+<!-- SLIDE 1: Title -->
+<div class="slide theme-title active">
+  <div class="slide-inner" style="text-align:center; align-items:center;">
+    <div class="title-emoji">🧬☣️</div>
+    <div class="title-main">When the Environment Changes Your DNA</div>
+    <div class="title-sub">How the world around us can damage or alter our genetic code</div>
+    <div class="tag-row">
+      <span class="tag">⏱ 45 Minutes</span>
+      <span class="tag">🧬 Mutations</span>
+      <span class="tag">☀️ UV Radiation</span>
+      <span class="tag">🚬 Chemicals</span>
+      <span class="tag">🔬 Stage 5 Science</span>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 2: Lesson Overview -->
+<div class="slide theme-dna">
+  <div class="dna-banner section-banner">📋 Lesson Overview</div>
+  <div class="slide-inner">
+    <div class="slide-title">What We're Covering Today</div>
+    <div class="card-grid col2">
+      <div class="card">
+        <div class="card-icon">🧬</div>
+        <div class="card-label">Part 1 — Quick Recap (5 min)</div>
+        <div class="card-text">DNA is in every cell. Mutations = changes in DNA code. Some mutations are caused <em>by our environment</em> — and today we focus on exactly that.</div>
+      </div>
+      <div class="card">
+        <div class="card-icon">🌍</div>
+        <div class="card-label">Part 2 — 4 Environmental Mutagens (25 min)</div>
+        <div class="card-text"><strong>UV Radiation</strong> – sunlight & skin cancer<br><br><strong>Tobacco Smoke</strong> – chemicals & lung cancer<br><br><strong>Processed Foods & Alcohol</strong> – diet & cancer risk<br><br><strong>Industrial Chemicals</strong> – workplace & community exposure</div>
+      </div>
+    </div>
+    <div class="divider"></div>
+    <div class="card" style="flex-direction:row; align-items:center; gap:12px; margin-top:2%;">
+      <div class="card-icon">🎯</div>
+      <div class="card-text" style="font-size:clamp(0.6rem,1.35vw,0.85rem);">
+        <strong>Learning Goals:</strong> Define mutagen · Identify 4 environmental mutagens · Explain how each damages DNA · Connect scientific knowledge to healthy lifestyle choices
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 3: What is a Mutagen? -->
+<div class="slide theme-dna">
+  <div class="dna-banner section-banner">🧬 Quick Recap</div>
+  <div class="slide-inner">
+    <div class="slide-title">What's a Mutagen? 🤔</div>
+    <div class="card-grid col3" style="margin-bottom:3%;">
+      <div class="card">
+        <div class="card-icon">📖</div>
+        <div class="card-label">Mutation</div>
+        <div class="card-text">A change in the DNA code — like a typo in the instruction manual for your body.</div>
+      </div>
+      <div class="card">
+        <div class="card-icon">⚡</div>
+        <div class="card-label">Mutagen</div>
+        <div class="card-text">Anything in the environment that <strong>causes</strong> or <strong>increases</strong> the chance of a mutation. Think of it as the thing that creates the typo.</div>
+      </div>
+      <div class="card">
+        <div class="card-icon">🧫</div>
+        <div class="card-label">Why Does It Matter?</div>
+        <div class="card-text">If mutations happen in cells that control growth, they can lead to <strong>cancer</strong> — cells that copy themselves out of control.</div>
+      </div>
+    </div>
+    <div class="highlight-box hb-yellow">
+      <p>💡 <strong>Analogy:</strong> Imagine your DNA is a book with millions of instructions. A mutagen is like someone sneaking in and changing or deleting random words. Sometimes nothing changes. Sometimes the whole meaning is ruined — and that can cause cancer.</p>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 4: Case Study 1 — UV Radiation -->
+<div class="slide theme-case">
+  <div class="case-banner section-banner">☀️ Case Study 1 — UV Radiation <span class="timer-pill">Australia's #1 Skin Cancer Risk</span></div>
+  <div class="slide-inner" style="justify-content:flex-start; padding-top:3%;">
+    <div class="slide-title" style="margin-bottom:2%;">☀️ Sunlight & DNA Damage</div>
+    <div class="clue-list">
+      <div class="clue">
+        <div class="clue-num">1</div>
+        <div class="clue-text"><strong>What happens:</strong> UV-B radiation from the sun hits skin cells. It causes two DNA bases (thymine) to <em>stick together incorrectly</em> — called a <strong>thymine dimer</strong>. This corrupts the instruction at that point.</div>
+      </div>
+      <div class="clue">
+        <div class="clue-num">2</div>
+        <div class="clue-text"><strong>Australia Case Study:</strong> Australia has one of the highest skin cancer rates in the world. Approximately <strong>2 in 3 Australians</strong> will be diagnosed with skin cancer by age 70. Low-SES communities often work outdoors (construction, farming, cleaning) with less access to sun protection.</div>
+      </div>
+      <div class="clue">
+        <div class="clue-num">3</div>
+        <div class="clue-text"><strong>Connection to Mutations:</strong> UV damage builds up over years. When the mutation hits a gene that controls cell division (called a <em>tumour suppressor gene</em>), cells can multiply uncontrolled = melanoma (skin cancer).</div>
+      </div>
+      <div class="clue">
+        <div class="clue-num">4</div>
+        <div class="clue-text"><strong>Prevention:</strong> Sunscreen (SPF 50+), hats, shade, and avoiding peak UV hours (10am–3pm) all <em>reduce DNA damage</em>. Free sunscreen is available at many public spaces in NSW.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 5: Case Study 2 — Tobacco Smoke -->
+<div class="slide theme-case">
+  <div class="case-banner section-banner">🚬 Case Study 2 — Tobacco Smoke <span class="timer-pill">70+ Known Mutagens</span></div>
+  <div class="slide-inner" style="justify-content:flex-start; padding-top:3%;">
+    <div class="slide-title" style="margin-bottom:2%;">🚬 Chemicals That Attack Your DNA</div>
+    <div class="clue-list">
+      <div class="clue">
+        <div class="clue-num">1</div>
+        <div class="clue-text"><strong>What happens:</strong> Tobacco smoke contains <strong>70+ chemical mutagens</strong> (including benzene, formaldehyde, and polycyclic aromatic hydrocarbons). These chemicals enter lung cells and directly bond to DNA bases — bending and breaking the code.</div>
+      </div>
+      <div class="clue">
+        <div class="clue-num">2</div>
+        <div class="clue-text"><strong>Real Case Study:</strong> Research shows smoking rates are <strong>significantly higher in low-SES communities</strong> due to stress, marketing targeting, and fewer cessation resources. Lung cancer is the leading cause of cancer death in Australia and disproportionately affects working-class communities.</div>
+      </div>
+      <div class="clue">
+        <div class="clue-num">3</div>
+        <div class="clue-text"><strong>Connection to Mutations:</strong> Tobacco mutagens cause specific mutations in the TP53 gene — the body's main "damage control" gene. When TP53 is mutated, damaged cells can't be stopped from dividing.</div>
+      </div>
+      <div class="clue">
+        <div class="clue-num">4</div>
+        <div class="clue-text"><strong>Important:</strong> Second-hand smoke also causes mutations. You don't have to smoke to have your DNA damaged — being around smokers regularly exposes your cells to the same chemicals.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 6: Case Study 3 — Diet & Alcohol -->
+<div class="slide theme-case">
+  <div class="case-banner section-banner">🍺 Case Study 3 — Diet & Alcohol <span class="timer-pill">Everyday Choices Matter</span></div>
+  <div class="slide-inner" style="justify-content:flex-start; padding-top:3%;">
+    <div class="slide-title" style="margin-bottom:2%;">🍟 What You Eat Can Change Your DNA</div>
+    <div class="two-col">
+      <div>
+        <div class="clue-list">
+          <div class="clue" style="border-color:#e67e22;">
+            <div class="clue-num" style="background:#e67e22;">1</div>
+            <div class="clue-text"><strong>Alcohol:</strong> When your body breaks down alcohol, it produces <strong>acetaldehyde</strong> — a powerful chemical mutagen. Acetaldehyde directly damages DNA in liver, throat, and mouth cells. Regular heavy drinking dramatically raises cancer risk.</div>
+          </div>
+          <div class="clue" style="border-color:#e67e22; margin-top:2%;">
+            <div class="clue-num" style="background:#e67e22;">2</div>
+            <div class="clue-text"><strong>Processed meats & charred food:</strong> Contain chemicals called <strong>nitrosamines</strong> and <strong>heterocyclic amines</strong> (HCAs) — classified as probable carcinogens by the WHO. HCAs form when meat is cooked at high heat or burnt.</div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="card" style="margin-bottom:5%;">
+          <div class="card-icon">📊</div>
+          <div class="card-label">Real Data (Australia)</div>
+          <div class="card-text">Alcohol is linked to <strong>6 types of cancer</strong> in Australia. Low-SES communities often have less access to fresh food and higher rates of alcohol use due to social stressors — increasing DNA mutation risk.</div>
+        </div>
+        <div class="highlight-box hb-green">
+          <p>✅ <strong>Good news:</strong> Eating a diet rich in vegetables and fruit provides antioxidants that <em>help repair DNA damage</em>. Bulk vegetables, legumes and wholegrain bread are affordable options that reduce cancer risk.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 7: Case Study 4 — Industrial Chemicals -->
+<div class="slide theme-case">
+  <div class="case-banner section-banner">🏭 Case Study 4 — Industrial & Environmental Chemicals</div>
+  <div class="slide-inner" style="justify-content:flex-start; padding-top:3%;">
+    <div class="slide-title" style="margin-bottom:2%;">🏭 Chemicals in Our Neighbourhoods</div>
+    <div class="clue-list">
+      <div class="clue" style="border-color:#2980b9;">
+        <div class="clue-num" style="background:#2980b9;">1</div>
+        <div class="clue-text"><strong>Asbestos (Australia's biggest example):</strong> Used widely in Australian homes before 1987. Asbestos fibres lodge in lung cells and cause persistent DNA damage over decades, leading to <strong>mesothelioma</strong> (lung cancer). Workers in blue-collar industries were disproportionately exposed.</div>
+      </div>
+      <div class="clue" style="border-color:#2980b9;">
+        <div class="clue-num" style="background:#2980b9;">2</div>
+        <div class="clue-text"><strong>Benzene & Formaldehyde:</strong> Found in petrol fumes, cleaning products, and some building materials. Communities near busy roads or industrial areas (often lower-SES areas) have higher air pollution exposure — and higher rates of certain leukaemias and cancers.</div>
+      </div>
+      <div class="clue" style="border-color:#2980b9;">
+        <div class="clue-num" style="background:#2980b9;">3</div>
+        <div class="clue-text"><strong>Why does this affect low-SES communities more?</strong> Cheaper housing is often located near factories, main roads, and industrial sites. This is called <strong>environmental inequality</strong> — poorer communities bear more environmental health risks through no choice of their own.</div>
+      </div>
+      <div class="clue" style="border-color:#2980b9;">
+        <div class="clue-num" style="background:#2980b9;">4</div>
+        <div class="clue-text"><strong>What can individuals do?</strong> Ventilate homes, avoid burning rubbish, check for asbestos in older homes (free testing kits available in some NSW councils), and advocate for clean air in your community.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 8: Compare All 4 -->
+<div class="slide theme-dna">
+  <div class="dna-banner section-banner">🧬 Summary — The 4 Environmental Mutagens</div>
+  <div class="slide-inner">
+    <div class="slide-title">How Do They Compare?</div>
+    <div class="card-grid col4">
+      <div class="case-card c1">
+        <div class="case-title">☀️ UV Radiation</div>
+        <div class="badge-row"><span class="badge b-red">Thymine Dimers</span></div>
+        <div class="case-text">Damages DNA in skin cells. Cumulative. Prevention = sunscreen + shade.</div>
+      </div>
+      <div class="case-card c2">
+        <div class="case-title">🚬 Tobacco Smoke</div>
+        <div class="badge-row"><span class="badge b-ora">70+ Mutagens</span></div>
+        <div class="case-text">Chemicals bond directly to DNA bases in lung cells. Targets TP53 gene.</div>
+      </div>
+      <div class="case-card c3">
+        <div class="case-title">🍺 Diet & Alcohol</div>
+        <div class="badge-row"><span class="badge b-blu">Acetaldehyde</span></div>
+        <div class="case-text">Metabolism of alcohol creates mutagens. Charred/processed meat = carcinogens.</div>
+      </div>
+      <div class="case-card c4">
+        <div class="case-title">🏭 Industrial Chem.</div>
+        <div class="badge-row"><span class="badge b-pur">Asbestos · Benzene</span></div>
+        <div class="case-text">Environmental inequality. Low-SES communities face higher exposure rates.</div>
+      </div>
+    </div>
+    <div class="key-fact kf-green" style="margin-top:3%;">
+      <div class="key-fact-icon">💡</div>
+      <div class="key-fact-text">Key Idea: <strong>Not all mutations are our fault</strong> — but understanding the science gives us the knowledge to reduce our risk. Some risks require community and government action, not just individual choices.</div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 9: DNA Repair -->
+<div class="slide theme-dna">
+  <div class="dna-banner section-banner">🧬 Going Deeper — DNA Repair Mechanisms</div>
+  <div class="slide-inner">
+    <div class="slide-title">Your Body Fights Back! 🛡️</div>
+    <div class="two-col">
+      <div>
+        <div class="step-list">
+          <div class="step"><div class="step-dot">1</div><div class="step-text"><strong>Base Excision Repair (BER):</strong> Special enzymes "patrol" your DNA. When they find a damaged base, they cut it out and replace it — like a spell-checker.</div></div>
+          <div class="step"><div class="step-dot">2</div><div class="step-text"><strong>Nucleotide Excision Repair (NER):</strong> Specifically targets UV-damaged DNA (thymine dimers). Cuts out a larger section and fills it in correctly.</div></div>
+          <div class="step"><div class="step-dot">3</div><div class="step-text"><strong>When repair fails:</strong> If the damage is too great — or if the repair enzymes are overwhelmed — the mutation is permanent. This is when cancer risk increases.</div></div>
+        </div>
+      </div>
+      <div>
+        <div class="card" style="margin-bottom:5%;">
+          <div class="card-icon">⚗️</div>
+          <div class="card-label">Why repair fails with heavy mutagen exposure</div>
+          <div class="card-text">Every cigarette, every severe sunburn, every heavy drinking session creates thousands of DNA errors. Your repair enzymes can handle normal background damage — but not years of heavy mutagen exposure.</div>
+        </div>
+        <div class="highlight-box hb-red">
+          <p>⚠️ <strong>Key fact:</strong> Cancer is rarely caused by a single mutation. It usually takes <em>multiple mutations</em> in the same cell over time — which is why reducing mutagen exposure early matters.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 10: Summary -->
+<div class="slide theme-title">
+  <div class="slide-inner" style="align-items:center; text-align:center;">
+    <div class="title-emoji">🎯</div>
+    <div class="title-main" style="color:white;">Lesson Summary</div>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:3%; width:92%; margin-top:3%; text-align:left;">
+      <div class="card" style="background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2);">
+        <div class="card-icon">⚡</div>
+        <div class="card-label" style="color:white;">What is a Mutagen?</div>
+        <div class="card-text" style="color:rgba(255,255,255,0.8);">An environmental factor that damages DNA — causing mutations. Not all mutations cause harm, but some trigger cancer.</div>
+      </div>
+      <div class="card" style="background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2);">
+        <div class="card-icon">☀️🚬🍺🏭</div>
+        <div class="card-label" style="color:white;">4 Key Mutagens</div>
+        <div class="card-text" style="color:rgba(255,255,255,0.8);">UV radiation (skin) · Tobacco chemicals (lungs) · Alcohol/diet (liver, mouth) · Industrial chemicals (multiple organs)</div>
+      </div>
+      <div class="card" style="background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2);">
+        <div class="card-icon">🛡️</div>
+        <div class="card-label" style="color:white;">Your Body Repairs DNA</div>
+        <div class="card-text" style="color:rgba(255,255,255,0.8);">Repair enzymes fix thousands of errors per day — but heavy mutagen exposure overwhelms the system over time.</div>
+      </div>
+      <div class="card" style="background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2);">
+        <div class="card-icon">⚖️</div>
+        <div class="card-label" style="color:white;">It's Not All Individual Choice</div>
+        <div class="card-text" style="color:rgba(255,255,255,0.8);">Environmental inequality means some communities face higher mutagen exposure. Science + community action = best protection.</div>
+      </div>
+    </div>
+    <div style="margin-top:3%; font-size:clamp(0.6rem,1.4vw,0.88rem); opacity:0.6;">Great thinking today! 🎉</div>
+  </div>
+</div>
+
+</div>
+
+<div class="nav">
+  <button class="nav-btn" id="prev" onclick="go(-1)" disabled>← Prev</button>
+  <div style="display:flex; flex-direction:column; align-items:center; gap:6px;">
+    <div class="dot-row" id="dots"></div>
+    <div class="slide-counter" id="counter">Slide 1 / 10</div>
+  </div>
+  <button class="nav-btn" id="next" onclick="go(1)">Next →</button>
+</div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  let cur = 0;
+  const dotsEl = document.getElementById('dots');
+  const counter = document.getElementById('counter');
+  slides.forEach((_, i) => {
+    const d = document.createElement('div');
+    d.className = 'dot' + (i === 0 ? ' on' : '');
+    d.onclick = () => goTo(i);
+    dotsEl.appendChild(d);
+  });
+  function goTo(n) {
+    slides[cur].classList.remove('active'); dotsEl.children[cur].classList.remove('on');
+    cur = n; slides[cur].classList.add('active'); dotsEl.children[cur].classList.add('on');
+    counter.textContent = `Slide ${cur+1} / ${slides.length}`;
+    document.getElementById('prev').disabled = cur === 0;
+    document.getElementById('next').disabled = cur === slides.length - 1;
+  }
+  function go(d) { goTo(cur + d); }
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' && cur < slides.length - 1) go(1);
+    if (e.key === 'ArrowLeft' && cur > 0) go(-1);
+  });
+</script>
+</body>
+</html>
