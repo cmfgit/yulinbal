@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NAPLAN 2026 – Year 9</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', Arial, sans-serif; background: #f4f6f9; color: #222; }
+
+  header {
+    background: linear-gradient(135deg, #003087, #0057b8);
+    color: white;
+    padding: 40px 24px 32px;
+    text-align: center;
+  }
+  header .tag { font-size: 13px; letter-spacing: 2px; text-transform: uppercase; opacity: 0.8; margin-bottom: 8px; }
+  header h1 { font-size: 2.6rem; font-weight: 800; margin-bottom: 8px; }
+  header p { font-size: 1.1rem; opacity: 0.9; max-width: 560px; margin: 0 auto; }
+
+  main { max-width: 860px; margin: 0 auto; padding: 32px 16px 60px; }
+
+  .card {
+    background: white;
+    border-radius: 12px;
+    padding: 28px;
+    margin-bottom: 24px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.07);
+  }
+  .card h2 {
+    font-size: 1.2rem;
+    color: #003087;
+    margin-bottom: 16px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #e8edf5;
+  }
+  .card p { line-height: 1.7; color: #444; margin-bottom: 10px; }
+  .card p:last-child { margin-bottom: 0; }
+
+  /* Schedule */
+  .schedule { display: grid; gap: 14px; }
+  .test-day {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background: #f0f4fb;
+    border-radius: 10px;
+    padding: 16px 20px;
+    border-left: 5px solid #0057b8;
+  }
+  .test-day .day-num {
+    background: #0057b8;
+    color: white;
+    font-weight: 800;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 6px 10px;
+    border-radius: 6px;
+    white-space: nowrap;
+  }
+  .test-day .details { flex: 1; }
+  .test-day .details .date { font-size: 0.85rem; color: #666; margin-bottom: 2px; }
+  .test-day .details .test-name { font-weight: 700; font-size: 1rem; color: #003087; margin-bottom: 2px; }
+  .test-day .details .duration { font-size: 0.85rem; color: #555; }
+  .test-day .icon { font-size: 1.6rem; }
+
+  .catchup-notice {
+    background: #fff8e1;
+    border: 1px solid #ffe082;
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin-top: 16px;
+    font-size: 0.95rem;
+    color: #5a4000;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  .catchup-notice .icon { font-size: 1.2rem; flex-shrink: 0; }
+
+  /* Exemption */
+  .exemption-card {
+    background: #fff3f3;
+    border: 2px solid #e53935;
+    border-radius: 12px;
+    padding: 28px;
+    margin-bottom: 24px;
+    box-shadow: 0 2px 10px rgba(229,57,53,0.08);
+  }
+  .exemption-card h2 { color: #c62828; border-bottom-color: #ffcdd2; }
+  .exemption-card p { color: #444; }
+  .exemption-badge {
+    display: inline-block;
+    background: #e53935;
+    color: white;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 20px;
+    margin-bottom: 14px;
+  }
+
+  /* Info grid */
+  .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 560px) { .info-grid { grid-template-columns: 1fr; } header h1 { font-size: 1.9rem; } }
+  .info-item { background: #f0f4fb; border-radius: 8px; padding: 16px; }
+  .info-item .label { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; color: #0057b8; font-weight: 700; margin-bottom: 6px; }
+  .info-item .value { font-size: 0.95rem; color: #333; line-height: 1.5; }
+
+  /* Link */
+  .brochure-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #0057b8;
+    color: white;
+    text-decoration: none;
+    padding: 12px 22px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    margin-top: 14px;
+    transition: background 0.2s;
+  }
+  .brochure-link:hover { background: #003087; }
+
+  footer { text-align: center; font-size: 0.8rem; color: #888; padding-bottom: 24px; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="tag">National Assessment Program</div>
+  <h1>NAPLAN 2026</h1>
+  <p>Important information for Year 9 students, parents and carers</p>
+</header>
+
+<main>
+
+  <!-- What is NAPLAN -->
+  <div class="card">
+    <h2>What is NAPLAN?</h2>
+    <p>The National Assessment Program – Literacy and Numeracy (NAPLAN) is Australia's only national assessment, undertaken by students in Years 3, 5, 7 and 9 each year. It assesses the literacy and numeracy skills students are learning through the school curriculum.</p>
+    <p>NAPLAN is just one aspect of a school's assessment process. It does not replace ongoing teacher assessments, but provides additional information about your child's educational progress against national proficiency standards.</p>
+    <p>Results are reported across four proficiency levels: <strong>Exceeding, Strong, Developing</strong> and <strong>Needs additional support</strong>.</p>
+    <a class="brochure-link" href="https://www.nap.edu.au/docs/default-source/naplan/naplan-information-brochure-for-parents-and-carers.pdf?sfvrsn=2551405e_14" target="_blank">
+      📄 View the Official NAPLAN Brochure
+    </a>
+  </div>
+
+  <!-- Online tests -->
+  <div class="card">
+    <h2>Online Adaptive Testing</h2>
+    <p>Year 9 students complete all NAPLAN tests online. The tests are <strong>tailored (adaptive)</strong> — questions may become more or less difficult depending on a student's responses, allowing a wider range of abilities to be measured more precisely.</p>
+    <p>Students should not be concerned if they find questions challenging — they may simply be on a more complex test pathway. Results are based on both the <strong>number and complexity</strong> of questions answered correctly.</p>
+  </div>
+
+  <!-- Schedule -->
+  <div class="card">
+    <h2>📅 Year 9 Test Schedule</h2>
+    <p style="margin-bottom:16px;">The NAPLAN testing window runs from <strong>Wednesday 11 March</strong> to <strong>Monday 23 March 2026</strong>. Year 9 students will complete four tests across the following days:</p>
+    <div class="schedule">
+      <div class="test-day">
+        <div class="day-num">Day 1</div>
+        <div class="details">
+          <div class="date">Wednesday, 11 March 2026</div>
+          <div class="test-name">Writing</div>
+          <div class="duration">Duration: 42 minutes &nbsp;·&nbsp; Students respond to a narrative or persuasive writing prompt</div>
+        </div>
+        <div class="icon">✍️</div>
+      </div>
+      <div class="test-day">
+        <div class="day-num">Day 2</div>
+        <div class="details">
+          <div class="date">Thursday, 12 March 2026</div>
+          <div class="test-name">Reading</div>
+          <div class="duration">Duration: 65 minutes &nbsp;·&nbsp; Students read and answer questions on a range of texts</div>
+        </div>
+        <div class="icon">📖</div>
+      </div>
+      <div class="test-day">
+        <div class="day-num">Day 3</div>
+        <div class="details">
+          <div class="date">Monday, 16 March 2026</div>
+          <div class="test-name">Conventions of Language</div>
+          <div class="duration">Duration: 45 minutes &nbsp;·&nbsp; Spelling, grammar and punctuation</div>
+        </div>
+        <div class="icon">🔤</div>
+      </div>
+      <div class="test-day">
+        <div class="day-num">Day 4</div>
+        <div class="details">
+          <div class="date">Tuesday, 17 March 2026</div>
+          <div class="test-name">Numeracy</div>
+          <div class="duration">Duration: 65 minutes &nbsp;·&nbsp; Number, algebra, measurement, geometry, statistics and probability</div>
+        </div>
+        <div class="icon">🔢</div>
+      </div>
+    </div>
+
+    <div class="catchup-notice">
+      <span class="icon">⚠️</span>
+      <span><strong>Absent on a test day?</strong> Students who miss a test due to absence will need to complete any missed tests before the testing window closes on <strong>Monday 23 March 2026</strong>. Please contact the school if your child is absent during testing.</span>
+    </div>
+  </div>
+
+  <!-- Supporting your child -->
+  <div class="card">
+    <h2>How to Support Your Child</h2>
+    <p>Students are <strong>not expected to study for NAPLAN</strong>. The best support is to encourage your child to simply do their best. Teachers will ensure students are familiar with the types of questions and provide appropriate guidance.</p>
+    <p>ACARA does not recommend excessive preparation or the use of coaching services for NAPLAN. If you'd like your child to see the types of questions asked, visit the <a href="https://www.nap.edu.au/online-assessment/public-demonstration-site" target="_blank" style="color:#0057b8;">NAPLAN Public Demonstration Site</a>.</p>
+  </div>
+
+  <!-- Key details -->
+  <div class="card">
+    <h2>Key Details at a Glance</h2>
+    <div class="info-grid">
+      <div class="info-item">
+        <div class="label">Year Level</div>
+        <div class="value">Year 9</div>
+      </div>
+      <div class="info-item">
+        <div class="label">Test Format</div>
+        <div class="value">Online (adaptive)</div>
+      </div>
+      <div class="info-item">
+        <div class="label">Testing Window</div>
+        <div class="value">11 March – 23 March 2026</div>
+      </div>
+      <div class="info-item">
+        <div class="label">Number of Tests</div>
+        <div class="value">4 (Writing, Reading, Language, Numeracy)</div>
+      </div>
+      <div class="info-item">
+        <div class="label">Results Reported</div>
+        <div class="value">Later in 2026 via your child's school</div>
+      </div>
+      <div class="info-item">
+        <div class="label">More Information</div>
+        <div class="value"><a href="https://www.nap.edu.au" target="_blank" style="color:#0057b8;">nap.edu.au</a></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Exemption -->
+  <div class="exemption-card card">
+    <h2>⚠️ Exemptions from NAPLAN</h2>
+    <div class="exemption-badge">Action Required</div>
+    <p>In exceptional circumstances, a formal exemption from NAPLAN may be available — for example, for a student with a disability that severely limits their capacity to participate, or a student who has recently arrived in Australia with a non-English speaking background.</p>
+    <p style="margin-top:12px;">Students may also be withdrawn from the test at the request of the parent/carer. <strong>Parents/carers must contact the school office immediately to complete the required forms.</strong></p>
+  </div>
+
+</main>
+
+<footer>
+  <p>Information sourced from the <a href="https://www.nap.edu.au/docs/default-source/naplan/naplan-information-brochure-for-parents-and-carers.pdf?sfvrsn=2551405e_14" target="_blank" style="color:#0057b8;">NAPLAN 2026 Information Brochure for Parents and Carers</a> · Australian Curriculum, Assessment and Reporting Authority (ACARA)</p>
+</footer>
+
+</body>
+</html>
