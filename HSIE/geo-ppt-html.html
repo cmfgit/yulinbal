@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Geography Assessment</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Segoe UI',Arial,sans-serif;background:#0f172a;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px}
+  .slide-wrap{width:100%;max-width:860px;min-height:480px;background:#fff;border-radius:16px;box-shadow:0 25px 60px rgba(0,0,0,.5);overflow:hidden;display:flex;flex-direction:column}
+  .topbar{background:linear-gradient(135deg,#0f766e,#065f46);padding:18px 32px;display:flex;align-items:center;justify-content:space-between}
+  .topbar-label{color:rgba(255,255,255,.7);font-size:13px;font-weight:600;letter-spacing:1px}
+  .topbar-count{color:rgba(255,255,255,.5);font-size:12px}
+  .content{flex:1;padding:36px 40px;display:flex;flex-direction:column;justify-content:center}
+
+  /* Title */
+  .title-slide{text-align:center}
+  .title-slide .emoji{font-size:56px;margin-bottom:8px}
+  .title-slide h1{font-size:38px;font-weight:800;color:#1e293b;margin-bottom:12px}
+  .divider{width:60px;height:4px;background:#0d9488;border-radius:2px;margin:0 auto 16px}
+  .title-slide p{font-size:20px;color:#0f766e;font-weight:600}
+
+  /* Intro */
+  .intro h2{font-size:28px;font-weight:700;color:#1e293b;margin-bottom:16px}
+  .intro-box{background:#ccfbf1;border-left:4px solid #0d9488;border-radius:0 8px 8px 0;padding:14px 18px;margin-bottom:20px}
+  .intro-box p{font-size:16px;color:#0f766e;line-height:1.6}
+  .req-label{font-weight:700;color:#1e293b;margin-bottom:10px;font-size:15px}
+  .req-list{display:flex;gap:12px;flex-wrap:wrap}
+  .req-item{background:#f1f5f9;border-radius:8px;padding:10px 16px;font-size:15px;color:#1e293b;font-weight:500}
+  .intro-note{margin-top:20px;font-size:13px;color:#94a3b8;font-style:italic}
+
+  /* Choice */
+  .choice h2{font-size:26px;font-weight:700;color:#1e293b;margin-bottom:20px}
+  .choice-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .choice-card{border:2px solid #e2e8f0;border-radius:12px;padding:16px 18px;cursor:pointer;background:#f1f5f9;transition:all .2s}
+  .choice-card:hover{border-color:#0d9488;background:#ccfbf1}
+  .choice-card.selected{border-color:#0d9488;background:#ccfbf1}
+  .choice-card .c-icon{font-size:28px;margin-bottom:6px}
+  .choice-card .c-label{font-weight:700;font-size:16px;color:#1e293b;margin-bottom:4px}
+  .choice-card.selected .c-label{color:#0f766e}
+  .choice-card .c-example{font-size:12px;color:#64748b;line-height:1.4}
+  .choice-selected{margin-top:14px;font-size:13px;color:#0d9488;font-weight:600}
+
+  /* Part */
+  .part-slide{text-align:center}
+  .part-badge{display:inline-block;background:#0d9488;color:#fff;font-weight:700;font-size:13px;letter-spacing:2px;padding:6px 18px;border-radius:20px;margin-bottom:18px}
+  .part-slide h2{font-size:34px;font-weight:800;color:#1e293b;margin-bottom:16px}
+  .marks-badge{display:inline-block;background:#fef3c7;color:#d97706;font-weight:700;font-size:16px;padding:8px 22px;border-radius:8px}
+  .part-slide .sub{margin-top:20px;color:#64748b;font-size:15px}
+
+  /* Question */
+  .q-part{font-size:12px;color:#0d9488;font-weight:700;letter-spacing:1px;margin-bottom:8px}
+  .q-badges{display:flex;align-items:center;gap:12px;margin-bottom:20px}
+  .q-num{background:#0d9488;color:#fff;font-weight:800;font-size:13px;padding:6px 14px;border-radius:8px}
+  .q-marks{background:#fef3c7;color:#d97706;font-weight:700;font-size:13px;padding:6px 14px;border-radius:8px}
+  .q-box{background:#f1f5f9;border-radius:12px;padding:18px 22px;margin-bottom:22px;border-left:4px solid #0d9488}
+  .q-box p{font-size:18px;color:#1e293b;font-weight:600;line-height:1.6}
+  .tips-label{font-weight:700;font-size:13px;color:#64748b;margin-bottom:10px;letter-spacing:.5px}
+  .tips-list{display:flex;flex-direction:column;gap:8px}
+  .tip-item{display:flex;align-items:flex-start;gap:8px;font-size:14px;color:#475569}
+  .tip-arrow{color:#0d9488;font-weight:700;flex-shrink:0}
+
+  /* Nav */
+  .nav{display:flex;gap:16px;margin-top:24px;align-items:center}
+  .nav-btn{padding:10px 28px;border-radius:8px;border:none;background:#0d9488;color:#fff;font-weight:600;font-size:15px;cursor:pointer;transition:background .2s}
+  .nav-btn:disabled{background:#334155;color:#64748b;cursor:not-allowed}
+  .nav-btn:not(:disabled):hover{background:#0f766e}
+  .dots{display:flex;gap:6px;align-items:center}
+  .dot{height:8px;border-radius:4px;background:#475569;cursor:pointer;transition:all .2s}
+  .dot.active{background:#0d9488}
+
+  /* Download */
+  .dl-btn{margin-top:16px;padding:9px 22px;border-radius:8px;border:2px solid #0d9488;background:transparent;color:#0d9488;font-weight:600;font-size:14px;cursor:pointer;transition:all .2s}
+  .dl-btn:hover{background:#0d9488;color:#fff}
+</style>
+</head>
+<body>
+
+<div class="slide-wrap">
+  <div class="topbar">
+    <span class="topbar-label">GEOGRAPHY ASSESSMENT</span>
+    <span class="topbar-count" id="counter">1 / 8</span>
+  </div>
+  <div class="content" id="content"></div>
+</div>
+
+<div class="nav">
+  <button class="nav-btn" id="prevBtn" onclick="go(-1)" disabled>← Prev</button>
+  <div class="dots" id="dots"></div>
+  <button class="nav-btn" id="nextBtn" onclick="go(1)">Next →</button>
+</div>
+<button class="dl-btn" onclick="downloadHTML()">⬇ Download as HTML File</button>
+
+<script>
+const slides = [
+  { type:"title" },
+  { type:"intro" },
+  { type:"choice" },
+  { type:"part" },
+  { type:"q", qNum:"Question 1", marks:"2 marks",
+    q:"Describe your chosen environment. What does it look like? What plants and animals live there?",
+    tips:["Use descriptive language","Name specific species if you can","Think about climate, terrain, and biodiversity"] },
+  { type:"q", qNum:"Question 2", marks:"3 marks",
+    q:"Draw or insert a labelled map showing where each environment is located in both countries.",
+    tips:["Show both countries clearly","Label key locations and features","Include a scale bar","Include a compass rose (N/S/E/W)"] },
+  { type:"q", qNum:"Question 3", marks:"3 marks",
+    q:"Explain two biophysical processes that are important to keeping this environment healthy.",
+    tips:["Choose from: rainfall patterns, erosion, nutrient cycles, photosynthesis, water cycles, etc.","Explain HOW each process supports the environment","Use geographical terminology"] },
+  { type:"q", qNum:"Question 4", marks:"2 marks",
+    q:"Explain two ecosystem services this environment provides to people.",
+    tips:["Think about food, water, medicine, tourism, carbon storage, flood protection…","Explain the benefit to people or communities","Give real-world examples if possible"] },
+];
+
+let current = 0;
+let selectedEnv = null;
+
+const envs = [
+  { icon:"🐠", label:"Coral Reef", example:"Great Barrier Reef, Australia  vs.  Mesoamerican Reef, Mexico" },
+  { icon:"🌿", label:"Tropical Rainforest", example:"Daintree, Australia  vs.  Amazon, Brazil" },
+  { icon:"🦢", label:"Wetland", example:"Kakadu, Australia  vs.  Sundarbans, Bangladesh/India" },
+  { icon:"🦁", label:"Grassland / Savanna", example:"Mitchell Grass Downs, Australia  vs.  Serengeti, Tanzania" },
+];
+
+function renderTitle() {
+  return `<div class="title-slide">
+    <div class="emoji">🌍</div>
+    <h1>Geography Assessment</h1>
+    <div class="divider"></div>
+    <p>Environmental Change Report</p>
+  </div>`;
+}
+
+function renderIntro() {
+  return `<div class="intro">
+    <h2>Your Task</h2>
+    <div class="intro-box"><p>Students will produce an Environmental Change Report comparing one environment type in Australia with the same environment type in one other country.</p></div>
+    <p class="req-label">Your report must include:</p>
+    <div class="req-list">
+      <div class="req-item">✍️ Written responses</div>
+      <div class="req-item">🗺️ A labelled map</div>
+      <div class="req-item">📊 A data graph or table</div>
+    </div>
+    <p class="intro-note">📌 The report is completed independently outside of class time.</p>
+  </div>`;
+}
+
+function renderChoice() {
+  let cards = envs.map((e,i) => `
+    <div class="choice-card${selectedEnv===i?' selected':''}" onclick="selectEnv(${i})">
+      <div class="c-icon">${e.icon}</div>
+      <div class="c-label">${e.label}</div>
+      <div class="c-example">${e.example}</div>
+    </div>`).join('');
+  let sel = selectedEnv !== null ? `<p class="choice-selected">✅ You selected: ${envs[selectedEnv].label}</p>` : '';
+  return `<div class="choice">
+    <h2>Choose ONE Environment Type</h2>
+    <div class="choice-grid">${cards}</div>
+    ${sel}
+  </div>`;
+}
+
+function renderPart() {
+  return `<div class="part-slide">
+    <div class="part-badge">PART A</div>
+    <h2>What is this Environment?</h2>
+    <div class="divider"></div>
+    <div class="marks-badge">Total: 10 marks</div>
+    <p class="sub">Answer all 4 questions in this section</p>
+  </div>`;
+}
+
+function renderQ(s) {
+  let tips = s.tips.map(t=>`<div class="tip-item"><span class="tip-arrow">›</span><span>${t}</span></div>`).join('');
+  return `<div>
+    <p class="q-part">PART A – WHAT IS THIS ENVIRONMENT?</p>
+    <div class="q-badges">
+      <span class="q-num">${s.qNum}</span>
+      <span class="q-marks">${s.marks}</span>
+    </div>
+    <div class="q-box"><p>${s.q}</p></div>
+    <p class="tips-label">💡 TIPS</p>
+    <div class="tips-list">${tips}</div>
+  </div>`;
+}
+
+function selectEnv(i) {
+  selectedEnv = i;
+  render();
+}
+
+function render() {
+  const s = slides[current];
+  const el = document.getElementById('content');
+  if (s.type === 'title') el.innerHTML = renderTitle();
+  else if (s.type === 'intro') el.innerHTML = renderIntro();
+  else if (s.type === 'choice') el.innerHTML = renderChoice();
+  else if (s.type === 'part') el.innerHTML = renderPart();
+  else if (s.type === 'q') el.innerHTML = renderQ(s);
+
+  document.getElementById('counter').textContent = `${current+1} / ${slides.length}`;
+  document.getElementById('prevBtn').disabled = current === 0;
+  document.getElementById('nextBtn').disabled = current === slides.length-1;
+
+  // dots
+  const dots = document.getElementById('dots');
+  dots.innerHTML = slides.map((_,i)=>`<div class="dot${i===current?' active':''}" style="width:${i===current?24:8}px" onclick="jumpTo(${i})"></div>`).join('');
+}
+
+function go(dir) {
+  current = Math.max(0, Math.min(slides.length-1, current+dir));
+  render();
+}
+
+function jumpTo(i) {
+  current = i;
+  render();
+}
+
+function downloadHTML() {
+  const html = document.documentElement.outerHTML;
+  const blob = new Blob([html], {type:'text/html'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'Geography_Assessment.html';
+  a.click();
+}
+
+render();
+</script>
+</body>
+</html>
