@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Movement Analysis Portfolio</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:'Segoe UI',sans-serif;background:#0f0f1a;color:#fff;height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;}
+
+  /* ── slide container ── */
+  .deck{width:960px;max-width:98vw;position:relative;}
+  .slide{display:none;min-height:540px;border-radius:18px;padding:50px 58px;position:relative;overflow:hidden;animation:fadeIn .4s ease;}
+  .slide.active{display:flex;flex-direction:column;justify-content:center;}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+  /* ── slide themes ── */
+  .s1{background:linear-gradient(135deg,#1a1a2e 0%,#16213e 50%,#0f3460 100%);}
+  .s2{background:linear-gradient(135deg,#0d2137 0%,#1b3a5c 100%);}
+  .s3{background:linear-gradient(135deg,#12232e 0%,#1a3a4a 100%);}
+  .s4{background:linear-gradient(135deg,#1c1a2e 0%,#2d1b4e 100%);}
+
+  /* decorative circle */
+  .deco{position:absolute;border-radius:50%;opacity:.08;}
+  .deco1{width:380px;height:380px;background:#4fc3f7;top:-120px;right:-100px;}
+  .deco2{width:260px;height:260px;background:#81c784;bottom:-80px;left:-60px;}
+  .deco3{width:300px;height:300px;background:#ce93d8;top:-90px;right:-70px;}
+  .deco4{width:320px;height:320px;background:#ffb74d;bottom:-100px;left:-80px;}
+
+  /* ── typography ── */
+  .label{font-size:.72rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;margin-bottom:10px;opacity:.7;}
+  h1{font-size:3rem;font-weight:800;line-height:1.15;margin-bottom:14px;}
+  h2{font-size:2rem;font-weight:700;margin-bottom:18px;}
+  h3{font-size:1.15rem;font-weight:700;margin-bottom:6px;}
+  .subtitle{font-size:1.15rem;opacity:.75;margin-bottom:30px;line-height:1.6;}
+  p{font-size:.95rem;line-height:1.7;opacity:.88;}
+
+  /* ── accent colours ── */
+  .accent-blue{color:#4fc3f7;}
+  .accent-green{color:#81c784;}
+  .accent-purple{color:#ce93d8;}
+  .accent-orange{color:#ffb74d;}
+
+  /* ── pill badge ── */
+  .badge{display:inline-block;padding:4px 14px;border-radius:50px;font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:22px;}
+  .badge-blue{background:rgba(79,195,247,.18);color:#4fc3f7;border:1px solid rgba(79,195,247,.35);}
+  .badge-green{background:rgba(129,199,132,.18);color:#81c784;border:1px solid rgba(129,199,132,.35);}
+  .badge-purple{background:rgba(206,147,216,.18);color:#ce93d8;border:1px solid rgba(206,147,216,.35);}
+
+  /* ── cards / grid ── */
+  .grid{display:grid;gap:16px;margin-top:4px;}
+  .g2{grid-template-columns:1fr 1fr;}
+  .g3{grid-template-columns:1fr 1fr 1fr;}
+  .card{background:rgba(255,255,255,.06);border-radius:12px;padding:18px 20px;border:1px solid rgba(255,255,255,.09);}
+  .card p{font-size:.88rem;}
+  .card ul{padding-left:18px;margin-top:6px;}
+  .card ul li{font-size:.88rem;line-height:1.65;opacity:.88;}
+
+  /* ── bullet list ── */
+  .blist{list-style:none;padding:0;margin-top:10px;}
+  .blist li{display:flex;align-items:flex-start;gap:10px;margin-bottom:10px;font-size:.93rem;line-height:1.6;opacity:.9;}
+  .blist li::before{content:'▸';font-size:.9rem;margin-top:2px;flex-shrink:0;}
+  .blist.blue li::before{color:#4fc3f7;}
+  .blist.green li::before{color:#81c784;}
+  .blist.purple li::before{color:#ce93d8;}
+
+  /* ── divider ── */
+  .divider{height:3px;width:60px;border-radius:4px;margin-bottom:24px;}
+  .div-blue{background:linear-gradient(90deg,#4fc3f7,#0288d1);}
+  .div-green{background:linear-gradient(90deg,#81c784,#388e3c);}
+  .div-purple{background:linear-gradient(90deg,#ce93d8,#7b1fa2);}
+
+  /* ── marks pill ── */
+  .marks{float:right;background:rgba(255,183,77,.15);color:#ffb74d;border:1px solid rgba(255,183,77,.35);padding:3px 12px;border-radius:50px;font-size:.75rem;font-weight:700;letter-spacing:.08em;}
+
+  /* ── nav ── */
+  .nav{display:flex;align-items:center;gap:18px;margin-top:28px;justify-content:center;}
+  .nav button{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:#fff;padding:9px 26px;border-radius:50px;font-size:.88rem;cursor:pointer;transition:all .2s;}
+  .nav button:hover{background:rgba(255,255,255,.2);}
+  .nav button:disabled{opacity:.3;cursor:default;}
+  .dots{display:flex;gap:8px;}
+  .dot{width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,.25);cursor:pointer;transition:all .2s;}
+  .dot.active{background:#4fc3f7;transform:scale(1.3);}
+
+  /* slide counter */
+  .counter{position:absolute;top:22px;right:28px;font-size:.72rem;opacity:.45;letter-spacing:.1em;}
+
+  /* title slide extras */
+  .title-rule{width:80px;height:4px;background:linear-gradient(90deg,#4fc3f7,#81c784);border-radius:4px;margin:20px 0 28px;}
+  .tag-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:28px;}
+  .tag{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);padding:5px 16px;border-radius:50px;font-size:.78rem;opacity:.75;}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════ SLIDE 1 – TITLE ═══════════════════ -->
+<div class="deck">
+  <div class="slide s1 active" id="s1">
+    <div class="deco deco1"></div>
+    <div class="deco deco2"></div>
+    <span class="counter">1 / 4</span>
+
+    <div class="label accent-blue">Physical Education · Assessment Task</div>
+    <h1>Movement<br><span class="accent-blue">Analysis</span><br>Portfolio</h1>
+    <div class="title-rule"></div>
+    <p class="subtitle">An in-depth investigation into the muscular and skeletal<br>systems through the lens of sport science.</p>
+    <div class="tag-row">
+      <span class="tag">🦴 Skeletal System</span>
+      <span class="tag">💪 Muscular System</span>
+      <span class="tag">⚙️ Biomechanics</span>
+      <span class="tag">🏅 Sport Performance</span>
+    </div>
+  </div>
+
+  <!-- ═══════════════════ SLIDE 2 – OVERVIEW ═══════════════════ -->
+  <div class="slide s2" id="s2">
+    <div class="deco deco1"></div>
+    <span class="counter">2 / 4</span>
+
+    <span class="badge badge-blue">Assessment Overview</span>
+    <h2>About This <span class="accent-blue">Portfolio</span></h2>
+    <div class="divider div-blue"></div>
+
+    <p style="margin-bottom:20px;">This is an <strong>in-class and take-home assessment</strong>. Through your portfolio you will demonstrate understanding of anatomy and biomechanics in a real sporting context.</p>
+
+    <div class="grid g3">
+      <div class="card">
+        <h3 class="accent-blue">🎯 Task 1</h3>
+        <p>Label and describe key <strong>muscles &amp; bones</strong> involved in a chosen sport movement.</p>
+      </div>
+      <div class="card">
+        <h3 class="accent-green">🔗 Task 2</h3>
+        <p>Explain how <strong>muscles &amp; bones work together</strong> to produce efficient movement.</p>
+      </div>
+      <div class="card">
+        <h3 class="accent-purple">📐 Task 3</h3>
+        <p>Analyse how <strong>biomechanical principles</strong> can improve performance or reduce injury risk.</p>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:16px;">
+      <h3 style="margin-bottom:8px;">📋 Presentation Format <span style="font-weight:400;opacity:.7;font-size:.85rem;">— choose one</span></h3>
+      <div style="display:flex;gap:14px;flex-wrap:wrap;margin-top:4px;">
+        <span class="tag">📝 Written Report</span>
+        <span class="tag">🖼️ Poster</span>
+        <span class="tag">💻 Digital Slideshow</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════ SLIDE 3 – Q1 ═══════════════════ -->
+  <div class="slide s3" id="s3">
+    <div class="deco deco3" style="background:#4fc3f7;"></div>
+    <span class="counter">3 / 4</span>
+
+    <span class="badge badge-green">Question 1</span>
+    <h2>The Muscular &amp; Skeletal Systems <span class="marks">10 marks</span></h2>
+    <div class="divider div-green"></div>
+
+    <p style="margin-bottom:18px;">Choose <strong>ONE sporting movement</strong> (e.g. throwing a ball, kicking, jumping, swimming stroke) and use a diagram or image to address all three parts below.</p>
+
+    <div class="grid g3">
+      <div class="card">
+        <h3 class="accent-green">🦴 Part A — Label</h3>
+        <ul>
+          <li>Identify at least <strong>4 bones</strong> involved in the movement</li>
+          <li>Identify at least <strong>4 muscles</strong> involved in the movement</li>
+          <li>Clearly label these on a diagram or annotated image</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 class="accent-green">📝 Part B — Describe</h3>
+        <ul>
+          <li>For <strong>each</strong> bone and muscle labelled, write <strong>2–3 sentences</strong> describing its role during the movement</li>
+          <li>Explain what the muscle/bone does at each phase (e.g. propulsion, support)</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 class="accent-green">🔄 Part C — Joint Type</h3>
+        <ul>
+          <li>Identify the <strong>type of joint</strong> most critical to the movement (e.g. ball-and-socket, hinge)</li>
+          <li>State the <strong>range of motion</strong> it allows</li>
+          <li>Explain why this joint type suits the movement</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:14px;background:rgba(129,199,132,.07);border-color:rgba(129,199,132,.2);">
+      <p><span class="accent-green">💡 Tip:</span> Choose a movement you are familiar with. The more specific your descriptions, the higher your marks. Use correct anatomical terminology throughout.</p>
+    </div>
+  </div>
+
+  <!-- ═══════════════════ SLIDE 4 – Q2 ═══════════════════ -->
+  <div class="slide s4" id="s4">
+    <div class="deco deco4" style="background:#ce93d8;"></div>
+    <span class="counter">4 / 4</span>
+
+    <span class="badge badge-purple">Question 2</span>
+    <h2>Muscles &amp; Bones Working Together <span class="marks">8 marks</span></h2>
+    <div class="divider div-purple"></div>
+
+    <p style="margin-bottom:18px;">Using the <strong>same sporting movement</strong> from Q1, explain how the muscular and skeletal systems work together to produce efficient movement.</p>
+
+    <div class="grid g3">
+      <div class="card">
+        <h3 class="accent-purple">💪 Part A — Muscle Roles</h3>
+        <p style="margin-bottom:8px;">For <strong>one phase</strong> of your movement, identify:</p>
+        <ul>
+          <li><strong>Agonist</strong> — the prime mover producing the force</li>
+          <li><strong>Antagonist</strong> — the opposing muscle that controls movement</li>
+          <li><strong>Stabiliser(s)</strong> — muscles that fix joints for control</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 class="accent-purple">⚙️ Part B — Lever System</h3>
+        <p style="margin-bottom:8px;">Explain the lever system at work:</p>
+        <ul>
+          <li>State the <strong>class of lever</strong> (1st, 2nd, or 3rd)</li>
+          <li>Identify the <strong>fulcrum</strong> (joint), <strong>effort</strong> (muscle force) &amp; <strong>load</strong> (resistance)</li>
+          <li>Describe the mechanical advantage this provides</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 class="accent-purple">🏃 Part C — Efficient Movement</h3>
+        <p style="margin-bottom:8px;">Bring it all together:</p>
+        <ul>
+          <li>Explain how the agonist/antagonist relationship <strong>produces smooth, controlled movement</strong></li>
+          <li>Describe how the skeletal lever system <strong>amplifies force or speed</strong></li>
+          <li>Link to overall <strong>performance efficiency</strong></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:14px;background:rgba(206,147,216,.07);border-color:rgba(206,147,216,.2);">
+      <p><span class="accent-purple">💡 Tip:</span> Use a clearly labelled diagram of the lever system for Part B. Most movements in sport use a <strong>3rd class lever</strong> — prioritise speed and range of motion over mechanical advantage.</p>
+    </div>
+  </div>
+
+  <!-- ═══════════════════ NAV ═══════════════════ -->
+  <div class="nav">
+    <button id="prev" onclick="go(-1)" disabled>← Prev</button>
+    <div class="dots">
+      <div class="dot active" onclick="jump(0)"></div>
+      <div class="dot" onclick="jump(1)"></div>
+      <div class="dot" onclick="jump(2)"></div>
+      <div class="dot" onclick="jump(3)"></div>
+    </div>
+    <button id="next" onclick="go(1)">Next →</button>
+  </div>
+</div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const dots   = document.querySelectorAll('.dot');
+  let cur = 0;
+
+  function show(n){
+    slides[cur].classList.remove('active');
+    dots[cur].classList.remove('active');
+    cur = n;
+    slides[cur].classList.add('active');
+    dots[cur].classList.add('active');
+    document.getElementById('prev').disabled = cur===0;
+    document.getElementById('next').disabled = cur===slides.length-1;
+  }
+  function go(d){show(cur+d);}
+  function jump(n){show(n);}
+
+  document.addEventListener('keydown',e=>{
+    if(e.key==='ArrowRight'&&cur<slides.length-1)go(1);
+    if(e.key==='ArrowLeft'&&cur>0)go(-1);
+  });
+</script>
+</body>
+</html>
