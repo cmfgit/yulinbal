@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Geography Assessment – Part B</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Segoe UI',Arial,sans-serif;background:#0f172a;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px}
+  .slide-wrap{width:100%;max-width:860px;min-height:480px;background:#fff;border-radius:16px;box-shadow:0 25px 60px rgba(0,0,0,.5);overflow:hidden;display:flex;flex-direction:column}
+  .topbar{background:linear-gradient(135deg,#7c3aed,#4c1d95);padding:18px 32px;display:flex;align-items:center;justify-content:space-between}
+  .topbar-label{color:rgba(255,255,255,.7);font-size:13px;font-weight:600;letter-spacing:1px}
+  .topbar-count{color:rgba(255,255,255,.5);font-size:12px}
+  .content{flex:1;padding:36px 40px;display:flex;flex-direction:column;justify-content:center}
+
+  /* Title */
+  .title-slide{text-align:center}
+  .title-slide .emoji{font-size:56px;margin-bottom:8px}
+  .title-slide h1{font-size:38px;font-weight:800;color:#1e293b;margin-bottom:12px}
+  .divider{width:60px;height:4px;background:#7c3aed;border-radius:2px;margin:0 auto 16px}
+  .title-slide p{font-size:20px;color:#6d28d9;font-weight:600}
+
+  /* Part */
+  .part-slide{text-align:center}
+  .part-badge{display:inline-block;background:#7c3aed;color:#fff;font-weight:700;font-size:13px;letter-spacing:2px;padding:6px 18px;border-radius:20px;margin-bottom:18px}
+  .part-slide h2{font-size:34px;font-weight:800;color:#1e293b;margin-bottom:16px}
+  .marks-badge{display:inline-block;background:#fef3c7;color:#d97706;font-weight:700;font-size:16px;padding:8px 22px;border-radius:8px}
+  .part-slide .sub{margin-top:20px;color:#64748b;font-size:15px}
+
+  /* Overview */
+  .overview h2{font-size:26px;font-weight:700;color:#1e293b;margin-bottom:18px}
+  .ov-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .ov-card{background:#f5f3ff;border:2px solid #ddd6fe;border-radius:12px;padding:14px 16px}
+  .ov-card .ov-num{background:#7c3aed;color:#fff;font-weight:800;font-size:12px;padding:3px 10px;border-radius:6px;display:inline-block;margin-bottom:8px}
+  .ov-card .ov-marks{background:#fef3c7;color:#d97706;font-weight:700;font-size:11px;padding:3px 10px;border-radius:6px;display:inline-block;margin-bottom:8px;margin-left:6px}
+  .ov-card p{font-size:13px;color:#374151;line-height:1.5}
+
+  /* Question */
+  .q-part{font-size:12px;color:#7c3aed;font-weight:700;letter-spacing:1px;margin-bottom:8px}
+  .q-badges{display:flex;align-items:center;gap:12px;margin-bottom:20px}
+  .q-num{background:#7c3aed;color:#fff;font-weight:800;font-size:13px;padding:6px 14px;border-radius:8px}
+  .q-marks{background:#fef3c7;color:#d97706;font-weight:700;font-size:13px;padding:6px 14px;border-radius:8px}
+  .q-box{background:#f5f3ff;border-radius:12px;padding:18px 22px;margin-bottom:22px;border-left:4px solid #7c3aed}
+  .q-box p{font-size:17px;color:#1e293b;font-weight:600;line-height:1.6}
+  .q-box .sub-points{margin-top:10px;display:flex;flex-direction:column;gap:6px}
+  .q-box .sub-point{display:flex;align-items:flex-start;gap:8px;font-size:15px;color:#4c1d95;font-weight:500}
+  .sub-dot{color:#7c3aed;font-weight:900;flex-shrink:0}
+  .tips-label{font-weight:700;font-size:13px;color:#64748b;margin-bottom:10px;letter-spacing:.5px}
+  .tips-list{display:flex;flex-direction:column;gap:8px}
+  .tip-item{display:flex;align-items:flex-start;gap:8px;font-size:14px;color:#475569}
+  .tip-arrow{color:#7c3aed;font-weight:700;flex-shrink:0}
+
+  /* Nav */
+  .nav{display:flex;gap:16px;margin-top:24px;align-items:center}
+  .nav-btn{padding:10px 28px;border-radius:8px;border:none;background:#7c3aed;color:#fff;font-weight:600;font-size:15px;cursor:pointer;transition:background .2s}
+  .nav-btn:disabled{background:#334155;color:#64748b;cursor:not-allowed}
+  .nav-btn:not(:disabled):hover{background:#6d28d9}
+  .dots{display:flex;gap:6px;align-items:center}
+  .dot{height:8px;border-radius:4px;background:#475569;cursor:pointer;transition:all .2s}
+  .dot.active{background:#7c3aed}
+  .dl-btn{margin-top:16px;padding:9px 22px;border-radius:8px;border:2px solid #7c3aed;background:transparent;color:#7c3aed;font-weight:600;font-size:14px;cursor:pointer;transition:all .2s}
+  .dl-btn:hover{background:#7c3aed;color:#fff}
+</style>
+</head>
+<body>
+
+<div class="slide-wrap">
+  <div class="topbar">
+    <span class="topbar-label">GEOGRAPHY ASSESSMENT – PART B</span>
+    <span class="topbar-count" id="counter">1 / 7</span>
+  </div>
+  <div class="content" id="content"></div>
+</div>
+
+<div class="nav">
+  <button class="nav-btn" id="prevBtn" onclick="go(-1)" disabled>← Prev</button>
+  <div class="dots" id="dots"></div>
+  <button class="nav-btn" id="nextBtn" onclick="go(1)">Next →</button>
+</div>
+<button class="dl-btn" onclick="downloadHTML()">⬇ Download as HTML File</button>
+
+<script>
+const slides = [
+  { type:"title" },
+  { type:"part" },
+  { type:"overview" },
+  {
+    type:"q", qNum:"Question 5", marks:"4 marks",
+    q:"Describe two human activities causing environmental change.",
+    subPoints:["Use specific examples from Australia","Use specific examples from the other country"],
+    tips:[
+      "Think about: deforestation, pollution, overfishing, agriculture, urban development, climate change",
+      "Name real places or industries for each country",
+      "Describe HOW each activity causes harm — not just what it is"
+    ]
+  },
+  {
+    type:"q", qNum:"Question 6", marks:"3 marks",
+    q:"Using a graph or data table from a reliable source, show evidence that this environment is changing.",
+    subPoints:["Describe what the data tells you"],
+    tips:[
+      "Use sources like: CSIRO, WWF, NASA, UN Environment Programme, government reports",
+      "Include the title, source, and year of your graph or table",
+      "Describe the trend — is it increasing, decreasing, or fluctuating?",
+      "Use numbers from the data in your written description"
+    ]
+  },
+  {
+    type:"q", qNum:"Question 7", marks:"4 marks",
+    q:"Explain the consequences of this environmental change for:",
+    subPoints:["🌿 Biodiversity — plants and animals","🏘️ Local communities and economies"],
+    tips:[
+      "Give at least one specific consequence for each dot point",
+      "Think about: habitat loss, species extinction, food security, jobs, tourism, health",
+      "Use linking language: 'This leads to…', 'As a result…', 'This means that…'"
+    ]
+  },
+  {
+    type:"q", qNum:"Question 8", marks:"4 marks",
+    q:"Compare the scale of change between Australia and the other country. Is one country more severely affected? Explain why.",
+    subPoints:[],
+    tips:[
+      "Use data or evidence from earlier questions to support your comparison",
+      "Consider: government policies, population pressure, economic development, geography",
+      "Use comparative language: 'more than', 'whereas', 'in contrast', 'similarly'",
+      "Give a clear judgement — which country is more affected and why"
+    ]
+  },
+];
+
+let current = 0;
+
+function renderTitle() {
+  return `<div class="title-slide">
+    <div class="emoji">🔬</div>
+    <h1>Geography Assessment</h1>
+    <div class="divider"></div>
+    <p>Part B – How is it Changing?</p>
+  </div>`;
+}
+
+function renderPart() {
+  return `<div class="part-slide">
+    <div class="part-badge">PART B</div>
+    <h2>How is it Changing?</h2>
+    <div class="divider"></div>
+    <div class="marks-badge">Total: 15 marks</div>
+    <p class="sub">Answer all 4 questions in this section</p>
+  </div>`;
+}
+
+function renderOverview() {
+  const qs = [
+    { num:"Q5", marks:"4 marks", text:"Describe two human activities causing environmental change with examples from each country." },
+    { num:"Q6", marks:"3 marks", text:"Use a graph or data table to show evidence of change and describe what it tells you." },
+    { num:"Q7", marks:"4 marks", text:"Explain consequences for biodiversity and for local communities and economies." },
+    { num:"Q8", marks:"4 marks", text:"Compare the scale of change between Australia and the other country." },
+  ];
+  const cards = qs.map(q=>`
+    <div class="ov-card">
+      <span class="ov-num">${q.num}</span><span class="ov-marks">${q.marks}</span>
+      <p>${q.text}</p>
+    </div>`).join('');
+  return `<div class="overview">
+    <h2>Section Overview</h2>
+    <div class="ov-grid">${cards}</div>
+  </div>`;
+}
+
+function renderQ(s) {
+  const tips = s.tips.map(t=>`<div class="tip-item"><span class="tip-arrow">›</span><span>${t}</span></div>`).join('');
+  const subs = s.subPoints.length ? `<div class="sub-points">${s.subPoints.map(sp=>`<div class="sub-point"><span class="sub-dot">•</span><span>${sp}</span></div>`).join('')}</div>` : '';
+  return `<div>
+    <p class="q-part">PART B – HOW IS IT CHANGING?</p>
+    <div class="q-badges">
+      <span class="q-num">${s.qNum}</span>
+      <span class="q-marks">${s.marks}</span>
+    </div>
+    <div class="q-box">
+      <p>${s.q}</p>
+      ${subs}
+    </div>
+    <p class="tips-label">💡 TIPS</p>
+    <div class="tips-list">${tips}</div>
+  </div>`;
+}
+
+function render() {
+  const s = slides[current];
+  const el = document.getElementById('content');
+  if (s.type==='title') el.innerHTML = renderTitle();
+  else if (s.type==='part') el.innerHTML = renderPart();
+  else if (s.type==='overview') el.innerHTML = renderOverview();
+  else if (s.type==='q') el.innerHTML = renderQ(s);
+
+  document.getElementById('counter').textContent = `${current+1} / ${slides.length}`;
+  document.getElementById('prevBtn').disabled = current===0;
+  document.getElementById('nextBtn').disabled = current===slides.length-1;
+
+  const dots = document.getElementById('dots');
+  dots.innerHTML = slides.map((_,i)=>`<div class="dot${i===current?' active':''}" style="width:${i===current?24:8}px" onclick="jumpTo(${i})"></div>`).join('');
+}
+
+function go(dir){ current=Math.max(0,Math.min(slides.length-1,current+dir)); render(); }
+function jumpTo(i){ current=i; render(); }
+function downloadHTML(){
+  const blob=new Blob([document.documentElement.outerHTML],{type:'text/html'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='Geography_Assessment_PartB.html';
+  a.click();
+}
+
+render();
+</script>
+</body>
+</html>
