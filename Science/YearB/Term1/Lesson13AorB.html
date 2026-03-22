@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Is It A or B? — DNA & GMOs</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family: Arial, sans-serif; overflow: hidden; height: 100vh; }
+
+  .presentation { display:flex; flex-direction:column; height:100vh; background: linear-gradient(135deg,#eff6ff,#f0fdf4); }
+  .slide-container { flex:1; display:flex; align-items:center; justify-content:center; padding:2.5rem; }
+  .slide { display:none; width:100%; height:100%; align-items:center; justify-content:center; flex-direction:column; }
+  .slide.active { display:flex; }
+
+  /* ── TITLE ── */
+  .title-slide { text-align:center; gap:1.2rem; }
+  .title-slide h1 { font-size:5rem; color:#1e40af; font-weight:900; line-height:1.1; }
+  .title-slide h2 { font-size:2.8rem; color:#374151; font-weight:600; }
+  .title-slide p  { font-size:1.8rem; color:#6b7280; margin-top:.5rem; }
+  .tags { display:flex; gap:1.2rem; justify-content:center; margin-top:1rem; flex-wrap:wrap; }
+  .tag { font-size:1.4rem; font-weight:700; padding:.4rem 1.2rem; border-radius:2rem; }
+  .tag-dna { background:#dbeafe; color:#1e40af; }
+  .tag-gmo { background:#d1fae5; color:#065f46; }
+
+  /* ── SECTION HEADER ── */
+  .section-slide { text-align:center; gap:1rem; }
+  .section-slide h2 { font-size:4rem; font-weight:800; }
+  .section-slide p  { font-size:2rem; color:#4b5563; }
+  .dna-col  { color:#1e40af; }
+  .gmo-col  { color:#059669; }
+
+  /* ── QUESTION ── */
+  .question-slide { width:100%; gap:2rem; }
+  .q-header { display:flex; align-items:center; gap:1rem; }
+  .q-badge { font-size:1.2rem; font-weight:700; padding:.35rem 1rem; border-radius:2rem; }
+  .badge-dna { background:#dbeafe; color:#1e40af; }
+  .badge-gmo { background:#d1fae5; color:#065f46; }
+  .q-num  { font-size:1.6rem; font-weight:700; color:#6b7280; }
+  .q-text { font-size:2.6rem; font-weight:700; color:#111827; line-height:1.3; }
+  .options { display:flex; flex-direction:column; gap:1.2rem; width:100%; }
+  .opt {
+    display:flex; align-items:center; gap:1.2rem;
+    padding:1.2rem 1.8rem; border-radius:14px;
+    font-size:2rem; font-weight:600; border:3px solid transparent;
+  }
+  .opt-a { background:#fee2e2; border-color:#fca5a5; color:#991b1b; }
+  .opt-b { background:#dbeafe; border-color:#93c5fd; color:#1e40af; }
+  .opt-label { font-size:2.4rem; font-weight:900; min-width:2rem; }
+  .move-hint {
+    text-align:center; font-size:1.4rem; color:#6b7280;
+    background:#f9fafb; border-radius:10px; padding:.7rem 1.4rem;
+    border:1.5px dashed #d1d5db; margin-top:.5rem;
+  }
+
+  /* ── ANSWER ── */
+  .answer-slide { text-align:center; gap:1.5rem; }
+  .answer-slide .q-echo { font-size:1.8rem; color:#4b5563; font-style:italic; max-width:800px; }
+  .answer-bubble {
+    font-size:5rem; font-weight:900; padding:1rem 3rem;
+    border-radius:20px; letter-spacing:2px;
+  }
+  .ans-a { background:#fee2e2; color:#991b1b; border:4px solid #fca5a5; }
+  .ans-b { background:#dbeafe; color:#1e40af; border:4px solid #93c5fd; }
+  .explain {
+    font-size:1.8rem; color:#1f2937; background:#f0fdf4;
+    border-left:5px solid #34d399; border-radius:0 10px 10px 0;
+    padding:1rem 1.6rem; max-width:820px; text-align:left; line-height:1.5;
+  }
+  .explain.dna-explain { background:#eff6ff; border-left-color:#60a5fa; }
+
+  /* ── END ── */
+  .end-slide { text-align:center; gap:1.2rem; }
+  .end-slide h2 { font-size:4rem; font-weight:900; color:#1e40af; }
+  .end-slide p  { font-size:2rem; color:#374151; }
+  .score-row { display:flex; gap:2rem; justify-content:center; margin-top:1rem; }
+  .score-box { padding:1rem 2rem; border-radius:14px; font-size:1.6rem; font-weight:700; }
+  .score-dna { background:#dbeafe; color:#1e40af; }
+  .score-gmo { background:#d1fae5; color:#065f46; }
+
+  /* ── NAV ── */
+  .nav-bar {
+    background:#1e3a5f; padding:.8rem 2rem;
+    display:flex; align-items:center; justify-content:space-between;
+  }
+  .nav-btn {
+    background:#3b82f6; color:white; border:none; cursor:pointer;
+    font-size:1.4rem; font-weight:700; padding:.6rem 2rem; border-radius:8px;
+    transition:background .2s;
+  }
+  .nav-btn:hover:not(:disabled) { background:#2563eb; }
+  .nav-btn:disabled { opacity:.35; cursor:not-allowed; }
+  .slide-info { color:#cbd5e1; font-size:1.2rem; font-weight:600; }
+  .dots { display:flex; gap:.5rem; }
+  .dot {
+    width:12px; height:12px; border-radius:50%;
+    background:#475569; cursor:pointer; transition:background .2s;
+  }
+  .dot.active { background:#60a5fa; }
+</style>
+</head>
+<body>
+<div class="presentation">
+  <div class="slide-container" id="container"></div>
+  <div class="nav-bar">
+    <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)">◀ Back</button>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:.4rem;">
+      <div class="slide-info" id="slideInfo">Slide 1</div>
+      <div class="dots" id="dots"></div>
+    </div>
+    <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)">Next ▶</button>
+  </div>
+</div>
+
+<script>
+const SLIDES = [
+
+  // ── TITLE ──
+  { type:'title' },
+
+  // ── DNA SECTION HEADER ──
+  { type:'section', topic:'dna', label:'🧬 DNA Revision', sub:'Questions 1–4 — What do you remember?' },
+
+  // Q1 → A
+  {
+    type:'question', n:1, topic:'dna',
+    q:'What shape is a DNA molecule?',
+    a:'A double helix — two strands twisted around each other',
+    b:'A single straight strand of chemical letters',
+    ans:'a'
+  },
+  { type:'answer', n:1, ans:'a',
+    echo:'What shape is a DNA molecule?',
+    explain:'DNA is a <strong>double helix</strong> — like a twisted ladder. The two "rails" are made of sugar and phosphate, and the "rungs" are pairs of bases (A, T, C, G). This shape was discovered by Watson and Crick in 1953.',
+    topic:'dna'
+  },
+
+  // Q2 → B
+  {
+    type:'question', n:2, topic:'dna',
+    q:'What does DNA stand for?',
+    a:'Deoxyribose Nucleotide Acid',
+    b:'Deoxyribonucleic Acid',
+    ans:'b'
+  },
+  { type:'answer', n:2, ans:'b',
+    echo:'What does DNA stand for?',
+    explain:'DNA stands for <strong>Deoxyribonucleic Acid</strong>. It is the molecule found in the nucleus of almost every cell that carries the genetic instructions for building and running a living organism.',
+    topic:'dna'
+  },
+
+  // Q3 → B
+  {
+    type:'question', n:3, topic:'dna',
+    q:'What is a gene?',
+    a:'The full set of DNA found inside all of an organism\'s cells',
+    b:'A specific section of DNA that contains instructions to make one protein',
+    ans:'b'
+  },
+  { type:'answer', n:3, ans:'b',
+    echo:'What is a gene?',
+    explain:'A <strong>gene</strong> is a section of DNA that acts like a recipe — it contains the instructions for making one specific protein. Humans have approximately 20,000–25,000 genes. The full set of all our DNA is called the <em>genome</em>.',
+    topic:'dna'
+  },
+
+  // Q4 → A
+  {
+    type:'question', n:4, topic:'dna',
+    q:'Where is DNA found inside a cell?',
+    a:'In the nucleus, tightly coiled into structures called chromosomes',
+    b:'Floating freely throughout the entire cell, including the cytoplasm',
+    ans:'a'
+  },
+  { type:'answer', n:4, ans:'a',
+    echo:'Where is DNA found inside a cell?',
+    explain:'DNA is stored in the <strong>nucleus</strong> of the cell, coiled up tightly into structures called <strong>chromosomes</strong>. Humans have 46 chromosomes (23 pairs). If you uncoiled all the DNA from one human cell, it would stretch roughly 2 metres!',
+    topic:'dna'
+  },
+
+  // ── GMO SECTION HEADER ──
+  { type:'section', topic:'gmo', label:'🌱 Introducing GMOs', sub:'Questions 5–7 — New ideas coming up!' },
+
+  // Q5 → B
+  {
+    type:'question', n:5, topic:'gmo',
+    q:'What does GMO stand for?',
+    a:'Genetically Modified Outcome',
+    b:'Genetically Modified Organism',
+    ans:'b'
+  },
+  { type:'answer', n:5, ans:'b',
+    echo:'What does GMO stand for?',
+    explain:'GMO stands for <strong>Genetically Modified Organism</strong> — any living thing whose DNA has been changed using laboratory techniques. This usually involves adding a gene from a different species to give the organism a new trait.',
+    topic:'gmo'
+  },
+
+  // Q6 → A
+  {
+    type:'question', n:6, topic:'gmo',
+    q:'Why is it possible to put a gene from a bacterium into a plant and have it work?',
+    a:'All living things use the same genetic code, so any organism can read a gene from another species',
+    b:'Bacteria and plants have exactly the same DNA, so their genes are already identical',
+    ans:'a'
+  },
+  { type:'answer', n:6, ans:'a',
+    echo:'Why can a bacterial gene work inside a plant?',
+    explain:'The <strong>genetic code is universal</strong> — all living things (bacteria, plants, animals, fungi) use the same system to translate DNA into proteins. This means a gene from one species can be placed into another and it will still be read and used correctly.',
+    topic:'gmo'
+  },
+
+  // Q7 → B
+  {
+    type:'question', n:7, topic:'gmo',
+    q:'What is the main reason scientists use genetic modification rather than traditional selective breeding to improve crops?',
+    a:'Selective breeding is illegal in most countries, so scientists must use genetic modification instead',
+    b:'Genetic modification is much faster and can introduce traits that don\'t exist anywhere in the crop\'s gene pool',
+    ans:'b'
+  },
+  { type:'answer', n:7, ans:'b',
+    echo:'Why use genetic modification instead of selective breeding?',
+    explain:'<strong>Selective breeding</strong> can take 20–50 years and is limited to traits already in the species. <strong>Genetic modification</strong> can introduce brand new traits (even from other species) in a fraction of the time — making it far more powerful for solving problems like drought resistance or pest control.',
+    topic:'gmo'
+  },
+
+  // ── END ──
+  { type:'end' }
+];
+
+// ── BUILD SLIDES ──
+function buildSlides() {
+  const container = document.getElementById('container');
+  const dots = document.getElementById('dots');
+
+  SLIDES.forEach((s, i) => {
+    // dot
+    const dot = document.createElement('div');
+    dot.className = 'dot';
+    dot.onclick = () => goTo(i);
+    dots.appendChild(dot);
+
+    // slide
+    const el = document.createElement('div');
+    el.className = 'slide';
+    el.id = 'slide-' + i;
+
+    if (s.type === 'title') {
+      el.innerHTML = `
+        <div class="title-slide slide">
+          <h1>Is It A or B? 🤔</h1>
+          <h2>DNA Revision &amp; Introducing GMOs</h2>
+          <p>Stand on the side of the room that matches your answer!</p>
+          <div class="tags">
+            <span class="tag tag-dna">🧬 DNA Revision (Q1–4)</span>
+            <span class="tag tag-gmo">🌱 GMO Introduction (Q5–7)</span>
+          </div>
+        </div>`;
+      el.style.flexDirection='column';
+    }
+    else if (s.type === 'section') {
+      const col = s.topic === 'dna' ? 'dna-col' : 'gmo-col';
+      el.innerHTML = `
+        <div class="section-slide">
+          <h2 class="${col}">${s.label}</h2>
+          <p>${s.sub}</p>
+        </div>`;
+      el.style.flexDirection='column';
+    }
+    else if (s.type === 'question') {
+      const badge = s.topic === 'dna'
+        ? `<span class="q-badge badge-dna">🧬 DNA Revision</span>`
+        : `<span class="q-badge badge-gmo">🌱 GMO Intro</span>`;
+      el.innerHTML = `
+        <div class="question-slide">
+          <div class="q-header">
+            ${badge}
+            <span class="q-num">Question ${s.n} of 7</span>
+          </div>
+          <div class="q-text">${s.q}</div>
+          <div class="options">
+            <div class="opt opt-a"><span class="opt-label">A</span>${s.a}</div>
+            <div class="opt opt-b"><span class="opt-label">B</span>${s.b}</div>
+          </div>
+          <div class="move-hint">🚶 Stand on the <strong>A side</strong> (red) or <strong>B side</strong> (blue) of the room</div>
+        </div>`;
+    }
+    else if (s.type === 'answer') {
+      const bubble = s.ans === 'a'
+        ? `<div class="answer-bubble ans-a">✅ Answer: A</div>`
+        : `<div class="answer-bubble ans-b">✅ Answer: B</div>`;
+      const exClass = s.topic === 'dna' ? 'explain dna-explain' : 'explain';
+      el.innerHTML = `
+        <div class="answer-slide">
+          <div class="q-echo">"${s.echo}"</div>
+          ${bubble}
+          <div class="${exClass}">${s.explain}</div>
+        </div>`;
+      el.style.textAlign='center';
+    }
+    else if (s.type === 'end') {
+      el.innerHTML = `
+        <div class="end-slide">
+          <h2>🎉 Well Done!</h2>
+          <p>You've revised DNA and had your first look at GMOs.</p>
+          <div class="score-row">
+            <div class="score-box score-dna">🧬 DNA: 4 questions</div>
+            <div class="score-box score-gmo">🌱 GMOs: 3 questions</div>
+          </div>
+          <p style="margin-top:1.5rem;font-size:1.6rem;color:#4b5563;">Ready to dive deeper into transgenic crops? 🌽</p>
+        </div>`;
+    }
+
+    container.appendChild(el);
+  });
+}
+
+// ── NAVIGATION ──
+let cur = 0;
+
+function goTo(n) {
+  document.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.dot').forEach(d => d.classList.remove('active'));
+  cur = n;
+  document.getElementById('slide-' + n).classList.add('active');
+  document.querySelectorAll('.dot')[n].classList.add('active');
+  document.getElementById('slideInfo').textContent = `Slide ${n + 1} of ${SLIDES.length}`;
+  document.getElementById('prevBtn').disabled = n === 0;
+  document.getElementById('nextBtn').disabled = n === SLIDES.length - 1;
+}
+
+function changeSlide(dir) {
+  const next = cur + dir;
+  if (next >= 0 && next < SLIDES.length) goTo(next);
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight') changeSlide(1);
+  if (e.key === 'ArrowLeft')  changeSlide(-1);
+});
+
+buildSlides();
+goTo(0);
+</script>
+</body>
+</html>
