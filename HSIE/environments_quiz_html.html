@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Earth's Environments Quiz</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: system-ui, -apple-system, sans-serif; background: #f5f4f0; color: #1a1a18; min-height: 100vh; padding: 2rem 1rem; }
+  #quiz { max-width: 680px; margin: 0 auto; }
+  h1 { font-size: 22px; font-weight: 500; margin-bottom: 0.25rem; }
+  .subtitle { font-size: 14px; color: #5f5e5a; margin-bottom: 2rem; }
+  .env-badge { display: inline-block; font-size: 12px; font-weight: 500; padding: 4px 12px; border-radius: 8px; margin-bottom: 12px; }
+  .question-card { background: #fff; border: 0.5px solid rgba(0,0,0,0.12); border-radius: 12px; padding: 1.25rem 1.5rem; margin-bottom: 1rem; }
+  .q-text { font-size: 17px; font-weight: 500; margin-bottom: 1.25rem; line-height: 1.5; }
+  .options { display: flex; flex-direction: column; gap: 8px; }
+  .opt { background: #f1efe8; border: 0.5px solid rgba(0,0,0,0.12); border-radius: 8px; padding: 12px 16px; font-size: 15px; color: #1a1a18; cursor: pointer; text-align: left; transition: background 0.15s, border-color 0.15s; font-family: inherit; }
+  .opt:hover:not(:disabled) { background: #e4e2da; border-color: rgba(0,0,0,0.25); }
+  .opt.correct { background: #eaf3de; border-color: #639922; color: #27500a; }
+  .opt.wrong { background: #fcebeb; border-color: #e24b4a; color: #501313; }
+  .opt:disabled { cursor: default; }
+  .feedback { margin-top: 1rem; padding: 12px 16px; border-radius: 8px; font-size: 14px; line-height: 1.6; display: none; }
+  .feedback.show { display: block; }
+  .feedback.correct { background: #eaf3de; color: #3b6d11; border: 0.5px solid #97c459; }
+  .feedback.wrong { background: #fcebeb; color: #a32d2d; border: 0.5px solid #f09595; }
+  .next-btn { margin-top: 1rem; padding: 10px 24px; border-radius: 8px; border: 0.5px solid rgba(0,0,0,0.25); background: transparent; color: #1a1a18; font-size: 14px; cursor: pointer; display: none; font-family: inherit; }
+  .next-btn.show { display: inline-block; }
+  .next-btn:hover { background: #f1efe8; }
+  .progress { display: flex; gap: 5px; margin-bottom: 1.25rem; flex-wrap: wrap; }
+  .pip { width: 18px; height: 6px; border-radius: 3px; background: rgba(0,0,0,0.12); }
+  .pip.done-correct { background: #639922; }
+  .pip.done-wrong { background: #e24b4a; }
+  .pip.active { background: #378add; }
+  .meta { font-size: 13px; color: #5f5e5a; margin-bottom: 1.5rem; }
+  .score-card { background: #fff; border: 0.5px solid rgba(0,0,0,0.12); border-radius: 12px; padding: 2rem; text-align: center; }
+  .score-num { font-size: 56px; font-weight: 500; line-height: 1; }
+  .score-label { font-size: 15px; color: #5f5e5a; margin-top: 6px; }
+  .score-msg { font-size: 16px; margin: 1.25rem 0; line-height: 1.6; }
+  .restart-btn { padding: 10px 28px; border-radius: 8px; border: 0.5px solid rgba(0,0,0,0.25); background: transparent; color: #1a1a18; font-size: 14px; cursor: pointer; font-family: inherit; }
+  .restart-btn:hover { background: #f1efe8; }
+  .review-list { text-align: left; margin-top: 1.5rem; display: flex; flex-direction: column; gap: 10px; }
+  .review-item { padding: 10px 14px; border-radius: 8px; font-size: 13px; line-height: 1.5; }
+  .review-item.c { background: #eaf3de; color: #3b6d11; border: 0.5px solid #97c459; }
+  .review-item.w { background: #fcebeb; color: #a32d2d; border: 0.5px solid #f09595; }
+</style>
+</head>
+<body>
+<div id="quiz">
+  <h1>Earth's Environments</h1>
+  <p class="subtitle">30 questions across 11 biomes — how well do you know our planet?</p>
+</div>
+<script>
+const questions = [
+  {env:"Tropical Rainforest",color:"#1D9E75",tc:"#04342C",q:"Tropical rainforests cover about 6% of Earth's surface. What percentage of all land-based species do they shelter?",opts:["About 25%","About 50%","About 10%","About 80%"],c:1,fact:"Rainforests are home to around 50% of all land-based species despite covering only a small fraction of Earth's surface. The Amazon alone holds more tree species in one hectare than all of Europe."},
+  {env:"Tropical Rainforest",color:"#1D9E75",tc:"#04342C",q:"What is the name for the highest layer of a rainforest, where the tallest trees poke above the main canopy?",opts:["The canopy","The understory","The emergent layer","The forest floor"],c:2,fact:"The emergent layer sits above the main canopy, sometimes reaching 60m high. Trees here face strong winds and intense sun, so they've developed wide buttress roots for stability and small, waxy leaves to reduce water loss."},
+  {env:"Desert",color:"#BA7517",tc:"#412402",q:"The Sahara is the world's largest hot desert. What fraction of it is actually covered by sand dunes?",opts:["About 75%","About 50%","Around 25%","Less than 10%"],c:2,fact:"Only about 25% of the Sahara is sandy. Most of it is rocky plateaus, gravel plains, and dried river valleys. The image of endless dunes is a popular myth!"},
+  {env:"Desert",color:"#BA7517",tc:"#412402",q:"The Atacama Desert in South America is one of the driest places on Earth. What surprising phenomenon brings life-sustaining moisture to it?",opts:["Underground rivers","Coastal fog called 'camanchaca'","Annual monsoon rains","Glacial meltwater streams"],c:1,fact:"Dense coastal fog known as 'camanchaca' rolls in from the Pacific Ocean. Specially adapted plants called 'lomas' capture this fog on their leaves and funnel it to their roots — an entire ecosystem powered by mist, not rain."},
+  {env:"Deep Ocean",color:"#185FA5",tc:"#042C53",q:"The deep ocean (below 200m) makes up about 95% of Earth's living space. Which of these is NOT a real deep-sea adaptation?",opts:["Bioluminescence","Antifreeze proteins in blood","Transparent skin and organs","Photosynthesis using UV rays"],c:3,fact:"No sunlight reaches the deep ocean, so photosynthesis is impossible there. Instead, deep-sea ecosystems are often powered by chemosynthesis — organisms harvest energy from chemical reactions around hydrothermal vents."},
+  {env:"Deep Ocean",color:"#185FA5",tc:"#042C53",q:"Hydrothermal vents on the ocean floor support rich ecosystems. What is the primary energy source for these communities?",opts:["Sunlight filtered from above","Chemical energy from hydrogen sulfide","Organic matter sinking from the surface","Radioactive decay in the rock"],c:1,fact:"Chemosynthetic bacteria oxidise hydrogen sulfide pouring from the vents, converting it into organic matter. These bacteria form the base of an entire food web — including tube worms, clams, and shrimp — completely independent of sunlight."},
+  {env:"Arctic Tundra",color:"#534AB7",tc:"#26215C",q:"Arctic tundra soil contains a layer called permafrost. Why is melting permafrost a serious concern for climate change?",opts:["It floods coastal cities directly","It releases huge stores of methane and CO₂","It destroys the ozone layer","It acidifies ocean water"],c:1,fact:"Permafrost locks in ancient organic matter accumulated over thousands of years. As it thaws, microbes decompose this matter and release methane and CO₂ — powerful greenhouse gases — creating a dangerous self-reinforcing feedback loop."},
+  {env:"Arctic Tundra",color:"#534AB7",tc:"#26215C",q:"Which animal is considered a keystone species of the Arctic tundra, dramatically shaping its vegetation?",opts:["Arctic fox","Snowy owl","Caribou/Reindeer","Musk ox"],c:2,fact:"Caribou (reindeer) migrate in massive herds and their grazing, trampling, and digging profoundly shapes tundra plant communities. Their hooves also churn up soil, affecting how much heat it absorbs — they literally influence local climate."},
+  {env:"Savanna",color:"#993C1D",tc:"#4A1B0C",q:"African savannas have a remarkable relationship between trees and large herbivores. What role do elephants play?",opts:["They plant tree seeds by burying them","They act as 'ecosystem engineers' by uprooting trees","They pollinate acacia flowers","They prevent wildfires by clearing dry grass"],c:1,fact:"Elephants knock over and uproot trees, maintaining the open grassland structure of savannas. Without them, savannas would become denser woodland. They're ecosystem engineers — shaping the entire landscape for thousands of species."},
+  {env:"Savanna",color:"#993C1D",tc:"#4A1B0C",q:"Fires are common in savannas. What is their ecological role?",opts:["They are purely destructive and slow recovery","They are a natural and necessary part of the ecosystem","They only occur due to human activity","They permanently destroy soil nutrients"],c:1,fact:"Savanna fires are a vital ecological process. They clear dead vegetation, recycle nutrients back into the soil, control tree density, and trigger seed germination in fire-adapted plants. Many savanna species have evolved specifically to depend on periodic burning."},
+  {env:"Coral Reef",color:"#D4537E",tc:"#4B1528",q:"What actually causes coral bleaching?",opts:["Oil spills coating the coral","Stressed corals expelling their symbiotic algae","Overfishing removing cleaner species","Sediment permanently blocking sunlight"],c:1,fact:"Corals get their colour from zooxanthellae — tiny symbiotic algae in their tissue. When stressed by warm water or pollution, corals expel these algae, turning white. Without the algae, the coral slowly starves unless conditions improve."},
+  {env:"Coral Reef",color:"#D4537E",tc:"#4B1528",q:"The Great Barrier Reef is the world's largest coral reef system. Roughly how many species of fish does it support?",opts:["Around 500","Around 1,500","Around 3,000","Around 5,000"],c:1,fact:"The Great Barrier Reef supports over 1,500 species of fish, along with 4,000 types of mollusc, 240 species of birds, and countless other organisms. It's one of the most biodiverse ecosystems on the planet."},
+  {env:"Wetlands",color:"#0F6E56",tc:"#04342C",q:"Wetlands are called 'the kidneys of the Earth.' What ecosystem service best earns them this nickname?",opts:["They produce the most oxygen of any biome","They filter and purify water naturally","They store the most carbon per hectare","They regulate ocean salt levels"],c:1,fact:"Wetlands filter pollutants, excess nutrients, and sediments from water — much like kidneys filter blood. A single acre of wetland can filter millions of gallons of water per year, protecting drinking water and downstream ecosystems."},
+  {env:"Wetlands",color:"#0F6E56",tc:"#04342C",q:"Which type of wetland is the world's largest, spanning about 150,000 km² in South America?",opts:["The Everglades","The Okavango Delta","The Pantanal","The Sundarbans"],c:2,fact:"The Pantanal in Brazil, Bolivia, and Paraguay is the world's largest tropical wetland. It hosts jaguars, giant river otters, capybaras, and hundreds of bird species. It floods seasonally, creating a constantly shifting mosaic of habitats."},
+  {env:"Temperate Forest",color:"#3B6D11",tc:"#173404",q:"Trees in temperate forests communicate and share resources underground. What network makes this possible?",opts:["Root grafts joining trees","Mycorrhizal fungal networks","Pheromone signals in soil water","Electrical pulses through shared root cells"],c:1,fact:"The mycorrhizal network — nicknamed the 'Wood Wide Web' — connects trees via fungal threads. Trees use it to share sugars, water, and even warning signals about insect attacks. A single old tree can be connected to hundreds of neighbours."},
+  {env:"Temperate Forest",color:"#3B6D11",tc:"#173404",q:"Why do many temperate forest trees shed their leaves in autumn?",opts:["To reduce weight before winter storms","To conserve water and energy during cold, low-light months","To release seeds more effectively","To allow sunlight to reach the forest floor for understory plants"],c:1,fact:"Deciduous trees shed leaves to avoid losing water through transpiration when the ground is frozen and water uptake is impossible. Before dropping them, trees reabsorb valuable nutrients — the breakdown of green chlorophyll reveals the red and orange pigments we associate with autumn."},
+  {env:"Grasslands",color:"#888780",tc:"#2C2C2A",q:"Which statement about grassland soils is TRUE?",opts:["They have the thinnest topsoil of any biome","Their soils are among the most fertile on Earth","They store almost no carbon compared to forests","Their soil is largely sand and clay with few nutrients"],c:1,fact:"Grassland soils are incredibly fertile — centuries of decaying grass and roots create deep, nutrient-rich topsoil. Much of the world's most productive farmland was once grassland. The North American prairies and Ukrainian steppes feed much of humanity."},
+  {env:"Grasslands",color:"#888780",tc:"#2C2C2A",q:"Prairie dog towns were once a defining feature of North American grasslands. Why are they considered a keystone species?",opts:["They are the main predators of grass-eating insects","Their burrows create habitat used by over 200 other species","They fix nitrogen into the soil like legumes","They control wildfires by digging firebreaks"],c:1,fact:"Prairie dog burrows are used by burrowing owls, black-footed ferrets, rattlesnakes, and many other species. Their grazing stimulates grass growth and their mounds create microhabitats. The near-extinction of prairie dogs caused a cascade of losses across the entire grassland ecosystem."},
+  {env:"Mangroves",color:"#1D9E75",tc:"#04342C",q:"Mangrove forests store carbon up to how many times faster than tropical rainforests?",opts:["Twice as fast","4 times faster","10 times faster","At the same rate"],c:1,fact:"Mangroves are carbon-storing superstars — they sequester carbon up to 4 times faster than tropical rainforests. They also protect coastlines from storm surges, serve as nurseries for up to 75% of tropical fish species, and stabilise shorelines."},
+  {env:"Mangroves",color:"#1D9E75",tc:"#04342C",q:"Mangrove trees survive in saltwater, which would kill most plants. How do they cope with the salt?",opts:["They convert salt into sugars for energy","They exclude or excrete salt through specialised roots and leaves","They absorb salt into bark where it can't damage cells","They dilute salt by absorbing extra freshwater from rain"],c:1,fact:"Mangroves have evolved remarkable salt-management strategies. Some species have ultra-filtering roots that block up to 90% of salt from entering. Others actively excrete salt through salt glands on their leaves — you can actually taste it if you lick a mangrove leaf!"},
+  {env:"Alpine",color:"#7F77DD",tc:"#26215C",q:"Alpine environments exist above the tree line on mountains. What is the main reason trees cannot grow above this altitude?",opts:["Soil is too thin to anchor roots","Temperature and wind damage new growth faster than it can recover","UV radiation at altitude destroys chlorophyll","Snowfall buries trees for too many months per year"],c:1,fact:"Above the tree line, growing seasons are extremely short and cold, and powerful winds physically damage new shoots and desiccate tissue. Trees simply can't repair damage and grow fast enough to survive. Plants instead evolve to grow low, cushion-shaped, and slow."},
+  {env:"Alpine",color:"#7F77DD",tc:"#26215C",q:"How have alpine plants adapted to cold, windy conditions?",opts:["They grow very tall to catch more sunlight","They grow in low cushion or rosette shapes to stay out of the wind","They go dormant for the entire year except one week","They produce antifreeze chemicals that let them grow in snow"],c:1,fact:"Alpine plants grow in tight, low cushions that create their own microclimate — temperatures inside the cushion can be 10°C warmer than the surrounding air. They also have deep root systems, hairy surfaces to trap warmth, and dark pigmentation to absorb more solar radiation."},
+  {env:"Kelp Forest",color:"#185FA5",tc:"#042C53",q:"Kelp forests are found in cold, nutrient-rich coastal waters. How fast can giant kelp grow under ideal conditions?",opts:["About 1 cm per day","Up to 60 cm per day","About 10 cm per week","About 1 metre per month"],c:1,fact:"Giant kelp (Macrocystis pyrifera) can grow up to 60 cm (2 feet) in a single day — one of the fastest growth rates of any organism on Earth. It can reach 45 metres tall, creating towering underwater forests that shelter thousands of species."},
+  {env:"Kelp Forest",color:"#185FA5",tc:"#042C53",q:"Sea otters are a keystone species in kelp forests. What happens to kelp forests when sea otters are removed?",opts:["Kelp grows denser because there are fewer grazers","Sea urchin populations explode and devour the kelp","Fish overpopulate and shade out the kelp","Water temperature drops and kelp dies off"],c:1,fact:"Sea otters eat sea urchins. Without otters, urchin populations explode and graze kelp down to bare rock, creating 'urchin barrens'. When otters are reintroduced, urchins retreat, kelp recovers, and the entire ecosystem rebounds — a textbook example of a keystone species."},
+  {env:"Boreal Forest",color:"#27500A",tc:"#173404",q:"The boreal forest (taiga) is Earth's largest land biome. Which country contains the most boreal forest?",opts:["Canada","Finland","USA","Russia"],c:3,fact:"Russia contains about 60% of the world's boreal forest, making it the single largest forested nation on Earth. The Siberian taiga alone spans more area than the entire continental United States. Canada is second, holding about 30% of the global total."},
+  {env:"Boreal Forest",color:"#27500A",tc:"#173404",q:"Boreal forests are dominated by conifers like spruce and pine. Why are conifer needle-shaped leaves an advantage in this biome?",opts:["Needles photosynthesize faster than broad leaves","Needles reduce water loss, snow load, and wind resistance","Needles produce more seeds than broad leaves","Needles store more sugar for winter energy reserves"],c:1,fact:"Needle-shaped leaves have a tiny surface area, reducing water loss in cold dry winters, shedding snow load to prevent branch breakage, and minimising wind resistance. Keeping their leaves year-round also lets conifers begin photosynthesising immediately when temperatures rise in spring."},
+  {env:"Estuary",color:"#0F6E56",tc:"#04342C",q:"Estuaries are where rivers meet the sea. Why are they among the most productive ecosystems on Earth despite constant environmental stress?",opts:["They receive nutrients from both river and ocean currents","The mixing of salt and fresh water creates unique chemical energy","They are protected from weather by surrounding land","They lack predators, so populations grow unchecked"],c:0,fact:"Estuaries receive a constant supply of nutrients washed down from rivers (sediment, minerals, organic matter) AND from tidal ocean water. This double nutrient supply, combined with shallow sunlit water, produces extraordinary biological productivity — they're the nurseries of the sea."},
+  {env:"Estuary",color:"#0F6E56",tc:"#04342C",q:"Many fish species that live in the open ocean are born in estuaries. What term describes animals that move between salt and fresh water during their life cycle?",opts:["Eurythermal","Diadromous","Halophytic","Amphipathic"],c:1,fact:"Diadromous species migrate between freshwater and saltwater. Salmon (anadromous) are born in freshwater, mature in the sea, then return to freshwater to spawn. Eels (catadromous) do the reverse. Estuaries are the critical transition zones for both journeys."},
+  {env:"Polar Ice",color:"#AFA9EC",tc:"#26215C",q:"Antarctic ice sheets hold about 70% of Earth's fresh water. If the entire West Antarctic Ice Sheet melted, by roughly how much would sea levels rise?",opts:["About 0.5 metres","About 3 metres","About 6 metres","About 15 metres"],c:1,fact:"The West Antarctic Ice Sheet alone contains enough ice to raise global sea levels by roughly 3–5 metres if it fully melted. The entire Antarctic ice sheet, if it melted completely, would raise sea levels by around 60 metres — though this would take millennia under any realistic scenario."},
+  {env:"Polar Ice",color:"#AFA9EC",tc:"#26215C",q:"Sea ice plays a vital role in regulating Earth's climate. What is the key mechanism called?",opts:["The thermohaline circulation","The albedo effect","The cryosphere feedback","The polar vortex stabilisation"],c:1,fact:"White sea ice reflects up to 90% of incoming solar radiation back into space — a high albedo. When ice melts, the dark ocean beneath absorbs up to 94% of that same radiation, warming rapidly. This creates a powerful amplifying feedback loop that accelerates Arctic warming."},
+];
+
+let current=0,score=0,answered=false;
+const results=new Array(questions.length).fill(null);
+
+function renderProgress(){
+  return questions.map((_,i)=>{
+    let cls='pip';
+    if(results[i]===true)cls+=' done-correct';
+    else if(results[i]===false)cls+=' done-wrong';
+    else if(i===current)cls+=' active';
+    return`<div class="${cls}"></div>`;
+  }).join('');
+}
+
+function render(){
+  const el=document.getElementById('quiz');
+  const header=`<h1>Earth's Environments</h1><p class="subtitle">30 questions across 11 biomes — how well do you know our planet?</p>`;
+  if(current>=questions.length){
+    const pct=Math.round((score/questions.length)*100);
+    const msg=pct>=80?"Outstanding! You have a genuinely deep understanding of Earth's environments.":
+              pct>=60?"Great effort! You know your biomes well — a few surprises in there, perhaps?":
+              pct>=40?"Not bad! Earth's environments are full of unexpected facts. Worth exploring more!":
+              "Keep exploring! Our planet's environments are endlessly fascinating — this is just the beginning.";
+    const review=questions.map((q,i)=>`
+      <div class="review-item ${results[i]?'c':'w'}">
+        <strong>${q.env}</strong> — ${results[i]?'Correct':'Incorrect'}. ${q.fact}
+      </div>`).join('');
+    el.innerHTML=header+`
+      <div class="score-card">
+        <div class="score-num">${score}/${questions.length}</div>
+        <div class="score-label">${pct}% correct</div>
+        <p class="score-msg">${msg}</p>
+        <button class="restart-btn" onclick="restart()">Try again</button>
+        <div class="review-list">${review}</div>
+      </div>`;
+    return;
+  }
+  const q=questions[current];
+  el.innerHTML=header+`
+    <div class="progress">${renderProgress()}</div>
+    <div class="meta">Question ${current+1} of ${questions.length}</div>
+    <div class="question-card">
+      <span class="env-badge" style="background:${q.color}22;color:${q.tc};border:0.5px solid ${q.color}66">${q.env}</span>
+      <p class="q-text">${q.q}</p>
+      <div class="options">
+        ${q.opts.map((o,i)=>`<button class="opt" id="opt${i}" onclick="answer(${i})">${o}</button>`).join('')}
+      </div>
+      <div class="feedback" id="fb"></div>
+      <button class="next-btn" id="nxt" onclick="next()">${current<questions.length-1?'Next question':'See results'}</button>
+    </div>`;
+}
+
+function answer(i){
+  if(answered)return;
+  answered=true;
+  const q=questions[current];
+  const correct=i===q.c;
+  results[current]=correct;
+  if(correct)score++;
+  document.querySelectorAll('.opt').forEach((b,idx)=>{
+    b.disabled=true;
+    if(idx===q.c)b.classList.add('correct');
+    else if(idx===i&&!correct)b.classList.add('wrong');
+  });
+  const fb=document.getElementById('fb');
+  fb.className='feedback show '+(correct?'correct':'wrong');
+  fb.innerHTML=(correct?'<strong>Correct!</strong> ':`<strong>Not quite.</strong> The answer was: <em>${q.opts[q.c]}</em>. `)+q.fact;
+  document.getElementById('nxt').className='next-btn show';
+  document.querySelector('.progress').innerHTML=renderProgress();
+}
+
+function next(){current++;answered=false;render();}
+function restart(){current=0;score=0;answered=false;results.fill(null);render();}
+render();
+</script>
+</body>
+</html>
