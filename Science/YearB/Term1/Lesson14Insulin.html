@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Recombinant DNA & Diabetes Quiz</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: system-ui, -apple-system, sans-serif; background: #f5f4f0; color: #1a1a18; min-height: 100vh; padding: 2rem 1rem; }
+  #quiz { max-width: 680px; margin: 0 auto; }
+  h1 { font-size: 22px; font-weight: 500; margin-bottom: 0.25rem; }
+  .subtitle { font-size: 14px; color: #5f5e5a; margin-bottom: 2rem; }
+  .env-badge { display: inline-block; font-size: 12px; font-weight: 500; padding: 4px 12px; border-radius: 8px; margin-bottom: 12px; }
+  .question-card { background: #fff; border: 0.5px solid rgba(0,0,0,0.12); border-radius: 12px; padding: 1.25rem 1.5rem; margin-bottom: 1rem; }
+  .q-text { font-size: 17px; font-weight: 500; margin-bottom: 1.25rem; line-height: 1.5; }
+  .options { display: flex; flex-direction: column; gap: 8px; }
+  .opt { background: #f1efe8; border: 0.5px solid rgba(0,0,0,0.12); border-radius: 8px; padding: 12px 16px; font-size: 15px; color: #1a1a18; cursor: pointer; text-align: left; transition: background 0.15s, border-color 0.15s; font-family: inherit; }
+  .opt:hover:not(:disabled) { background: #e4e2da; border-color: rgba(0,0,0,0.25); }
+  .opt.correct { background: #eaf3de; border-color: #639922; color: #27500a; }
+  .opt.wrong { background: #fcebeb; border-color: #e24b4a; color: #501313; }
+  .opt:disabled { cursor: default; }
+  .feedback { margin-top: 1rem; padding: 12px 16px; border-radius: 8px; font-size: 14px; line-height: 1.6; display: none; }
+  .feedback.show { display: block; }
+  .feedback.correct { background: #eaf3de; color: #3b6d11; border: 0.5px solid #97c459; }
+  .feedback.wrong { background: #fcebeb; color: #a32d2d; border: 0.5px solid #f09595; }
+  .next-btn { margin-top: 1rem; padding: 10px 24px; border-radius: 8px; border: 0.5px solid rgba(0,0,0,0.25); background: transparent; color: #1a1a18; font-size: 14px; cursor: pointer; display: none; font-family: inherit; }
+  .next-btn.show { display: inline-block; }
+  .next-btn:hover { background: #f1efe8; }
+  .progress { display: flex; gap: 5px; margin-bottom: 1.25rem; flex-wrap: wrap; }
+  .pip { width: 18px; height: 6px; border-radius: 3px; background: rgba(0,0,0,0.12); }
+  .pip.done-correct { background: #639922; }
+  .pip.done-wrong { background: #e24b4a; }
+  .pip.active { background: #378add; }
+  .meta { font-size: 13px; color: #5f5e5a; margin-bottom: 1.5rem; }
+  .score-card { background: #fff; border: 0.5px solid rgba(0,0,0,0.12); border-radius: 12px; padding: 2rem; text-align: center; }
+  .score-num { font-size: 56px; font-weight: 500; line-height: 1; }
+  .score-label { font-size: 15px; color: #5f5e5a; margin-top: 6px; }
+  .score-msg { font-size: 16px; margin: 1.25rem 0; line-height: 1.6; }
+  .restart-btn { padding: 10px 28px; border-radius: 8px; border: 0.5px solid rgba(0,0,0,0.25); background: transparent; color: #1a1a18; font-size: 14px; cursor: pointer; font-family: inherit; }
+  .restart-btn:hover { background: #f1efe8; }
+  .review-list { text-align: left; margin-top: 1.5rem; display: flex; flex-direction: column; gap: 10px; }
+  .review-item { padding: 10px 14px; border-radius: 8px; font-size: 13px; line-height: 1.5; }
+  .review-item.c { background: #eaf3de; color: #3b6d11; border: 0.5px solid #97c459; }
+  .review-item.w { background: #fcebeb; color: #a32d2d; border: 0.5px solid #f09595; }
+</style>
+</head>
+<body>
+<div id="quiz">
+  <h1>Recombinant DNA & Diabetes</h1>
+  <p class="subtitle">10 questions — genetic technology in medicine and how it changed diabetes treatment</p>
+</div>
+<script>
+// Answer key (0-indexed): Q1=A(0), Q2=C(2), Q3=D(3), Q4=B(1), Q5=B(1), Q6=A(0), Q7=D(3), Q8=C(2), Q9=A(0), Q10=B(1)
+const questions = [
+  {
+    env:"Type 1 vs Type 2 Diabetes",
+    color:"#C0392B", tc:"#4A0D0D",
+    q:"What is the key difference between Type 1 and Type 2 diabetes?",
+    opts:[
+      "Type 1 is genetic — the immune system destroys insulin-producing cells; Type 2 is mainly lifestyle-related with reduced insulin response",
+      "Type 1 only affects children; Type 2 only affects adults",
+      "Type 1 is caused by diet; Type 2 is caused by a virus",
+      "Type 1 and Type 2 are exactly the same disease with different names"
+    ],
+    c:0,
+    fact:"Type 1 diabetes is an autoimmune disease — the body's immune system mistakenly attacks and destroys the beta cells in the pancreas that make insulin. Because it's caused by a genetic fault, the person cannot produce insulin at all. Type 2 is different: the body still makes some insulin but cells don't respond to it properly, and it is strongly linked to lifestyle factors like diet and exercise."
+  },
+  {
+    env:"Type 1 vs Type 2 Diabetes",
+    color:"#C0392B", tc:"#4A0D0D",
+    q:"Why do people with Type 1 diabetes need to inject insulin every day, but many people with Type 2 diabetes do not?",
+    opts:[
+      "Type 2 patients are cured by surgery so they no longer need insulin",
+      "Injected insulin only works for Type 1 patients",
+      "People with Type 1 have destroyed beta cells and cannot make any insulin themselves",
+      "People with Type 2 produce no insulin at all, so they don't need it"
+    ],
+    c:2,
+    fact:"Because Type 1 destroys all the insulin-producing beta cells, the body makes zero insulin. Without insulin, glucose cannot enter cells and builds up dangerously in the blood. Daily injections replace the hormone the body can no longer produce. Many Type 2 patients can manage with diet, exercise, or tablets because their pancreas still produces some insulin — just not enough, or cells resist it."
+  },
+  {
+    env:"Insulin & the Pancreas",
+    color:"#1A6EA8", tc:"#0B2E4A",
+    q:"What is the role of insulin in the body?",
+    opts:[
+      "It carries oxygen to muscles during exercise",
+      "It destroys bacteria in the bloodstream",
+      "It breaks down food in the stomach",
+      "It signals cells to absorb glucose from the blood, lowering blood sugar levels"
+    ],
+    c:3,
+    fact:"Insulin is a hormone made by beta cells in the pancreas. When you eat, blood glucose rises. Insulin acts like a 'key' — it binds to receptors on body cells and unlocks them so glucose can enter and be used for energy. Without insulin, glucose stays trapped in the blood, which damages blood vessels, organs, and nerves over time."
+  },
+  {
+    env:"Insulin & the Pancreas",
+    color:"#1A6EA8", tc:"#0B2E4A",
+    q:"Before recombinant DNA technology, where did insulin for diabetics come from?",
+    opts:[
+      "It was made completely in a laboratory from chemicals",
+      "It was extracted from the pancreases of pigs and cows",
+      "Patients had to produce their own insulin using meditation techniques",
+      "It was grown in greenhouses using special plants"
+    ],
+    c:1,
+    fact:"Until the 1980s, insulin was extracted from the pancreases of slaughtered pigs and cattle. It took enormous numbers of animal organs to produce small amounts — around 2 kg of pig pancreases to make just 8 grams of insulin. It was expensive, in limited supply, and some patients had allergic reactions because animal insulin is slightly different from human insulin."
+  },
+  {
+    env:"Recombinant DNA Technology",
+    color:"#1D7A3A", tc:"#0A3318",
+    q:"What does 'recombinant DNA' mean?",
+    opts:[
+      "DNA that has mutated naturally inside a living organism",
+      "DNA from two different sources that has been joined together",
+      "DNA copied from a fossil using ancient techniques",
+      "DNA that has been destroyed and rebuilt inside a cell"
+    ],
+    c:1,
+    fact:"Recombinant DNA is made by combining DNA from two different organisms — cutting out a gene from one organism and inserting it into another. The word 'recombinant' means 'put together in a new combination.' This is the core technique that allowed scientists to put the human insulin gene into bacteria."
+  },
+  {
+    env:"Recombinant DNA Technology",
+    color:"#1D7A3A", tc:"#0A3318",
+    q:"Which tool do scientists use to cut DNA at a specific location — like molecular scissors?",
+    opts:[
+      "Restriction enzymes",
+      "Ribosomes",
+      "Gel electrophoresis",
+      "Polymerase chain reaction (PCR)"
+    ],
+    c:0,
+    fact:"Restriction enzymes are proteins that cut DNA at specific sequences — they recognise a short sequence of bases and slice through the double helix at that exact spot. Different restriction enzymes cut at different sequences. They were originally discovered in bacteria, where they act as a defence mechanism against viruses. Scientists use them as precise molecular scissors to cut out genes of interest."
+  },
+  {
+    env:"Recombinant DNA Technology",
+    color:"#1D7A3A", tc:"#0A3318",
+    q:"After the human insulin gene is cut out, it is inserted into a small circular piece of bacterial DNA. What is this circular DNA called?",
+    opts:[
+      "A codon",
+      "A ribosome",
+      "A chromosome",
+      "A plasmid"
+    ],
+    c:3,
+    fact:"Plasmids are small, circular loops of DNA found naturally in bacteria. They exist separately from the bacteria's main chromosome and can replicate independently. Scientists use plasmids as 'vectors' — delivery vehicles that carry the inserted gene into bacterial cells. When bacteria reproduce, they copy the plasmid too, creating millions of copies of the human gene."
+  },
+  {
+    env:"Making Insulin with Bacteria",
+    color:"#7B3FA0", tc:"#2E0E3E",
+    q:"Why are bacteria so useful for producing human insulin in large quantities?",
+    opts:[
+      "Bacteria are the only organisms that have ribosomes for making proteins",
+      "Bacteria produce insulin naturally without any genetic modification",
+      "Bacteria reproduce extremely rapidly and follow the same genetic code, so they read the human insulin gene and produce human insulin protein",
+      "Bacteria are the only organisms that can read human DNA"
+    ],
+    c:2,
+    fact:"The genetic code is universal — almost all living things use the same codons to code for the same amino acids. This means when the human insulin gene is placed inside bacteria, the bacterial ribosomes can read it and produce human insulin protein. Bacteria also reproduce every 20 minutes under good conditions, so a small vat of bacteria can produce billions of insulin molecules in hours. This is why recombinant insulin is cheap and available in huge quantities."
+  },
+  {
+    env:"Making Insulin with Bacteria",
+    color:"#7B3FA0", tc:"#2E0E3E",
+    q:"What is the correct order of steps for producing recombinant human insulin?",
+    opts:[
+      "Cut human insulin gene from DNA → insert into plasmid → put plasmid into bacteria → bacteria produce insulin → purify and package",
+      "Copy insulin from a cow → modify it chemically → test on patients → mass produce",
+      "Inject bacteria into humans → bacteria make insulin inside the body → collect insulin from blood",
+      "Insert gene into bacteria → cut gene from human DNA → bacteria produce insulin → purify insulin"
+    ],
+    c:0,
+    fact:"The process follows a clear sequence: (1) Locate and cut out the human insulin gene using restriction enzymes. (2) Cut open a plasmid with the same enzyme so the ends match. (3) Join the gene into the plasmid using ligase enzyme — the 'molecular glue.' (4) Insert the recombinant plasmid into bacteria. (5) Grow the bacteria in large fermentation tanks. (6) Extract, purify, and package the insulin. This is exactly how Humulin — the world's first recombinant medicine — was made in 1982."
+  },
+  {
+    env:"Impact of Recombinant DNA",
+    color:"#BA7517", tc:"#412402",
+    q:"Three of these statements about recombinant insulin are TRUE. Which one is FALSE?",
+    opts:[
+      "It permanently cures Type 1 diabetes — patients no longer need daily injections",
+      "It matches human insulin exactly, so patients are less likely to have allergic reactions",
+      "It can be produced in large quantities inside bacterial fermentation tanks",
+      "It is cheaper and more consistent in quality than insulin extracted from animal pancreases"
+    ],
+    c:0,
+    fact:"Recombinant insulin does NOT cure diabetes — it simply replaces the hormone the body can no longer make. People with Type 1 diabetes still need daily injections or an insulin pump for the rest of their lives. The three TRUE advantages are: it matches human insulin exactly (fewer allergic reactions), it can be made in massive quantities in bioreactors, and it is cheaper and more consistent than animal-extracted insulin. A life-changing breakthrough — but not a cure."
+  }
+];
+
+let current=0,score=0,answered=false;
+const results=new Array(questions.length).fill(null);
+
+function renderProgress(){
+  return questions.map((_,i)=>{
+    let cls='pip';
+    if(results[i]===true)cls+=' done-correct';
+    else if(results[i]===false)cls+=' done-wrong';
+    else if(i===current)cls+=' active';
+    return`<div class="${cls}"></div>`;
+  }).join('');
+}
+
+function render(){
+  const el=document.getElementById('quiz');
+  const header=`<h1>Recombinant DNA & Diabetes</h1><p class="subtitle">10 questions — genetic technology in medicine and how it changed diabetes treatment</p>`;
+  if(current>=questions.length){
+    const pct=Math.round((score/questions.length)*100);
+    const msg=pct>=80?"Excellent work! You have a strong understanding of recombinant DNA technology and diabetes.":
+              pct>=60?"Good effort! You understand most of the key ideas — review the ones you missed below.":
+              pct>=40?"Keep going! These are tricky concepts. Read through the explanations below to build your understanding.":
+              "Don't worry — recombinant DNA is complex! Read through each explanation below and try again.";
+    const review=questions.map((q,i)=>`
+      <div class="review-item ${results[i]?'c':'w'}">
+        <strong>${q.env}</strong> — ${results[i]?'✓ Correct':'✗ Incorrect. The answer was: <em>'+q.opts[q.c]+'</em>'}. ${q.fact}
+      </div>`).join('');
+    el.innerHTML=header+`
+      <div class="score-card">
+        <div class="score-num">${score}/${questions.length}</div>
+        <div class="score-label">${pct}% correct</div>
+        <p class="score-msg">${msg}</p>
+        <button class="restart-btn" onclick="restart()">Try again</button>
+        <div class="review-list">${review}</div>
+      </div>`;
+    return;
+  }
+  const q=questions[current];
+  el.innerHTML=header+`
+    <div class="progress">${renderProgress()}</div>
+    <div class="meta">Question ${current+1} of ${questions.length}</div>
+    <div class="question-card">
+      <span class="env-badge" style="background:${q.color}22;color:${q.tc};border:0.5px solid ${q.color}66">${q.env}</span>
+      <p class="q-text">${q.q}</p>
+      <div class="options">
+        ${q.opts.map((o,i)=>`<button class="opt" id="opt${i}" onclick="answer(${i})">${o}</button>`).join('')}
+      </div>
+      <div class="feedback" id="fb"></div>
+      <button class="next-btn" id="nxt" onclick="next()">${current<questions.length-1?'Next question':'See results'}</button>
+    </div>`;
+}
+
+function answer(i){
+  if(answered)return;
+  answered=true;
+  const q=questions[current];
+  const correct=i===q.c;
+  results[current]=correct;
+  if(correct)score++;
+  document.querySelectorAll('.opt').forEach((b,idx)=>{
+    b.disabled=true;
+    if(idx===q.c)b.classList.add('correct');
+    else if(idx===i&&!correct)b.classList.add('wrong');
+  });
+  const fb=document.getElementById('fb');
+  fb.className='feedback show '+(correct?'correct':'wrong');
+  fb.innerHTML=(correct?'<strong>Correct!</strong> ':`<strong>Not quite.</strong> The answer was: <em>${q.opts[q.c]}</em>. `)+q.fact;
+  document.getElementById('nxt').className='next-btn show';
+  document.querySelector('.progress').innerHTML=renderProgress();
+}
+
+function next(){current++;answered=false;render();}
+function restart(){current=0;score=0;answered=false;results.fill(null);render();}
+render();
+</script>
+</body>
+</html>
