@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Deep Ocean</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,-apple-system,sans-serif;background:#0a0e1a;color:#fff;height:100vh;overflow:hidden;display:flex;flex-direction:column}
+.slideshow{flex:1;position:relative;overflow:hidden}
+.slide{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:2.5rem;opacity:0;pointer-events:none;transition:opacity 0.35s}
+.slide.active{opacity:1;pointer-events:all}
+.slide-inner{max-width:860px;width:100%}
+.nav{display:flex;align-items:center;justify-content:space-between;padding:0.75rem 2rem;border-top:0.5px solid rgba(255,255,255,0.1);background:#0a0e1a;flex-shrink:0}
+.nav-btn{background:transparent;border:0.5px solid rgba(255,255,255,0.3);color:#fff;padding:7px 18px;border-radius:8px;cursor:pointer;font-size:13px;font-family:inherit}
+.nav-btn:hover{background:rgba(255,255,255,0.08)}
+.nav-btn:disabled{opacity:0.2;cursor:default}
+.counter{font-size:12px;color:rgba(255,255,255,0.4)}
+.pips{display:flex;gap:5px;align-items:center}
+.pip{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,0.2);cursor:pointer;transition:all 0.2s}
+.pip.on{background:#378ADD;width:16px;border-radius:3px}
+
+/* Title slide */
+.s-title .tag{font-size:12px;letter-spacing:0.1em;color:#378ADD;text-transform:uppercase;margin-bottom:0.75rem}
+.s-title h1{font-size:48px;font-weight:500;line-height:1.1;margin-bottom:1.25rem}
+.accent{width:40px;height:3px;background:#378ADD;border-radius:2px;margin-bottom:1.25rem}
+.s-title .sub{font-size:17px;color:rgba(255,255,255,0.55);line-height:1.6;max-width:540px}
+.stat-row{display:flex;gap:2rem;margin-top:2rem;flex-wrap:wrap}
+.stat-val{font-size:26px;font-weight:500;color:#378ADD}
+.stat-lbl{font-size:12px;color:rgba(255,255,255,0.45);margin-top:2px}
+
+/* Section header */
+.s-sec{text-align:center}
+.s-sec .sec-num{font-size:12px;letter-spacing:0.1em;color:#378ADD;text-transform:uppercase;margin-bottom:0.75rem}
+.s-sec h2{font-size:38px;font-weight:500;margin-bottom:1rem}
+.s-sec p{font-size:16px;color:rgba(255,255,255,0.55);line-height:1.7;max-width:560px;margin:0 auto}
+
+/* Content */
+.s-con h2{font-size:24px;font-weight:500;margin-bottom:1.25rem}
+.ctag{display:inline-block;font-size:11px;font-weight:500;padding:3px 12px;border-radius:20px;background:rgba(55,138,221,0.18);color:#85B7EB;border:0.5px solid rgba(55,138,221,0.35);margin-bottom:0.75rem;letter-spacing:0.05em;text-transform:uppercase}
+
+/* Zones */
+.zones{display:flex;flex-direction:column;gap:7px}
+.zone{border-radius:8px;padding:10px 14px;border:0.5px solid}
+.zn{font-size:13px;font-weight:500;margin-bottom:1px}
+.zd{font-size:11px;margin-bottom:3px;opacity:0.75}
+.zb{font-size:12px;line-height:1.5;opacity:0.8}
+.z1{background:rgba(55,138,221,0.07);border-color:rgba(55,138,221,0.2)}.z1 .zn{color:#85B7EB}.z1 .zd{color:#378ADD}
+.z2{background:rgba(55,138,221,0.13);border-color:rgba(55,138,221,0.28)}.z2 .zn{color:#B5D4F4}.z2 .zd{color:#85B7EB}
+.z3{background:rgba(55,138,221,0.19);border-color:rgba(55,138,221,0.38)}.z3 .zn{color:#E6F1FB}.z3 .zd{color:#B5D4F4}
+.z4{background:rgba(12,68,124,0.45);border-color:rgba(55,138,221,0.45)}.z4 .zn{color:#E6F1FB}.z4 .zd{color:#85B7EB}
+.z5{background:rgba(4,44,83,0.75);border-color:rgba(55,138,221,0.55)}.z5 .zn{color:#E6F1FB}.z5 .zd{color:#85B7EB}
+
+/* Adapt grid */
+.ag{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.ac{background:rgba(255,255,255,0.04);border:0.5px solid rgba(255,255,255,0.1);border-radius:10px;padding:1rem}
+.at{font-size:14px;font-weight:500;color:#85B7EB;margin-bottom:6px}
+.ab{font-size:13px;color:rgba(255,255,255,0.65);line-height:1.55}
+
+/* Features */
+.fg{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.fc{background:rgba(255,255,255,0.04);border:0.5px solid rgba(255,255,255,0.1);border-radius:10px;padding:1rem}
+.fh{font-size:12px;font-weight:500;color:#378ADD;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:6px}
+.fb{font-size:13px;color:rgba(255,255,255,0.65);line-height:1.55}
+
+/* Threats */
+.tl{display:flex;flex-direction:column;gap:10px}
+.ti{display:flex;gap:12px;align-items:flex-start;background:rgba(226,75,74,0.07);border:0.5px solid rgba(226,75,74,0.22);border-radius:9px;padding:12px}
+.td{width:7px;height:7px;border-radius:50%;background:#E24B4A;flex-shrink:0;margin-top:4px}
+.tt{font-size:13px;font-weight:500;color:#F09595;margin-bottom:3px}
+.tb{font-size:13px;color:rgba(255,255,255,0.6);line-height:1.5}
+
+/* Quiz slide */
+.s-quiz{justify-content:flex-start;overflow-y:auto;padding-top:1.5rem}
+.qw{max-width:680px;width:100%;margin:0 auto}
+.qbadge{display:inline-block;font-size:11px;font-weight:500;padding:3px 12px;border-radius:20px;background:rgba(55,138,221,0.18);color:#85B7EB;border:0.5px solid rgba(55,138,221,0.35);margin-bottom:8px;letter-spacing:0.05em;text-transform:uppercase}
+.qcard{background:rgba(255,255,255,0.04);border:0.5px solid rgba(255,255,255,0.1);border-radius:10px;padding:1.25rem 1.5rem;margin-bottom:0.75rem}
+.qt{font-size:16px;font-weight:500;margin-bottom:1.1rem;line-height:1.5;color:#fff}
+.qopts{display:flex;flex-direction:column;gap:7px}
+.qopt{background:rgba(255,255,255,0.06);border:0.5px solid rgba(255,255,255,0.13);border-radius:8px;padding:11px 14px;font-size:14px;color:#fff;cursor:pointer;text-align:left;font-family:inherit;transition:background 0.15s}
+.qopt:hover:not(:disabled){background:rgba(255,255,255,0.11)}
+.qopt.correct{background:rgba(99,153,34,0.18);border-color:#639922;color:#C0DD97}
+.qopt.wrong{background:rgba(226,75,74,0.13);border-color:#E24B4A;color:#F09595}
+.qopt:disabled{cursor:default}
+.qfb{margin-top:0.75rem;padding:10px 14px;border-radius:8px;font-size:13px;line-height:1.6;display:none}
+.qfb.show{display:block}
+.qfb.correct{background:rgba(99,153,34,0.13);color:#C0DD97;border:0.5px solid #639922}
+.qfb.wrong{background:rgba(226,75,74,0.09);color:#F09595;border:0.5px solid #E24B4A}
+.qnxt{margin-top:0.75rem;padding:9px 22px;border-radius:8px;border:0.5px solid rgba(255,255,255,0.28);background:transparent;color:#fff;font-size:13px;cursor:pointer;display:none;font-family:inherit}
+.qnxt.show{display:inline-block}
+.qnxt:hover{background:rgba(255,255,255,0.08)}
+.qprog{display:flex;gap:5px;margin-bottom:1rem;flex-wrap:wrap}
+.qpip{width:26px;height:5px;border-radius:3px;background:rgba(255,255,255,0.13)}
+.qpip.dc{background:#639922}.qpip.dw{background:#E24B4A}.qpip.act{background:#378ADD}
+.qmeta{font-size:12px;color:rgba(255,255,255,0.4);margin-bottom:1rem}
+.sccard{background:rgba(255,255,255,0.04);border:0.5px solid rgba(255,255,255,0.1);border-radius:10px;padding:1.75rem;text-align:center}
+.scnum{font-size:52px;font-weight:500;line-height:1}
+.sclbl{font-size:14px;color:rgba(255,255,255,0.45);margin-top:5px}
+.scmsg{font-size:15px;color:rgba(255,255,255,0.75);margin:1rem 0;line-height:1.6}
+.scbtns{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.scbtn{padding:9px 22px;border-radius:8px;border:0.5px solid rgba(255,255,255,0.28);background:transparent;color:#fff;font-size:13px;cursor:pointer;font-family:inherit}
+.scbtn:hover{background:rgba(255,255,255,0.08)}
+.rlist{text-align:left;margin-top:1.25rem;display:flex;flex-direction:column;gap:7px}
+.ri{padding:9px 13px;border-radius:8px;font-size:12px;line-height:1.5}
+.ri.c{background:rgba(99,153,34,0.1);color:#C0DD97;border:0.5px solid #639922}
+.ri.w{background:rgba(226,75,74,0.09);color:#F09595;border:0.5px solid #E24B4A}
+</style>
+</head>
+<body>
+<div class="slideshow" id="ss">
+
+  <div class="slide s-title active" id="s0">
+    <div class="slide-inner">
+      <div class="tag">Environment fact sheet</div>
+      <h1>The Deep<br>Ocean</h1>
+      <div class="accent"></div>
+      <p class="sub">Earth's largest and least explored habitat — everything you need to know about life below 200 metres.</p>
+      <div class="stat-row">
+        <div><div class="stat-val">95%</div><div class="stat-lbl">of Earth's living space</div></div>
+        <div><div class="stat-val">11 km</div><div class="stat-lbl">deepest point</div></div>
+        <div><div class="stat-val">2°C</div><div class="stat-lbl">average temperature</div></div>
+        <div><div class="stat-val">&lt;5%</div><div class="stat-lbl">explored by humans</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="slide s-sec" id="s1">
+    <div class="slide-inner">
+      <div class="sec-num">Section 1</div>
+      <h2>Depth Zones</h2>
+      <p>The ocean is divided into five distinct layers, each with its own pressure, temperature, light levels, and unique life forms.</p>
+    </div>
+  </div>
+
+  <div class="slide s-con" id="s2">
+    <div class="slide-inner">
+      <span class="ctag">Depth zones</span>
+      <h2>Five layers of the ocean</h2>
+      <div class="zones">
+        <div class="zone z1"><div class="zn">Sunlight zone (epipelagic)</div><div class="zd">0 – 200 m</div><div class="zb">Enough light for photosynthesis. Home to most ocean life. Phytoplankton here produce 50% of Earth's oxygen.</div></div>
+        <div class="zone z2"><div class="zn">Twilight zone (mesopelagic)</div><div class="zd">200 – 1,000 m</div><div class="zb">Dim, fading light. Many creatures migrate vertically each day — the largest daily animal migration on Earth.</div></div>
+        <div class="zone z3"><div class="zn">Midnight zone (bathypelagic)</div><div class="zd">1,000 – 4,000 m</div><div class="zb">Total darkness. Anglerfish and giant squid live here. Bioluminescence is the only light source.</div></div>
+        <div class="zone z4"><div class="zn">Abyssal zone</div><div class="zd">4,000 – 6,000 m</div><div class="zb">Near-freezing, immense pressure. Covers 50%+ of Earth's surface. Hydrothermal vents create oases of life.</div></div>
+        <div class="zone z5"><div class="zn">Hadal zone (trenches)</div><div class="zd">6,000 m+</div><div class="zb">Pressure over 1,000× sea level. Found only in oceanic trenches. Snailfish and amphipods still survive here.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="slide s-sec" id="s3">
+    <div class="slide-inner">
+      <div class="sec-num">Section 2</div>
+      <h2>Key Adaptations</h2>
+      <p>Life in the deep ocean has evolved extraordinary strategies to survive total darkness, crushing pressure, and near-freezing cold.</p>
+    </div>
+  </div>
+
+  <div class="slide s-con" id="s4">
+    <div class="slide-inner">
+      <span class="ctag">Adaptations</span>
+      <h2>How deep-sea life survives</h2>
+      <div class="ag">
+        <div class="ac"><div class="at">Bioluminescence</div><div class="ab">Up to 90% of deep-sea creatures produce their own light to attract prey, find mates, or confuse predators. The most common form of communication on Earth.</div></div>
+        <div class="ac"><div class="at">Chemosynthesis</div><div class="ab">Near hydrothermal vents, bacteria convert hydrogen sulfide into energy — powering entire food webs with zero dependence on the sun.</div></div>
+        <div class="ac"><div class="at">Pressure tolerance</div><div class="ab">Deep-sea fish lack swim bladders and have flexible bodies. Their cell membranes contain special fatty acids that stay fluid under extreme pressure.</div></div>
+        <div class="ac"><div class="at">Transparency</div><div class="ab">Many mesopelagic creatures have transparent or mirrored skin — no shadow, no silhouette, making them nearly invisible to predators.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="slide s-sec" id="s5">
+    <div class="slide-inner">
+      <div class="sec-num">Section 3</div>
+      <h2>Notable Features</h2>
+      <p>Three phenomena that define the deep ocean — and changed how scientists understand life on Earth.</p>
+    </div>
+  </div>
+
+  <div class="slide s-con" id="s6">
+    <div class="slide-inner">
+      <span class="ctag">Notable features</span>
+      <h2>Defining features of the deep</h2>
+      <div class="fg">
+        <div class="fc"><div class="fh">Hydrothermal vents</div><div class="fb">Discovered in 1977, these cracks release superheated water up to 400°C. They rewrote our understanding of where life can exist and sparked ideas about life on other planets.</div></div>
+        <div class="fc"><div class="fh">Marine snow</div><div class="fb">A constant slow rain of organic particles — dead cells, fecal pellets, mucus — drifting from surface waters. The main food source for most deep-sea life.</div></div>
+        <div class="fc"><div class="fh">Deep scattering layer</div><div class="fb">A dense band of fish, squid, and crustaceans that rises at night and sinks by day. So dense, early sonar operators mistook it for the ocean floor.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="slide s-sec" id="s7">
+    <div class="slide-inner">
+      <div class="sec-num">Section 4</div>
+      <h2>Threats</h2>
+      <p>Despite being the least explored environment on Earth, the deep ocean is already under serious threat from human activity.</p>
+    </div>
+  </div>
+
+  <div class="slide s-con" id="s8">
+    <div class="slide-inner">
+      <span class="ctag">Threats</span>
+      <h2>Dangers facing the deep ocean</h2>
+      <div class="tl">
+        <div class="ti"><div class="td"></div><div><div class="tt">Deep-sea mining</div><div class="tb">Companies target polymetallic nodules for cobalt and nickel, potentially destroying habitats that recover on timescales of millions of years.</div></div></div>
+        <div class="ti"><div class="td"></div><div><div class="tt">Ocean acidification</div><div class="tb">CO₂ absorbed from the atmosphere makes deep water more acidic, dissolving the shells of organisms that anchor deep-sea food chains.</div></div></div>
+        <div class="ti"><div class="td"></div><div><div class="tt">Deep-water trawling</div><div class="tb">Bottom trawl nets destroy ancient coral gardens and sponge communities in minutes that took centuries to grow.</div></div></div>
+        <div class="ti"><div class="td"></div><div><div class="tt">Plastic pollution</div><div class="tb">Microplastics have been found in the Mariana Trench — the deepest point on Earth. No part of the ocean is untouched.</div></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="slide s-sec" id="s9">
+    <div class="slide-inner">
+      <div class="sec-num">Quiz</div>
+      <h2>Test Your Knowledge</h2>
+      <p>10 questions based on everything in this presentation. How much did you take in?</p>
+    </div>
+  </div>
+
+  <div class="slide s-quiz" id="s10">
+    <div class="qw" id="qw"></div>
+  </div>
+
+</div>
+
+<div class="nav">
+  <button class="nav-btn" id="pb" onclick="go(-1)" disabled>← Back</button>
+  <div style="display:flex;flex-direction:column;align-items:center;gap:6px">
+    <div class="pips" id="pr"></div>
+    <div class="counter" id="ct">1 / 11</div>
+  </div>
+  <button class="nav-btn" id="nb" onclick="go(1)">Next →</button>
+</div>
+
+<script>
+const TOTAL=11;
+let cur=0;
+const allSlides=document.querySelectorAll('.slide');
+const pb=document.getElementById('pb');
+const nb=document.getElementById('nb');
+const ct=document.getElementById('ct');
+const pr=document.getElementById('pr');
+
+function buildPips(){
+  pr.innerHTML='';
+  for(let i=0;i<TOTAL;i++){
+    const d=document.createElement('div');
+    d.className='pip'+(i===cur?' on':'');
+    d.onclick=()=>goTo(i);
+    pr.appendChild(d);
+  }
+}
+
+function goTo(n){
+  allSlides[cur]&&allSlides[cur].classList.remove('active');
+  cur=n;
+  const id=cur===10?'s10':'s'+cur;
+  document.getElementById(id).classList.add('active');
+  pb.disabled=cur===0;
+  nb.disabled=cur===TOTAL-1;
+  ct.textContent=(cur+1)+' / '+TOTAL;
+  buildPips();
+  if(cur===10)renderQuiz();
+}
+
+function go(d){goTo(Math.max(0,Math.min(TOTAL-1,cur+d)));}
+buildPips();
+ct.textContent='1 / '+TOTAL;
+
+const qs=[
+  {tag:"Depth zones",q:"The deep ocean officially begins below what depth?",opts:["50 metres","200 metres","1,000 metres","4,000 metres"],c:1,fact:"The sunlight zone reaches down to 200 metres — the point where usable light for photosynthesis runs out. Everything below is the deep ocean, making up 95% of Earth's total living space."},
+  {tag:"Depth zones",q:"Which zone is found only in oceanic trenches, below 6,000 metres?",opts:["The abyssal zone","The bathypelagic zone","The hadal zone","The mesopelagic zone"],c:2,fact:"The hadal zone (6,000 m+) exists only in the deepest trenches. Pressure exceeds 1,000× sea level — yet snailfish and amphipods still survive there."},
+  {tag:"Adaptations",q:"Up to what percentage of deep-sea creatures produce bioluminescence?",opts:["Around 10%","Around 40%","Around 90%","Nearly 100%"],c:2,fact:"Up to 90% of deep-sea creatures produce their own light — to attract prey, find mates, and confuse predators. It's arguably the most common form of communication on Earth."},
+  {tag:"Adaptations",q:"What keeps deep-sea fish cell membranes flexible under crushing pressure?",opts:["Extra layers of tough protein","Special fatty acids that stay fluid under pressure","High salt concentrations inside cells","A gel-like cytoplasm unique to deep-sea species"],c:1,fact:"Deep-sea fish membranes are rich in unsaturated fatty acids which remain fluid at extreme pressure. They also lack swim bladders and have low-density, flexible bodies."},
+  {tag:"Notable features",q:"Why were hydrothermal vents (discovered 1977) so scientifically significant?",opts:["They proved the ocean floor is geologically inactive","They showed life can exist without any dependence on sunlight","They revealed deep-sea temps are much warmer than thought","They were the first evidence of tectonic plate movement"],c:1,fact:"Hydrothermal vent communities are powered entirely by chemosynthesis, proving life could thrive in total darkness — reshaping our understanding of where life might exist in the universe."},
+  {tag:"Notable features",q:"What is 'marine snow'?",opts:["Ice crystals at great depths","Bioluminescent plankton that glows white","A constant drift of organic particles sinking from surface waters","Mineral deposits from hydrothermal vents"],c:2,fact:"Marine snow is a continuous 'blizzard' of organic particles — dead cells, fecal pellets, mucus — drifting from surface to seafloor. It's the primary food source for most deep-sea life."},
+  {tag:"Notable features",q:"Early sonar operators mistook a deep-sea phenomenon for the ocean floor. What was it?",opts:["A layer of methane gas bubbles","The deep scattering layer — a dense band of migrating organisms","A thermal boundary between water masses","Sediment clouds stirred by currents"],c:1,fact:"The deep scattering layer is so dense with fish, squid, and crustaceans it returned a solid sonar echo. It rises to feed at night, sinks by dawn — the largest daily animal migration on Earth."},
+  {tag:"Threats",q:"Why is deep-sea mining particularly damaging?",opts:["It releases toxic gases that poison the surface","Habitats destroyed may take millions of years to recover","It permanently removes oxygen from deep water","It creates noise pollution that blinds whales"],c:1,fact:"Polymetallic nodules take millions of years to form. Mining disturbances can persist for decades, and ecosystems affected may never recover in any human timeframe."},
+  {tag:"Threats",q:"Microplastics found in the Mariana Trench tell us what?",opts:["Plastic is harmless at extreme depths","No part of the ocean, however remote, is untouched by human pollution","Deep currents are more powerful than thought","Plastic breaks down quickly in deep water"],c:1,fact:"Microplastics at 11 km depth confirmed human pollution has reached every corner of the planet. Some of the highest microplastic concentrations ever recorded have been found in deep-sea sediments."},
+  {tag:"Big picture",q:"Less than what percentage of the deep ocean has been explored by humans?",opts:["Around 25%","Around 50%","Less than 5%","About 10%"],c:2,fact:"Less than 5% of the deep ocean has been explored. We have more detailed maps of the surface of Mars than of our own ocean floor — and every expedition still regularly discovers new species."}
+];
+
+let qc=0,qsc=0,qa=false,qfin=false;
+const qr=new Array(qs.length).fill(null);
+
+function qprog(){
+  return qs.map((_,i)=>{
+    let c='qpip';
+    if(qr[i]===true)c+=' dc';
+    else if(qr[i]===false)c+=' dw';
+    else if(i===qc)c+=' act';
+    return`<div class="${c}"></div>`;
+  }).join('');
+}
+
+function renderQuiz(){
+  const w=document.getElementById('qw');
+  if(!w)return;
+  if(qc>=qs.length){
+    qfin=true;
+    nb.disabled=true;
+    const pct=Math.round((qsc/qs.length)*100);
+    const msg=pct===100?"Perfect score! You know the deep ocean inside out.":
+              pct>=80?"Excellent — you clearly paid close attention!":
+              pct>=60?"Good work! A couple of tricky ones in there.":
+              pct>=40?"Not bad — go back through the slides to lock in those details.":
+              "Keep diving in! Review the slides and try again.";
+    const rev=qs.map((q,i)=>`<div class="ri ${qr[i]?'c':'w'}"><strong>${q.tag}</strong> — ${qr[i]?'Correct':'Incorrect. Answer: '+q.opts[q.c]+'.'} ${q.fact}</div>`).join('');
+    w.innerHTML=`<div class="sccard"><div class="scnum">${qsc}/${qs.length}</div><div class="sclbl">${pct}% correct</div><p class="scmsg">${msg}</p><div class="scbtns"><button class="scbtn" onclick="restartQ()">Try again</button><button class="scbtn" onclick="goTo(0)">Back to start</button></div><div class="rlist">${rev}</div></div>`;
+    return;
+  }
+  const q=qs[qc];
+  w.innerHTML=`<div class="qprog">${qprog()}</div><div class="qmeta">Question ${qc+1} of ${qs.length}</div><div class="qcard"><span class="qbadge">${q.tag}</span><p class="qt">${q.q}</p><div class="qopts">${q.opts.map((o,i)=>`<button class="qopt" id="qo${i}" onclick="qans(${i})">${o}</button>`).join('')}</div><div class="qfb" id="qfb"></div><button class="qnxt" id="qnxt" onclick="qnext()">${qc<qs.length-1?'Next question':'See results'}</button></div>`;
+}
+
+function qans(i){
+  if(qa)return;
+  qa=true;
+  const q=qs[qc];
+  const ok=i===q.c;
+  qr[qc]=ok;
+  if(ok)qsc++;
+  document.querySelectorAll('.qopt').forEach((b,idx)=>{
+    b.disabled=true;
+    if(idx===q.c)b.classList.add('correct');
+    else if(idx===i&&!ok)b.classList.add('wrong');
+  });
+  const fb=document.getElementById('qfb');
+  fb.className='qfb show '+(ok?'correct':'wrong');
+  fb.innerHTML=(ok?'<strong>Correct!</strong> ':`<strong>Not quite.</strong> The answer was: <em>${q.opts[q.c]}</em>. `)+q.fact;
+  document.getElementById('qnxt').className='qnxt show';
+  document.querySelector('.qprog').innerHTML=qprog();
+}
+
+function qnext(){qc++;qa=false;renderQuiz();}
+function restartQ(){qc=0;qsc=0;qa=false;qfin=false;nb.disabled=false;qr.fill(null);renderQuiz();}
+</script>
+</body>
+</html>
